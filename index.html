@@ -323,7 +323,7 @@ textarea { width: 100%; min-height: 10em; font-family: ui-monospace, monospace; 
 .舞台 {
   --天a: #c3d9d8; --天b: #f0f1e6; --遠c: #b6c6c2; --地a: #dbd5be; --地紋c: #cac3a9; --牆c: #eee8d6; --頂c: #3a434b; --木c: #96744f; --淺木c: #b8976c;
   --暗c: #4b4139; --石c: #bcbab0; --水c: #93bfc7; --浪c: #ecf5f4; --紙c: #f8f3e4; --臉c: #f3dfc4; --髮c: #2a2e35; --白髮c: #d9d9d4; --鐵c: #555c62;
-  --葉c: #6f9069; --葉淺c: #8fad81; --蘆c: #a89a5e; --袋c: #d9c9a0; --燈c: #e9a03b; --日c: #f6efd2;
+  --葉c: #6f9069; --葉淺c: #8fad81; --蘆c: #a89a5e; --袋c: #d9c9a0; --燈c: #e9a03b; --日c: #f6efd2; --陶c: #b96f45; --深水c: #4f7f8c; --鹽c: #fbfaf4;
   position: relative; overflow: hidden; margin: 0 calc(-1 * clamp(16px, 4vw, 36px)); height: clamp(290px, 46vw, 340px);
   background: var(--天b); border-bottom: 1px solid var(--線); user-select: none; -webkit-user-select: none; touch-action: manipulation;
 }
@@ -335,13 +335,13 @@ textarea { width: 100%; min-height: 10em; font-family: ui-monospace, monospace; 
   :root:not([data-theme="light"]) .舞台 {
     --天a: #142029; --天b: #20313a; --遠c: #1b2a32; --地a: #2b3231; --地紋c: #353d3b; --牆c: #3b4347; --頂c: #0d1317; --木c: #5d4935; --淺木c: #77603f;
     --暗c: #12171a; --石c: #4b5153; --水c: #1f404a; --浪c: #3e6670; --紙c: #cfc8b4; --臉c: #d9c3a6; --髮c: #0c0f12; --白髮c: #a9aaa6; --鐵c: #252b30;
-    --葉c: #2f4a3a; --葉淺c: #3b5c48; --蘆c: #5f5936; --袋c: #7c7153; --燈c: #f2b04a; --日c: #dfe6e2;
+    --葉c: #2f4a3a; --葉淺c: #3b5c48; --蘆c: #5f5936; --袋c: #7c7153; --燈c: #f2b04a; --日c: #dfe6e2; --陶c: #6e3f28; --深水c: #10262d; --鹽c: #b9b8ad;
   }
 }
 :root[data-theme="dark"] .舞台 {
   --天a: #142029; --天b: #20313a; --遠c: #1b2a32; --地a: #2b3231; --地紋c: #353d3b; --牆c: #3b4347; --頂c: #0d1317; --木c: #5d4935; --淺木c: #77603f;
   --暗c: #12171a; --石c: #4b5153; --水c: #1f404a; --浪c: #3e6670; --紙c: #cfc8b4; --臉c: #d9c3a6; --髮c: #0c0f12; --白髮c: #a9aaa6; --鐵c: #252b30;
-  --葉c: #2f4a3a; --葉淺c: #3b5c48; --蘆c: #5f5936; --袋c: #7c7153; --燈c: #f2b04a; --日c: #dfe6e2;
+  --葉c: #2f4a3a; --葉淺c: #3b5c48; --蘆c: #5f5936; --袋c: #7c7153; --燈c: #f2b04a; --日c: #dfe6e2; --陶c: #6e3f28; --深水c: #10262d; --鹽c: #b9b8ad;
 }
 .舞台 .景圖 { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .舞台 .日 { fill: var(--日c); opacity: 0.9; }
@@ -382,6 +382,28 @@ textarea { width: 100%; min-height: 10em; font-family: ui-monospace, monospace; 
 .舞台 .落葉 { fill: var(--葉c); animation: 落 9s linear infinite; }
 .舞台 .飄1 { animation-delay: -2s; } .舞台 .飄2 { animation-delay: -4s; animation-duration: 10s; } .舞台 .飄3 { animation-delay: -6s; animation-duration: 12s; }
 @keyframes 落 { from { transform: translate(0, -30px); } to { transform: translate(-26px, 190px); } }
+
+.舞台 .帳布 { fill: var(--紙c); stroke: var(--頂c); stroke-width: 0.8; } .舞台 .帳帶 { fill: var(--州); } .舞台 .帳帶.朱帶 { fill: var(--朱); }
+.舞台 .石.黑石 { fill: var(--髮c); } .舞台 .字痕 { stroke: var(--頂c); stroke-width: 0.8; fill: none; opacity: 0.5; } .舞台 .黑石 ~ .字痕 { stroke: var(--紙c); opacity: 0.75; }
+.舞台 .火 { fill: var(--燈c); stroke: var(--朱); stroke-width: 0.8; transform-box: fill-box; transform-origin: 50% 100%; animation: 焰 0.5s ease-in-out infinite alternate; }
+@keyframes 焰 { from { transform: scale(1, 0.86); } to { transform: scale(0.92, 1.1); } }
+.舞台 .窯, .舞台 .陶 { fill: var(--陶c); stroke: var(--頂c); stroke-width: 0.7; }
+.舞台 .輪 { transform-box: fill-box; transform-origin: center; animation: 轉 16s linear infinite; } .舞台 .輪.慢輪 { animation-duration: 24s; animation-direction: reverse; }
+@keyframes 轉 { to { transform: rotate(360deg); } }
+.舞台 .輪框 { fill: none; stroke: var(--木c); stroke-width: 3; } .舞台 .輪框.細 { stroke-width: 1.4; }
+.舞台 .馬 ellipse, .舞台 .馬 path { fill: var(--暗c); } .舞台 .馬.淺馬 ellipse, .舞台 .馬.淺馬 path { fill: var(--木c); }
+.舞台 .馬 .馬腿 { fill: none; stroke: var(--暗c); stroke-width: 2.2; stroke-linecap: round; } .舞台 .馬.淺馬 .馬腿 { fill: none; stroke: var(--木c); }
+.舞台 .魚 { fill: var(--石c); stroke: var(--頂c); stroke-width: 0.5; }
+.舞台 .鹽 { fill: var(--鹽c); stroke: var(--石c); stroke-width: 0.7; }
+.舞台 .田土 { fill: var(--地紋c); stroke: var(--木c); stroke-width: 0.5; } .舞台 .田壟 { stroke: var(--木c); stroke-width: 1; opacity: 0.5; fill: none; }
+.舞台 .草 { stroke: var(--葉c); stroke-width: 1.3; fill: none; stroke-linecap: round; }
+.舞台 .旗 { fill: var(--朱); } .舞台 .旗.靛旗 { fill: var(--澤); } .舞台 .旗.紫旗 { fill: #7a66ad; } .舞台 .旗.綠旗 { fill: var(--葉c); }
+.舞台 .網線 { stroke: var(--淡墨); stroke-width: 0.9; fill: none; } .舞台 .柳絲 { stroke: var(--葉淺c); stroke-width: 1.3; fill: none; stroke-linecap: round; }
+.舞台 .泥 { fill: var(--地紋c); } .舞台 .水.淺水 { opacity: 0.75; } .舞台 .水.深水 { fill: var(--深水c); }
+.舞台 .浪圈 { fill: none; stroke: var(--浪c); stroke-width: 1.1; } .舞台 .浪圈.外 { opacity: 0.5; }
+.舞台 .渦 .浪圈 { stroke-dasharray: 9 6; animation: 旋 2.6s linear infinite; }
+@keyframes 旋 { to { stroke-dashoffset: -30; } }
+.舞台 .地.坡 { stroke: var(--地紋c); stroke-width: 1; }
 
 /* 紙偶 */
 .舞台 .偶 { display: block; height: clamp(58px, 12vw, 84px); width: auto; overflow: visible; }
@@ -1888,6 +1910,63 @@ const 七州舞台 = (function () {
   const 板 = (x, w, h, 行) => { let s = `<path class="木線" d="M${x + 5} ${G} V${G - 16} M${x + w - 5} ${G} V${G - 16}"/><rect class="紙板" x="${x}" y="${G - 16 - h}" width="${w}" height="${h}"/>`; for (let i = 0; i < (行 || 3); i++) s += `<path class="字線" d="M${x + 5} ${G - 16 - h + 7 + i * 6} h${w - 10 - (i % 2) * 8}"/>`; return s; };
   const 牌坊 = (x, w) => `<path class="朱線 粗" d="M${x + 4} ${G} V${G - 62} M${r1(x + w * 0.3)} ${G} V${G - 72} M${r1(x + w * 0.7)} ${G} V${G - 72} M${x + w - 4} ${G} V${G - 62}"/><rect class="朱柱" x="${x}" y="${G - 60}" width="${w}" height="5"/><rect class="朱柱" x="${r1(x + w * 0.24)}" y="${G - 74}" width="${r1(w * 0.52)}" height="5"/>${頂(r1(x + w * 0.26), G - 74, r1(w * 0.48), 7, 9)}${頂(x + 2, G - 60, r1(w * 0.22), 5, 7)}${頂(r1(x + w * 0.78) - 2, G - 60, r1(w * 0.22), 5, 7)}`;
 
+  // ---------- 六州用的積木（v9.2）----------
+  const 帳 = (x, w, h, 帶) => `<path class="帳布" d="M${x} ${G} V${r1(G - h * 0.5)} Q${r1(x + w * 0.5)} ${r1(G - h * 1.25)} ${x + w} ${r1(G - h * 0.5)} V${G} Z"/><path class="帳帶${帶 ? " " + 帶 : ""}" d="M${x} ${r1(G - h * 0.5)} h${w} v5 h-${w} Z"/><path class="暗" d="M${r1(x + w / 2 - 7)} ${G} v-${r1(h * 0.42)} q7 -6 14 0 V${G} Z"/><path class="木線" d="M${r1(x + w / 2)} ${r1(G - h * 0.86)} v-8"/>`;
+  const 石碑 = (x, w, h, 痕) => { let t = `<path class="石 黑石" d="M${x} ${G} V${G - h + 6} q${r1(w / 2)} -9 ${w} 0 V${G} Z"/>`; for (let i = 0; i < (痕 || 0); i++) t += `<path class="字痕" d="M${x + 3} ${G - h + 14 + i * 6} l${w - 6} ${i % 2 ? 2 : -2}"/>`; return t; };
+  function 碑牆(x, w, h) {
+    let t = `<rect class="城" x="${x}" y="${G - h}" width="${w}" height="${h}"/><rect class="脊" x="${x - 3}" y="${G - h - 4}" width="${w + 6}" height="4"/>`;
+    for (let j = 0; j < Math.floor((h - 12) / 8); j++) for (let i = 0; i < Math.floor((w - 12) / 16); i++) t += `<path class="字痕" d="M${x + 8 + i * 16} ${G - h + 10 + j * 8} h${6 + ((i * 7 + j * 5) % 6)}"/>`;
+    return t;
+  }
+  const 高爐 = (x, w) => { w = w || 44; return `<path class="石" d="M${x} ${G} l5 -46 h${w - 10} l5 46 Z"/><rect class="鐵" x="${r1(x + w / 2 - 6)}" y="${G - 66}" width="12" height="22"/><path class="暗" d="M${r1(x + w / 2 - 9)} ${G} v-14 a9 9 0 0 1 18 0 v14 Z"/><path class="火" d="M${r1(x + w / 2 - 6)} ${G} q-2 -9 6 -14 q8 5 6 14 Z"/>${煙(r1(x + w / 2), G - 68)}`; };
+  const 砧 = (x) => `<path class="鐵" d="M${x} ${G - 12} h20 l4 -3 v6 h-8 v5 h4 v4 h-16 v-4 h4 v-5 h-8 Z"/>`;
+  function 龍窯(x, w, h) {
+    let t = `<path class="窯" d="M${x} ${G} Q${r1(x + w * 0.1)} ${r1(G - h * 0.5)} ${r1(x + w * 0.3)} ${r1(G - h * 0.55)} L${x + w} ${G - h} V${G} Z"/>`;
+    for (let i = 0; i < 4; i++) { const px = x + w * (0.22 + i * 0.2), py = G - h * (0.38 + i * 0.13); t += `<path class="暗" d="M${r1(px - 5)} ${G} v-${r1(G - py - (G - py) * 0.55)} a5 5 0 0 1 10 0 V${G} Z"/>`; }
+    return t + `<rect class="石" x="${x + w - 8}" y="${G - h - 20}" width="8" height="20"/>` + 煙(x + w - 4, G - h - 22);
+  }
+  const 罐 = (x, n) => { let t = ""; for (let i = 0; i < (n || 3); i++) t += `<path class="陶" d="M${x + i * 13 + 3} ${G} q-5 -7 0 -12 h1 v-3 h5 v3 h1 q5 5 0 12 Z"/>`; return t; };
+  const 水輪 = (cx, r, 慢) => `<g class="輪${慢 ? " 慢輪" : ""}"><circle class="輪框" cx="${cx}" cy="${G - r + 18}" r="${r}"/><circle class="輪框 細" cx="${cx}" cy="${G - r + 18}" r="${r1(r * 0.55)}"/><path class="輪框 細" d="${[0, 1, 2, 3].map((i) => { const a = i * Math.PI / 4, dx = r1(Math.cos(a) * r), dy = r1(Math.sin(a) * r); return `M${r1(cx - dx)} ${r1(G - r + 18 - dy)} L${r1(cx + dx)} ${r1(G - r + 18 + dy)}`; }).join(" ")}"/></g><path class="木線 粗" d="M${cx - r - 6} ${G + 16} L${cx} ${G - r + 18} L${cx + r + 6} ${G + 16}"/>`;
+  const 馬 = (x, 淺) => `<g class="馬${淺 ? " 淺馬" : ""}"><ellipse cx="${x + 18}" cy="${G - 20}" rx="14" ry="7.5"/><path d="M${x + 28} ${G - 23} l8 -13 l5 1 l1 6 l-5 1 l-4 9 Z"/><path class="馬腿" d="M${x + 8} ${G - 16} v16 M${x + 13} ${G - 15} v15 M${x + 24} ${G - 15} v15 M${x + 29} ${G - 16} v16"/><path class="馬腿" d="M${x + 4} ${G - 22} q-6 4 -4 14"/></g>`;
+  const 魚架 = (x, w) => { let t = `<path class="木線" d="M${x} ${G} V${G - 40} M${x + w} ${G} V${G - 40} M${x - 3} ${G - 38} H${x + w + 3}"/>`; for (let i = x + 8; i < x + w - 4; i += 11) t += `<path class="魚" d="M${i} ${G - 37} q-4 8 0 16 q4 -8 0 -16 Z M${i} ${G - 21} l-3 5 h6 Z"/>`; return t; };
+  const 鹽堆 = (x, n, 小) => { let t = ""; for (let i = 0; i < (n || 2); i++) t += `<path class="鹽" d="M${x + i * (小 ? 14 : 30)} ${G} l${小 ? 7 : 16} -${小 ? 9 : 22} l${小 ? 7 : 16} ${小 ? 9 : 22} Z"/>`; return t; };
+  const 祭壇 = (x, w) => `<rect class="石" x="${x}" y="${G - 10}" width="${w}" height="10"/><rect class="石" x="${x + 10}" y="${G - 20}" width="${w - 20}" height="10"/><rect class="石" x="${x + 20}" y="${G - 30}" width="${w - 40}" height="10"/><g transform="translate(0 -30)">${爐(r1(x + w / 2 - 9))}</g>`;
+  const 泉 = (cx, w) => `<ellipse class="水" cx="${cx}" cy="${G + 14}" rx="${r1(w / 2)}" ry="9"/><ellipse class="浪圈" cx="${cx}" cy="${G + 14}" rx="${r1(w / 4)}" ry="4.5"/><ellipse class="浪圈 外" cx="${cx}" cy="${G + 14}" rx="${r1(w / 2.6)}" ry="7"/>`;
+  function 梯田(x, w, 層) {
+    let t = "";
+    for (let i = 0; i < 層; i++) {
+      const y = G - i * 15, x1 = x + i * (w / 層) * 0.55, x2 = x + w;
+      t += `<path class="田土" d="M${r1(x1)} ${y} H${x2} V${y - 15} H${r1(x1 + (w / 層) * 0.55)} Z"/>`;
+      for (let k = r1(x1 + 14); k < x2 - 4; k += 12) t += `<path class="草" d="M${r1(k + i * 3)} ${y - 1} v-6 M${r1(k + i * 3 - 2)} ${y - 4} l2 -3 l2 3"/>`;
+    }
+    return t;
+  }
+  function 閣(x, w, 層) {
+    let t = "";
+    for (let i = 0; i < 層; i++) {
+      const ww = w - i * 18, xx = x + i * 9, y = G - 34 * (i + 1);
+      t += `<rect class="城" x="${xx}" y="${y}" width="${ww}" height="34"/><rect class="窗" x="${r1(xx + ww / 2 - 7)}" y="${y + 10}" width="14" height="12"/>` + 頂(xx, y, ww, 9, 11);
+    }
+    return t + `<rect class="門" x="${r1(x + w / 2 - 8)}" y="${G - 24}" width="16" height="24"/>`;
+  }
+  const 石階 = (x, w, n) => { let t = ""; for (let i = 0; i < n; i++) t += `<rect class="石" x="${r1(x + i * w * 0.045)}" y="${G - (i + 1) * 7}" width="${r1(w - i * w * 0.09)}" height="7"/>`; return t; };
+  const 旗 = (x, h, cls) => `<path class="木線" d="M${x} ${G} V${G - h}"/><path class="旗 ${cls || ""}" d="M${x} ${G - h} l18 5 l-18 6 Z"/>`;
+  const 牆旗 = (x, y, cls) => `<path class="木線" d="M${x} ${y} v-18"/><path class="旗 ${cls || ""}" d="M${x} ${y - 18} l14 4 l-14 5 Z"/>`;
+  const 望樓 = (x, h) => `<path class="木線 粗" d="M${x} ${G} L${x + 6} ${G - h} M${x + 30} ${G} L${x + 24} ${G - h} M${x + 3} ${r1(G - h * 0.5)} L${x + 27} ${r1(G - h * 0.5)}"/><rect class="木" x="${x + 2}" y="${G - h - 12}" width="26" height="12"/>` + 頂(x + 2, G - h - 12, 26, 6, 9);
+  const 田 = (x, w) => { let t = ""; for (let i = 0; i < 5; i++) t += `<path class="田壟" d="M${x} ${G + 8 + i * 10} H${x + w}"/>`; for (let k = x + 8; k < x + w; k += 14) t += `<path class="草" d="M${k} ${G + 8} v-5 M${k + 5} ${G + 18} v-5 M${k - 3} ${G + 28} v-5"/>`; return t; };
+  const 閘 = (x) => `<rect class="石" x="${x}" y="${G - 44}" width="16" height="64"/><rect class="石" x="${x + 64}" y="${G - 44}" width="16" height="64"/><rect class="鐵" x="${x + 16}" y="${G - 40}" width="48" height="26"/><path class="字痕" d="M${x + 26} ${G - 32} h28 M${x + 26} ${G - 26} h20"/><rect class="石" x="${x - 4}" y="${G - 50}" width="88" height="7"/><rect class="水" x="${x + 16}" y="${G - 14}" width="48" height="34"/>`;
+  const 網 = (x, w) => `<path class="木線" d="M${x} ${G} V${G - 36} M${x + w} ${G} V${G - 30}"/><path class="網線" d="M${x} ${G - 34} Q${r1(x + w / 2)} ${G - 8} ${x + w} ${G - 28} M${x} ${G - 26} Q${r1(x + w / 2)} ${G - 2} ${x + w} ${G - 20} ${[0.2, 0.4, 0.6, 0.8].map((k) => `M${r1(x + w * k)} ${r1(G - 30 + 14 * Math.sin(k * Math.PI))} v8`).join(" ")}"/>`;
+  const 柳 = (x, h) => { h = h || 60; let t = `<path class="木線 粗" d="M${x} ${G} q-3 -${r1(h * 0.5)} 2 -${h}"/>`; for (let i = -3; i <= 3; i++) t += `<path class="柳絲" d="M${x + 2} ${G - h} q${i * 9} ${r1(h * 0.1)} ${i * 10} ${r1(h * (0.5 + (Math.abs(i) % 2) * 0.12))}"/>`; return t; };
+  const 界石 = (x) => `<path class="石" d="M${x} ${G} v-14 q6 -5 12 0 v14 Z"/><path class="字痕" d="M${x + 3} ${G - 9} h6"/>`;
+  const 火堆 = (x) => `<path class="木線 粗" d="M${x} ${G} l18 -6 M${x + 18} ${G} l-18 -6"/><path class="火" d="M${x + 3} ${G - 4} q-3 -10 6 -18 q9 8 6 18 Z"/>${煙(x + 9, G - 24)}`;
+  const 鐘架 = (x) => `<path class="木線 粗" d="M${x} ${G} V${G - 44} H${x + 30} V${G}"/><path class="鐵" d="M${x + 8} ${G - 22} q0 -18 7 -18 q7 0 7 18 Z"/><path class="木線" d="M${x + 15} ${G - 44} v4"/>`;
+  const 床 = (x) => `<rect class="木" x="${x}" y="${G - 9}" width="40" height="4"/><path class="木線" d="M${x + 2} ${G - 5} V${G} M${x + 38} ${G - 5} V${G}"/><rect class="紙片" x="${x + 2}" y="${G - 14}" width="30" height="5" rx="2"/>`;
+  const 晾布 = (x, w) => `<path class="木線" d="M${x} ${G} V${G - 40} M${x + w} ${G} V${G - 40} M${x} ${G - 38} Q${r1(x + w / 2)} ${G - 33} ${x + w} ${G - 38}"/>${[0.2, 0.5, 0.78].map((k) => `<rect class="紙片" x="${r1(x + w * k - 6)}" y="${G - 36}" width="12" height="18"/>`).join("")}`;
+  const 坡 = (x, w, h) => `<path class="地 坡" d="M${x} ${G} Q${r1(x + w / 2)} ${G - h * 2} ${x + w} ${G} Z"/>`;
+  const 渦 = (cx, cy) => `<g class="渦"><path class="浪圈" d="M${cx - 26} ${cy} a26 9 0 1 1 52 0"/><path class="浪圈" d="M${cx - 17} ${cy + 1} a17 6 0 1 0 34 0"/><path class="浪圈" d="M${cx - 9} ${cy} a9 3.2 0 1 1 18 0"/></g>`;
+  const 草叢 = (x, n) => { let t = ""; for (let i = 0; i < (n || 6); i++) t += `<path class="草" d="M${x + i * 9} ${G + 4 + (i % 3) * 14} l-2 -6 M${x + i * 9} ${G + 4 + (i % 3) * 14} l1 -7 M${x + i * 9} ${G + 4 + (i % 3) * 14} l4 -5"/>`; return t; };
+  const 岩 = (x, w, h) => `<path class="石" d="M${x} ${G} l${r1(w * 0.2)} -${h} l${r1(w * 0.45)} ${r1(h * 0.25)} l${r1(w * 0.35)} ${r1(h * 0.75)} Z"/>`;
+
   // ---------- 遠景：每一州一種 ----------
   const 遠景 = {
     汀: () => 山([[0, 100], [58, 100], [58, 90], [74, 90], [74, 100], [168, 100], [168, 84], [176, 76], [200, 66], [224, 76], [232, 84], [232, 100], [326, 100], [326, 90], [342, 90], [342, 100], [400, 100]]),
@@ -1919,6 +1998,50 @@ const 七州舞台 = (function () {
     "汀-南郊": () => `<path class="水" d="M0 ${G + 14} h118 l10 12 h-128 Z"/><rect class="木" x="96" y="${G + 13}" width="40" height="3"/>` + 蘆(4, 6) + 棚(36, 74) + 鍋(142) + 棚(196, 84, 38) + 棚(304, 70, 30) + 蘆(378, 5, 22),
     "汀-分號": () => 屋(98, 204, 76, { 匾: "澤通", 簷: 11 }) + `<rect class="暗" x="126" y="${G - 58}" width="94" height="30"/><path class="鐵線" d="${[0, 1, 2, 3, 4, 5, 6, 7].map((i) => `M${134 + i * 11.4} ${G - 58} v30`).join(" ")}"/><rect class="木" x="122" y="${G - 28}" width="102" height="8"/>`
       + `<rect class="鐵" x="246" y="${G - 42}" width="32" height="42"/><circle class="鈕點" cx="252" cy="${G - 22}" r="1.4"/>` + 幌(326, "票") + 燈籠(112, G - 72),
+    // ---- 渡州 ----
+    "渡-泊處": () => 水面(0, 400) + 蘆(2, 5, 30) + `<path class="木線" d="M34 ${G - 26} Q80 ${G - 14} 128 ${G - 26} Q176 ${G - 14} 224 ${G - 26} Q272 ${G - 14} 320 ${G - 26}"/>` + 船(4, 92, G + 12) + 船(100, 92, G + 12) + 船(196, 92, G + 12) + 船(292, 92, G + 12) + 蘆(376, 5, 28),
+    "渡-蘆口": () => 水面(0, 150) + 船(8, 84) + 蘆(96, 4, 22) + 棧(104, 60) + 攤(186, 76, "靛篷") + 魚架(270, 44) + 攤(322, 70, "朱篷"),
+    "渡-河醫棚": () => 水面(0, 112) + 船(6, 76) + 蘆(86, 4, 22) + 棚(138, 104, 42) + 床(150) + 爐(256) + 晾布(292, 60) + 蘆(376, 5, 20),
+    "渡-蘆棚": () => 蘆(2, 5, 24) + 棚(28, 76, 34) + 棚(112, 70, 30) + `<path class="船" d="M196 ${G} q26 -20 60 0 Z"/>` + 棚(266, 80, 38) + 柵(350, 46) + 蘆(380, 4, 20),
+    "渡-西灣": () => 山([[250, G], [300, 92], [340, 110], [372, 84], [400, 96]], "遠 近") + `<rect class="水 深水" x="0" y="${G}" width="400" height="${200 - G}"/>` + 渦(86, G + 26) + 船(130, 150, G + 14, false) + 岩(330, 60, 34) + 岩(374, 30, 20),
+    "渡-舊汊": () => 柳(48, 64) + `<path class="泥" d="M0 ${G + 10} H400 V${G + 46} H0 Z"/><path class="水 淺水" d="M70 ${G + 18} Q200 ${G + 10} 330 ${G + 20} V${G + 36} Q200 ${G + 44} 70 ${G + 36} Z"/>` + 蘆(120, 4, 18) + 蘆(268, 4, 18) + 柳(352, 70),
+    "渡-潮溝": () => 水面(0, 400) + 蘆(4, 6, 24) + 船(40, 110, G + 14) + 旗(74, 58, "靛旗") + 鹽堆(300, 2, true) + 界石(350) + 蘆(372, 5, 22),
+    // ---- 鹽州 ----
+    "鹽-碼頭": () => 水面(0, 176) + 船(6, 110, G + 14) + `<path class="篷" d="M32 ${G - 70} L32 ${G - 30} L74 ${G - 30} Z"/><path class="木線 粗" d="M30 ${G + 4} V${G - 76}"/>` + 棧(118, 86) + 袋堆(214, 6) + 袋堆(262, 6) + 袋堆(238, 3, G - 30) + 幌(330, "鹽") + 鹽堆(350, 1),
+    "鹽-票號": () => 屋(66, 268, 84, { 柱: 4, 門: true, 匾: "澤通票號", 簷: 14, 脊: 22 }) + 階(190, 20, 2) + 石獅(150) + 石獅(236) + 燈籠(88, G - 82) + 燈籠(312, G - 82) + 幌(362, "票"),
+    "鹽-魚市": () => 水面(0, 70) + 攤(84, 78, "靛篷") + 魚架(176, 50) + 攤(240, 78, "朱篷") + 魚架(330, 44) + `<path class="袋" d="M22 ${G} q-2 -10 10 -10 q12 0 10 10 Z"/>`,
+    "鹽-契堂": () => 屋(96, 190, 78, { 匾: "契堂", 門: true, 柱: 2, 簷: 12 }) + 圍牆(294, 106, 44) + [0, 1, 2, 3, 4].map((i) => `<rect class="紙片" x="${302 + i * 19}" y="${G - 36 + (i % 2) * 5}" width="14" height="18"/><path class="字線" d="M${305 + i * 19} ${G - 30 + (i % 2) * 5} h8 M${305 + i * 19} ${G - 25 + (i % 2) * 5} h8"/>`).join("") + 石獅(70) + 燈籠(110, G - 76),
+    "鹽-盛家": () => `<rect class="牆" x="0" y="${G - 114}" width="400" height="114"/>` + 櫃(14, 150, 98, 6, 6) + `<rect class="窗" x="186" y="${G - 92}" width="120" height="58"/>` + `<g transform="translate(0 -34)">${鹽堆(196, 3)}</g>` + `<path class="格" d="M246 ${G - 92} v58 M186 ${G - 63} h120"/>` + 桌(200, 94, 20) + `<rect class="木 淺木" x="226" y="${G - 27}" width="24" height="7" rx="1"/>` + 櫃(326, 70, 98, 3, 6) + 燈籠(170, G - 106),
+    "鹽-櫃檯": () => `<rect class="牆" x="0" y="${G - 114}" width="400" height="114"/>` + 櫃(10, 120, 98, 5, 6) + `<rect class="木" x="140" y="${G - 30}" width="150" height="30"/><path class="鐵線" d="${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => `M${148 + i * 15} ${G - 30} v-44`).join(" ")}"/><rect class="木" x="140" y="${G - 78}" width="150" height="5"/>` + [0, 1, 2].map((i) => `<rect class="木 淺木" x="${154 + i * 44}" y="${G - 37}" width="24" height="7" rx="1"/>`).join("")
+      + `<rect class="鐵" x="316" y="${G - 76}" width="60" height="76"/><path class="格" d="M346 ${G - 76} v76"/>${[0, 1, 2].map((j) => `<circle class="鈕點" cx="324" cy="${G - 64 + j * 26}" r="1.6"/><circle class="鈕點" cx="368" cy="${G - 64 + j * 26}" r="1.6"/>`).join("")}` + 燈籠(302, G - 106),
+    // ---- 淵州 ----
+    "淵-山門": () => 石階(150, 100, 9) + `<rect class="霧" x="0" y="${G - 78}" width="400" height="16"/>` + 屋(14, 96, 46, { 門: true, 窗: [10] }) + 幌(118, "棧", 56) + 牌坊(120, 160) + 匾(200, G - 68, "霧垣") + 屋(292, 96, 46, { 門: true, 窗: [68] }) + 樹(392, 50, true),
+    "淵-神廟": () => 屋(84, 232, 76, { 柱: 5, 門: true, 匾: "神廟", 簷: 15, 脊: 24 }) + 階(184, 32, 3) + 爐(46) + 鐘架(336) + `<rect class="霧" x="0" y="${G - 108}" width="400" height="12"/>` + 樹(14, 56, true),
+    "淵-藏經閣": () => 圍牆(0, 120, 26) + 樹(52, 60, true) + 閣(136, 128, 3) + 匾(200, G - 100, "藏經") + 圍牆(280, 120, 26) + 樹(346, 52, true) + `<rect class="霧" x="0" y="${G - 60}" width="400" height="9"/>`,
+    "淵-藥田": () => 梯田(60, 340, 5) + 棚(6, 60, 30) + `<path class="袋" d="M70 ${G} q-2 -11 9 -11 q11 0 9 11 Z"/>`,
+    "淵-神泉": () => 岩(20, 70, 40) + 泉(170, 120) + 屋(262, 64, 40, { 門: true, 簷: 7 }) + 爐(238) + 岩(350, 50, 30) + `<rect class="霧" x="0" y="${G - 22}" width="400" height="8"/>`,
+    "淵-西岸": () => `<rect class="水 深水" x="0" y="${G}" width="210" height="${200 - G}"/>` + 渦(100, G + 28) + 祭壇(230, 130) + 旗(224, 66, "紫旗") + 旗(372, 66, "紫旗") + 岩(196, 26, 14),
+    "淵-北山": () => 山([[0, 70], [60, 96], [120, G]], "遠 近") + 岩(10, 80, 46) + 泉(140, 60) + 樹(210, 62, true) + 岩(250, 60, 30) + 泉(322, 46) + 草叢(180, 8) + 樹(382, 50, true),
+    // ---- 霜原 ----
+    "霜-邊市": () => 攤(16, 80, "暗篷") + 魚架(104, 30) + 攤(150, 84, "暗篷") + 柵(246, 60) + 馬(256) + 馬(318, true) + 幌(384, "市", 56),
+    "霜-夏帳": () => 帳(20, 76, 46) + 帳(120, 160, 74, "朱帶") + 旗(200, 96, "綠旗") + 火堆(300) + 帳(336, 60, 40),
+    "霜-誓石": () => 坡(60, 220, 34) + `<g transform="translate(0 -32)">${石碑(158, 24, 46, 5)}</g>` + 帳(296, 84, 46) + 草叢(20, 5),
+    "霜-牧場": () => 草叢(10, 10) + 馬(40) + 馬(150, true) + 草叢(200, 10) + 馬(286) + `<path class="草" d="M0 ${G} H400"/>`,
+    "霜-舊界": () => 草叢(6, 9) + 界石(150) + 柵(176, 224) + 田(190, 210) + 望樓(336, 54),
+    // ---- 陶州 ----
+    "陶-碼頭": () => 水面(0, 180) + 船(8, 96, G + 14) + 棧(116, 84) + [0, 1, 2].map((i) => `<rect class="鐵" x="${214 + i * 8}" y="${G - 6 - i * 6}" width="${44 - i * 16}" height="6"/>`).join("") + 箱(270) + 罐(292, 4) + 幌(356, "爐城"),
+    "陶-鐵行": () => `<rect class="暗" x="0" y="${G - 114}" width="400" height="114"/>` + 高爐(20) + 高爐(110) + 高爐(200) + 高爐(290) + 砧(350) + `<path class="木線 粗" d="M70 ${G} l10 -10 M160 ${G} l10 -10"/>`,
+    "陶-窯場": () => 龍窯(20, 240, 62) + 罐(272, 5) + `<g transform="translate(0 -13)">${罐(278, 4)}</g>` + [0, 1, 2].map((i) => `<rect class="木" x="${346}" y="${G - 8 - i * 8}" width="${40 - i * 8}" height="8"/>`).join(""),
+    "陶-行會": () => 屋(76, 248, 80, { 柱: 4, 門: true, 匾: "四行會館", 簷: 14, 脊: 22 }) + 階(190, 20, 2) + 幌(26, "窯", 56) + 幌(48, "鐵", 56) + 幌(340, "紡", 56) + 幌(362, "木", 56),
+    "陶-水輪": () => 水面(0, 400, G + 16) + 屋(28, 70, 44, { 窗: [10] }) + 水輪(140, 34) + 屋(196, 64, 40, { 窗: [8] }) + 水輪(302, 30, true) + 屋(350, 50, 38, {}),
+    "陶-下城": () => 城牆(0, 400, 100) + 屋(18, 84, 38, { 門: true }) + 燈籠(30, G - 34) + 屋(124, 78, 34, { 窗: [10, 52] }) + 攤(222, 66, "暗篷") + 屋(304, 86, 38, { 門: true }) + 燈籠(380, G - 34) + 幌(208, "刻", 52),
+    "陶-北渠": () => 山([[0, 60], [70, 84], [130, G]], "遠 近") + `<path class="水" d="M0 ${G + 8} H176 V${G + 30} H0 Z"/>` + 閘(160) + 岩(262, 50, 30) + 樹(330, 60, true) + 樹(374, 46, true) + 岩(20, 40, 22),
+    // ---- 灰州 ----
+    "灰-石堡": () => 城牆(0, 400, 96, 200) + [30, 78, 126, 274, 322, 370].map((x, i) => 牆旗(x, G - 101, i % 2 ? "靛旗" : "朱旗")).join("") + 鍋(318) + 桌(346, 44) + 石獅(150) + 石獅(236),
+    "灰-碑牆": () => 碑牆(16, 368, 92) + [0, 1, 2, 3, 4, 5, 6].map((i) => 箱(30 + i * 50, 22, 12)).join("") + `<path class="木線 粗" d="M360 ${G} l14 -18"/>`,
+    "灰-屯田": () => 屋(14, 80, 40, { 門: true }) + 界石(120) + 柵(140, 250) + 田(140, 250) + 望樓(338, 60),
+    "灰-黑市": () => 屋(6, 96, 66, { 門: true }) + 燈籠(18, G - 60) + 屋(108, 86, 74, { 門: true }) + 燈籠(118, G - 66) + 攤(204, 70, "暗篷") + 燈籠(238, G - 60) + 屋(284, 110, 68, { 門: true }) + 燈籠(298, G - 62) + 幌(378, "酒", 58),
+    "灰-軍醫棚": () => 棚(10, 110, 42) + 床(26) + 床(74) + 棚(136, 110, 42) + 床(156) + 爐(262) + 晾布(292, 64) + 旗(380, 64, "朱旗"),
   };
   // 其他州還沒有自己的景：照地名猜。
   function 通用景(名) {
