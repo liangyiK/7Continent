@@ -319,6 +319,164 @@ textarea { width: 100%; min-height: 10em; font-family: ui-monospace, monospace; 
 .訊 { font-size: var(--小); color: var(--澤); min-height: 1.4em; }
 .訊.錯 { color: var(--朱); }
 .底 { font-size: var(--小); color: var(--淡墨); padding-top: 8px; border-top: 1px solid var(--線); }
+/* ===== 舞台（互動版）：景是積木拼的，人是紙偶。顏色都走變數，暗色時換成夜裡的景。 ===== */
+.舞台 {
+  --天a: #c3d9d8; --天b: #f0f1e6; --遠c: #b6c6c2; --地a: #dbd5be; --地紋c: #cac3a9; --牆c: #eee8d6; --頂c: #3a434b; --木c: #96744f; --淺木c: #b8976c;
+  --暗c: #4b4139; --石c: #bcbab0; --水c: #93bfc7; --浪c: #ecf5f4; --紙c: #f8f3e4; --臉c: #f3dfc4; --髮c: #2a2e35; --白髮c: #d9d9d4; --鐵c: #555c62;
+  --葉c: #6f9069; --葉淺c: #8fad81; --蘆c: #a89a5e; --袋c: #d9c9a0; --燈c: #e9a03b; --日c: #f6efd2;
+  position: relative; overflow: hidden; margin: 0 calc(-1 * clamp(16px, 4vw, 36px)); height: clamp(290px, 46vw, 340px);
+  background: var(--天b); border-bottom: 1px solid var(--線); user-select: none; -webkit-user-select: none; touch-action: manipulation;
+}
+.舞台.觀 { height: clamp(150px, 34vw, 230px); margin-top: -24px; margin-bottom: 18px; }
+.舞台.季-夏 { --天a: #a9d3dc; --天b: #e9f3ea; --葉c: #5f8a5c; --日c: #fff3c4; }
+.舞台.季-秋 { --天a: #e6cfa6; --天b: #f4ecd9; --遠c: #c7b697; --葉c: #b9843c; --葉淺c: #d2a85a; --地a: #ddd0b0; --地紋c: #cdbf9c; }
+.舞台.季-冬 { --天a: #cfd7dc; --天b: #eef0f0; --遠c: #b9c0c3; --葉c: #8b978d; --葉淺c: #a9b3aa; --地a: #e4e5df; --地紋c: #d3d5ce; --水c: #a9c3ca; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .舞台 {
+    --天a: #142029; --天b: #20313a; --遠c: #1b2a32; --地a: #2b3231; --地紋c: #353d3b; --牆c: #3b4347; --頂c: #0d1317; --木c: #5d4935; --淺木c: #77603f;
+    --暗c: #12171a; --石c: #4b5153; --水c: #1f404a; --浪c: #3e6670; --紙c: #cfc8b4; --臉c: #d9c3a6; --髮c: #0c0f12; --白髮c: #a9aaa6; --鐵c: #252b30;
+    --葉c: #2f4a3a; --葉淺c: #3b5c48; --蘆c: #5f5936; --袋c: #7c7153; --燈c: #f2b04a; --日c: #dfe6e2;
+  }
+}
+:root[data-theme="dark"] .舞台 {
+  --天a: #142029; --天b: #20313a; --遠c: #1b2a32; --地a: #2b3231; --地紋c: #353d3b; --牆c: #3b4347; --頂c: #0d1317; --木c: #5d4935; --淺木c: #77603f;
+  --暗c: #12171a; --石c: #4b5153; --水c: #1f404a; --浪c: #3e6670; --紙c: #cfc8b4; --臉c: #d9c3a6; --髮c: #0c0f12; --白髮c: #a9aaa6; --鐵c: #252b30;
+  --葉c: #2f4a3a; --葉淺c: #3b5c48; --蘆c: #5f5936; --袋c: #7c7153; --燈c: #f2b04a; --日c: #dfe6e2;
+}
+.舞台 .景圖 { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.舞台 .日 { fill: var(--日c); opacity: 0.9; }
+.舞台 .遠 { fill: var(--遠c); } .舞台 .遠.近 { opacity: 0.75; }
+.舞台 .遠線 { stroke: var(--遠c); stroke-width: 1.6; fill: none; }
+.舞台 .霧 { fill: var(--天b); opacity: 0.55; }
+.舞台 .地 { fill: var(--地a); } .舞台 .地紋 { stroke: var(--地紋c); stroke-width: 1; fill: none; stroke-dasharray: 26 14; }
+.舞台 .牆 { fill: var(--牆c); stroke: var(--頂c); stroke-width: 0.8; }
+.舞台 .城 { fill: var(--石c); stroke: var(--頂c); stroke-width: 0.8; } .舞台 .磚 { stroke: var(--頂c); stroke-width: 0.5; opacity: 0.35; fill: none; }
+.舞台 .門洞, .舞台 .暗, .舞台 .門 { fill: var(--暗c); } .舞台 .門扇 { stroke: var(--木c); stroke-width: 1.4; }
+.舞台 .屋頂, .舞台 .脊 { fill: var(--頂c); }
+.舞台 .木 { fill: var(--木c); stroke: var(--頂c); stroke-width: 0.6; } .舞台 .木.淺木 { fill: var(--淺木c); }
+.舞台 .木線 { stroke: var(--木c); stroke-width: 1.6; fill: none; stroke-linecap: round; } .舞台 .木線.粗 { stroke-width: 2.6; }
+.舞台 .朱柱 { fill: var(--朱); stroke: var(--頂c); stroke-width: 0.5; } .舞台 .朱線 { stroke: var(--朱); stroke-width: 1.4; fill: none; } .舞台 .朱線.粗 { stroke-width: 4; }
+.舞台 .朱點 { fill: var(--朱); }
+.舞台 .石 { fill: var(--石c); stroke: var(--頂c); stroke-width: 0.6; }
+.舞台 .鐵 { fill: var(--鐵c); } .舞台 .鐵線 { stroke: var(--鐵c); stroke-width: 1.6; fill: none; }
+.舞台 .窗 { fill: var(--紙c); stroke: var(--木c); stroke-width: 1; } .舞台 .格 { stroke: var(--頂c); stroke-width: 0.7; fill: none; opacity: 0.7; }
+.舞台 .匾 { fill: var(--暗c); stroke: var(--赭); stroke-width: 0.8; } .舞台 .匾字 { fill: var(--紙c); font: 700 9.5px var(--字-題); text-anchor: middle; letter-spacing: 1px; }
+.舞台 .幌 { fill: var(--州); } .舞台 .幌字 { fill: #fbf7ea; font: 700 9.5px var(--字-題); text-anchor: middle; }
+.舞台 .篷 { fill: var(--紙c); stroke: var(--頂c); stroke-width: 0.6; } .舞台 .篷.朱篷 { fill: var(--朱); } .舞台 .篷.靛篷 { fill: var(--澤); } .舞台 .篷.暗篷 { fill: var(--木c); }
+.舞台 .袋 { fill: var(--袋c); stroke: var(--木c); stroke-width: 0.7; }
+.舞台 .船 { fill: var(--木c); stroke: var(--頂c); stroke-width: 0.7; }
+.舞台 .葉 { fill: var(--葉c); } .舞台 .葉.淺 { fill: var(--葉淺c); }
+.舞台 .蘆 { stroke: var(--蘆c); stroke-width: 1.5; fill: none; stroke-linecap: round; } .舞台 .蘆頂 { fill: var(--蘆c); stroke: var(--木c); stroke-width: 0.6; } .舞台 .蓆 { fill: var(--袋c); opacity: 0.8; }
+.舞台 .屜 { fill: var(--淺木c); } .舞台 .鈕點 { fill: var(--頂c); }
+.舞台 .紙板, .舞台 .紙片 { fill: var(--紙c); stroke: var(--木c); stroke-width: 0.7; } .舞台 .字線 { stroke: var(--暗c); stroke-width: 0.9; fill: none; opacity: 0.65; }
+.舞台 .當牌 { fill: var(--紙c); stroke: var(--朱); stroke-width: 2; } .舞台 .當字 { fill: var(--朱); font: 900 15px var(--字-題); text-anchor: middle; }
+.舞台 .燈 { fill: var(--燈c); stroke: var(--朱); stroke-width: 0.8; }
+.舞台 .水 { fill: var(--水c); } .舞台 .水.遠水 { opacity: 0.7; }
+.舞台 .浪 { stroke: var(--浪c); stroke-width: 1.1; fill: none; stroke-linecap: round; animation: 浪 5s ease-in-out infinite alternate; }
+.舞台 .浪1 { animation-duration: 6.5s; } .舞台 .浪2 { animation-duration: 8s; }
+@keyframes 浪 { from { transform: translateX(-5px); } to { transform: translateX(5px); } }
+.舞台 .煙 { stroke: var(--紙c); stroke-width: 2.4; fill: none; stroke-linecap: round; opacity: 0.6; animation: 煙 3.6s ease-in-out infinite; transform-box: fill-box; transform-origin: bottom center; }
+.舞台 .煙.慢 { animation-duration: 5s; opacity: 0.4; }
+@keyframes 煙 { 0% { transform: translateY(4px) scaleY(0.7); opacity: 0; } 35% { opacity: 0.6; } 100% { transform: translateY(-6px) scaleY(1.15); opacity: 0; } }
+.舞台 .雪 { fill: #fff; opacity: 0.85; animation: 落 7s linear infinite; }
+.舞台 .落葉 { fill: var(--葉c); animation: 落 9s linear infinite; }
+.舞台 .飄1 { animation-delay: -2s; } .舞台 .飄2 { animation-delay: -4s; animation-duration: 10s; } .舞台 .飄3 { animation-delay: -6s; animation-duration: 12s; }
+@keyframes 落 { from { transform: translate(0, -30px); } to { transform: translate(-26px, 190px); } }
+
+/* 紙偶 */
+.舞台 .偶 { display: block; height: clamp(58px, 12vw, 84px); width: auto; overflow: visible; }
+.舞台 .偶.小 { height: clamp(48px, 10vw, 68px); }
+.舞台 .偶 .影 { fill: #000; opacity: 0.16; }
+.舞台 .偶 .衣 { fill: var(--衣); stroke: var(--頂c); stroke-width: 0.8; }
+.舞台 .偶 .袖 { fill: var(--衣); stroke: var(--頂c); stroke-width: 0.8; filter: brightness(0.88); }
+.舞台 .偶 .帶 { fill: var(--紙c); opacity: 0.85; } .舞台 .偶 .襟 { stroke: var(--紙c); stroke-width: 1.2; fill: none; opacity: 0.85; }
+.舞台 .偶 .臉 { fill: var(--臉c); stroke: var(--頂c); stroke-width: 0.8; }
+.舞台 .偶 .髮 { fill: var(--髮c); } .舞台 .偶 .髮.白 { fill: var(--白髮c); stroke: var(--頂c); stroke-width: 0.5; } .舞台 .偶 .髮線 { stroke: var(--髮c); stroke-width: 1.6; fill: none; stroke-linecap: round; }
+.舞台 .偶 .笠 { fill: var(--蘆c); stroke: var(--頂c); stroke-width: 0.8; }
+.舞台 .偶 .眼 { fill: var(--髮c); }
+.舞台 .偶 .身 { transform-box: fill-box; transform-origin: 50% 100%; animation: 晃 4.2s ease-in-out infinite alternate; }
+@keyframes 晃 { from { transform: rotate(-1.4deg); } to { transform: rotate(1.4deg); } }
+
+/* 站位：人在地線上，東西在前面的地上 */
+.舞台 .列 { position: absolute; left: 0; right: 0; display: flex; justify-content: space-evenly; align-items: flex-end; padding: 0 6px; pointer-events: none; }
+.舞台 .人列 { bottom: calc(30% - 8px); padding-left: 38%; padding-right: 3%; }
+.舞台.觀 .人列 { justify-content: flex-start; gap: 6%; padding-left: 46%; }
+.舞台 .物列 { bottom: 5px; align-items: flex-start; }
+.舞台 .位 {
+  pointer-events: auto; position: relative; display: grid; justify-items: center; gap: 1px; border: 0; background: none; padding: 2px 4px; margin: 0;
+  color: var(--墨); cursor: pointer; font: inherit; border-radius: 8px; min-width: 0; max-width: 24%;
+}
+.舞台 div.位 { cursor: default; }
+.舞台 .位:nth-child(2n) .身 { animation-delay: -1.7s; } .舞台 .位:nth-child(3n) .身 { animation-duration: 5.1s; }
+.舞台 .名牌 {
+  font-family: var(--字-介); font-size: 12px; line-height: 1.3; font-weight: 700; text-align: center; padding: 1px 7px; border-radius: 999px;
+  background: color-mix(in srgb, var(--紙二) 86%, transparent); border: 1px solid var(--線); max-width: 100%; position: relative;
+}
+.舞台 .名牌 small { display: block; font-weight: 400; font-size: 10.5px; color: var(--淡墨); }
+.舞台 .物 .名牌 { border-radius: 8px; font-family: var(--字-文); font-weight: 400; font-size: 12.5px; line-height: 1.25; }
+.舞台 .位.人 { max-width: none; }
+.舞台 .人 .名牌 { white-space: nowrap; }
+.舞台 .物 .名牌 small { font-family: var(--字-介); color: var(--州); font-weight: 700; }
+.舞台 .物 .名牌 small.因 { color: var(--淡墨); font-weight: 400; }
+.舞台 .物件 { display: block; height: clamp(26px, 6vw, 36px); width: auto; overflow: visible; transition: transform 0.15s ease; }
+.舞台 .位[disabled] { cursor: not-allowed; opacity: 0.55; }
+.舞台 button.位:hover:not([disabled]) .名牌, .舞台 button.位:focus-visible .名牌, .舞台 .位.選中 .名牌 { border-color: var(--州); background: var(--州淡); }
+.舞台 button.位:hover:not([disabled]) .偶, .舞台 button.位:hover:not([disabled]) .物件 { transform: translateY(-3px); }
+.舞台 .位 .偶 { transition: transform 0.15s ease; }
+.舞台 .位.已訪 .偶 { opacity: 0.78; }
+.舞台 .嘆 {
+  position: absolute; top: -9px; right: -7px; width: 17px; height: 17px; border-radius: 50%; background: var(--朱); color: #fff; font: 900 12px/17px var(--字-介);
+  font-style: normal; text-align: center; animation: 跳 1.1s ease-in-out infinite;
+}
+@keyframes 跳 { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+.舞台 .我 { position: absolute; bottom: calc(30% - 12px); transform: translateX(-50%); transition: left 0.4s ease-in-out; pointer-events: none; z-index: 2; }
+.舞台 .我 .偶 { filter: drop-shadow(0 0 0 var(--州)); }
+.舞台 .我 .影 { fill: var(--州); opacity: 0.45; }
+.舞台 .我.左 .偶 { transform: scaleX(-1); }
+.舞台 .我.走 .身 { animation: 步 0.28s ease-in-out infinite alternate; }
+@keyframes 步 { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-3px) rotate(3deg); } }
+.舞台.觀 .我 { left: 30% !important; }
+.舞台 .燈列 { position: absolute; top: 8px; right: 12px; display: flex; gap: 8px; }
+.舞台 .燈列 i { width: 13px; height: 17px; border-radius: 45% / 38%; border: 1.5px solid var(--朱); background: transparent; position: relative; }
+.舞台 .燈列 i::before { content: ""; position: absolute; left: 50%; top: -7px; width: 1.5px; height: 6px; background: var(--木c); }
+.舞台 .燈列 i.亮 { background: var(--燈c); box-shadow: 0 0 10px 2px color-mix(in srgb, var(--燈c) 70%, transparent); }
+.舞台 .出門 {
+  position: absolute; top: 8px; left: 10px; border: 1px solid var(--線); background: color-mix(in srgb, var(--紙二) 88%, transparent); color: var(--墨);
+  border-radius: 999px; padding: 3px 12px; font-size: var(--小); cursor: pointer; font-weight: 700;
+}
+.舞台 .出門:hover { border-color: var(--州); color: var(--州); }
+.舞台 .台曆 {
+  position: absolute; top: 8px; left: 50%; transform: translateX(-50%); padding: 2px 12px; border-radius: 999px; font-size: var(--小); font-weight: 700;
+  font-family: var(--字-題); letter-spacing: 0.1em; color: var(--墨); background: color-mix(in srgb, var(--紙二) 82%, transparent); border: 1px solid var(--線);
+}
+.舞台 .台曆.新旬 { animation: 換旬 0.9s ease both; }
+@keyframes 換旬 { 0% { transform: translateX(-50%) scale(0.7); opacity: 0; background: var(--州); color: #fff; } 60% { transform: translateX(-50%) scale(1.12); opacity: 1; background: var(--州); color: #fff; } 100% { transform: translateX(-50%); } }
+.舞台 .台報 {
+  position: absolute; top: 38px; left: 50%; transform: translateX(-50%); width: max-content; max-width: 84%; display: grid; gap: 4px; padding: 6px 12px; z-index: 3;
+  border-radius: 10px; background: color-mix(in srgb, var(--紙二) 94%, transparent); border: 1px solid var(--州); font-size: var(--小); pointer-events: none;
+  animation: 報 4.2s ease both;
+}
+.舞台 .台報 .變 { margin-top: 3px; }
+@keyframes 報 { 0% { opacity: 0; transform: translate(-50%, 8px); } 9% { opacity: 1; transform: translate(-50%, 0); } 80% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -6px); visibility: hidden; } }
+
+/* 擲骰：一把尺，針走到擲出來的那一格 */
+.骰尺 { max-width: 38em; margin: 0 0 12px; }
+.骰尺 .尺 { position: relative; height: 16px; border-radius: 8px; background: var(--朱淡); overflow: hidden; border: 1px solid var(--線); }
+.骰尺 .區 { position: absolute; top: 0; bottom: 0; left: 0; }
+.骰尺 .區.代 { width: var(--代); background: color-mix(in srgb, var(--赭) 35%, var(--紙二)); }
+.骰尺 .區.成 { width: var(--成); background: var(--澤淡); border-right: 1px solid var(--澤); }
+.骰尺 .針 { position: absolute; top: -2px; bottom: -2px; width: 3px; margin-left: -1.5px; background: var(--墨); border-radius: 2px; left: var(--點); animation: 針 1.15s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+@keyframes 針 { 0% { left: 0%; } 45% { left: 96%; } 72% { left: calc(var(--點) - 9%); } 88% { left: calc(var(--點) + 3%); } 100% { left: var(--點); } }
+.骰尺 .尺註 { display: flex; justify-content: space-between; font-size: 11px; color: var(--淡墨); margin-top: 2px; }
+.骰尺 + .骰果, .互動 .骰果 { animation: 浮 0.4s ease 1.1s both; }
+/* 互動版：字一段一段浮出來，得失一顆一顆跳出來 */
+.互動 .變 span { animation: 蹦 0.35s cubic-bezier(0.3, 1.5, 0.5, 1) both; animation-delay: calc(var(--序, 0) * 0.09s + 0.25s); }
+@keyframes 蹦 { from { opacity: 0; transform: scale(0.6) translateY(6px); } to { opacity: 1; transform: none; } }
+.互動 .選項, .互動 .回 { animation: 浮 0.4s ease both; animation-delay: var(--後, 0s); }
+@media (prefers-reduced-motion: reduce) {
+  .舞台 *, .骰尺 .針, .互動 .變 span, .互動 .選項, .互動 .回, .骰尺 + .骰果, .互動 .骰果 { animation: none !important; transition: none !important; }
+  .舞台 .台報 { display: none; }
+}
 </style>
 
 <header class="頂" id="頂"></header>
@@ -1661,6 +1819,225 @@ if (typeof module !== "undefined") module.exports = 七州引擎;
 
 </script>
 <script>
+// 環澤七州 養成版｜舞台
+// 把「這一旬能做什麼」畫成一個可以點的場景：景是積木拼的，人是紙偶。
+// 這個檔只管畫（回傳 HTML 字串），不碰引擎；點了以後做什麼，由介面.js 接。
+// 試作：汀州 13 個地點各有自己的景；其他州先照地名猜一個通用的景。
+const 七州舞台 = (function () {
+  "use strict";
+  const esc = (x) => String(x == null ? "" : x).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const G = 140;                                   // 地線。景圖是 400×200，地在下面三成
+  const r1 = (n) => Math.round(n * 10) / 10;
+  const 雜 = (s) => { let h = 7; for (const c of String(s)) h = (Math.imul(h, 31) + c.charCodeAt(0)) >>> 0; return h; };
+
+  // ---------- 積木 ----------
+  const 頂 = (x, y, w, 簷, 高) => {
+    簷 = 簷 == null ? 9 : 簷; 高 = 高 || 14;
+    return `<path class="屋頂" d="M${x - 簷} ${y} C${r1(x - 簷 * 0.2)} ${y - 1} ${r1(x + 簷 * 0.4)} ${r1(y - 高 * 0.5)} ${x + 簷} ${y - 高} L${x + w - 簷} ${y - 高} C${r1(x + w - 簷 * 0.4)} ${r1(y - 高 * 0.5)} ${r1(x + w + 簷 * 0.2)} ${y - 1} ${x + w + 簷} ${y} Z"/><rect class="脊" x="${x + 簷 - 2}" y="${y - 高 - 3}" width="${w - 簷 * 2 + 4}" height="3.4" rx="1"/>`;
+  };
+  const 匾 = (cx, y, 字) => { const w = 字.length * 11 + 8; return `<rect class="匾" x="${r1(cx - w / 2)}" y="${y}" width="${w}" height="13" rx="1.5"/><text class="匾字" x="${cx}" y="${y + 10}">${esc(字)}</text>`; };
+  function 屋(x, w, h, o) {
+    o = o || {};
+    const y = G - h, 窗y = y + Math.min(14, h * 0.28);
+    let s = `<rect class="牆" x="${x}" y="${y}" width="${w}" height="${h}"/>`;
+    if (o.開) s += `<rect class="暗" x="${x + 8}" y="${y + 10}" width="${w - 16}" height="${h - 10}"/>`;
+    if (o.柱) for (let i = 0; i <= o.柱; i++) s += `<rect class="木" x="${r1(x + (w - 4) * i / o.柱)}" y="${y}" width="4" height="${h}"/>`;
+    if (o.門) s += `<rect class="門" x="${r1(x + w / 2 - 9)}" y="${G - 28}" width="18" height="28"/><path class="格" d="M${r1(x + w / 2)} ${G - 28} v28"/>`;
+    for (const wx of o.窗 || []) s += `<rect class="窗" x="${x + wx}" y="${r1(窗y)}" width="16" height="14"/><path class="格" d="M${x + wx + 8} ${r1(窗y)} v14 M${x + wx} ${r1(窗y + 7)} h16"/>`;
+    s += 頂(x, y, w, o.簷, o.脊 || Math.max(12, w * 0.09));
+    if (o.匾) s += 匾(x + w / 2, y + 3, o.匾);
+    return s;
+  }
+  const 圍牆 = (x, w, h) => `<rect class="牆" x="${x}" y="${G - (h || 22)}" width="${w}" height="${h || 22}"/><rect class="脊" x="${x}" y="${G - (h || 22) - 3}" width="${w}" height="3.4"/>`;
+  const 幌 = (x, 字, h) => { h = h || 70; return `<path class="木線" d="M${x} ${G} V${G - h}"/><rect class="幌" x="${x + 1}" y="${G - h + 2}" width="13" height="${字.length * 12 + 6}"/>${[...字].map((c, i) => `<text class="幌字" x="${x + 7.5}" y="${G - h + 14 + i * 12}">${esc(c)}</text>`).join("")}`; };
+  function 城牆(x, w, h, 門) {
+    let s = `<rect class="城" x="${x}" y="${G - h}" width="${w}" height="${h}"/>`;
+    for (let i = x; i < x + w - 4; i += 12) s += `<rect class="城" x="${i}" y="${G - h - 5}" width="7" height="5"/>`;
+    for (let j = G - h + 12; j < G - 4; j += 12) s += `<path class="磚" d="M${x} ${j} h${w}"/>`;
+    if (門 != null) s += `<path class="門洞" d="M${門 - 20} ${G} V${G - 34} a20 20 0 0 1 40 0 V${G} Z"/><path class="門扇" d="M${門} ${G} V${G - 54}"/>`;
+    return s;
+  }
+  const 柱列 = (x, w, n, h) => { let s = ""; for (let i = 0; i < n; i++) { const px = r1(x + (w - 7) * i / (n - 1)); s += `<rect class="朱柱" x="${px}" y="${G - h}" width="7" height="${h}"/><rect class="石" x="${px - 2}" y="${G - 4}" width="11" height="4"/>`; } return s; };
+  const 攤 = (x, w, 色) => `<path class="木線" d="M${x + 3} ${G} V${G - 40} M${x + w - 3} ${G} V${G - 40}"/><path class="篷 ${色 || ""}" d="M${x - 4} ${G - 36} L${x + 6} ${G - 50} H${x + w - 6} L${x + w + 4} ${G - 36} Z"/><rect class="木" x="${x}" y="${G - 16}" width="${w}" height="5"/><path class="木線" d="M${x + 4} ${G - 11} V${G} M${x + w - 4} ${G - 11} V${G}"/>`;
+  const 袋堆 = (x, n, y) => { y = y == null ? G : y; let s = ""; const 列 = [[0, 0], [15, 0], [30, 0], [7, -10], [22, -10], [14, -20]]; for (let i = 0; i < Math.min(n, 6); i++) s += `<rect class="袋" x="${x + 列[i][0]}" y="${y - 11 + 列[i][1]}" width="16" height="11" rx="4"/>`; return s; };
+  const 箱 = (x, w, h, y) => { w = w || 16; h = h || 12; y = y == null ? G : y; return `<rect class="木" x="${x}" y="${y - h}" width="${w}" height="${h}"/><path class="格" d="M${x} ${r1(y - h / 2)} h${w}"/>`; };
+  const 船 = (x, w, y, 篷) => { y = y == null ? G + 16 : y; return `<path class="船" d="M${x} ${y - 8} Q${r1(x + w / 2)} ${y + 6} ${x + w} ${y - 8} L${x + w - 8} ${y} H${x + 8} Z"/>${篷 === false ? "" : `<path class="篷 暗篷" d="M${r1(x + w * 0.3)} ${y - 8} q${r1(w * 0.2)} -16 ${r1(w * 0.4)} 0 Z"/>`}<path class="木線" d="M${r1(x + w * 0.22)} ${y - 8} V${y - 42}"/>`; };
+  const 樹 = (x, h, 松) => { h = h || 46; return 松
+    ? `<path class="木線 粗" d="M${x} ${G} V${G - h}"/><path class="葉" d="M${x - 14} ${r1(G - h * 0.45)} L${x} ${r1(G - h * 0.8)} L${x + 14} ${r1(G - h * 0.45)} Z M${x - 11} ${r1(G - h * 0.7)} L${x} ${G - h - 6} L${x + 11} ${r1(G - h * 0.7)} Z"/>`
+    : `<path class="木線 粗" d="M${x} ${G} V${r1(G - h * 0.6)}"/><ellipse class="葉" cx="${x}" cy="${r1(G - h * 0.75)}" rx="${r1(h * 0.32)}" ry="${r1(h * 0.3)}"/><ellipse class="葉 淺" cx="${r1(x - h * 0.16)}" cy="${r1(G - h * 0.62)}" rx="${r1(h * 0.2)}" ry="${r1(h * 0.17)}"/>`; };
+  const 棚 = (x, w, h) => { h = h || 34; return `<path class="木線" d="M${x + 3} ${G} V${G - h} M${x + w - 3} ${G} V${G - h + 6}"/><path class="蘆頂" d="M${x - 5} ${G - h + 2} L${r1(x + w * 0.3)} ${G - h - 9} L${x + w + 5} ${G - h + 8} L${x + w + 3} ${G - h + 12} L${x - 5} ${G - h + 6} Z"/><path class="蓆" d="M${x + 5} ${G} V${r1(G - h * 0.6)} H${r1(x + w * 0.5)} V${G} Z"/>`; };
+  const 蘆 = (x, n, h) => { n = n || 5; h = h || 26; let s = ""; for (let i = 0; i < n; i++) { const px = x + i * 5, t = (i * 37) % 9 - 4; s += `<path class="蘆" d="M${px} ${G + 3} q${t} -${r1(h * 0.6)} ${r1(t * 1.6)} -${h - (i % 3) * 5}"/>`; } return s; };
+  function 櫃(x, w, h, 欄, 列) {
+    let s = `<rect class="木" x="${x}" y="${G - h}" width="${w}" height="${h}"/>`;
+    const cw = w / 欄, ch = (h - 4) / 列;
+    for (let i = 0; i < 欄; i++) for (let j = 0; j < 列; j++) s += `<rect class="屜" x="${r1(x + i * cw + 1.2)}" y="${r1(G - h + 3 + j * ch)}" width="${r1(cw - 2.4)}" height="${r1(ch - 2)}"/><circle class="鈕點" cx="${r1(x + i * cw + cw / 2)}" cy="${r1(G - h + 2 + j * ch + ch / 2)}" r="0.9"/>`;
+    return s;
+  }
+  const 燈籠 = (x, y) => `<path class="木線" d="M${x} ${y - 8} V${y}"/><ellipse class="燈" cx="${x}" cy="${y + 6}" rx="5" ry="6.5"/><path class="木線" d="M${x} ${y + 12.5} v4"/>`;
+  const 井 = (x) => `<rect class="石" x="${x}" y="${G - 10}" width="20" height="10" rx="1"/><path class="木線" d="M${x + 2} ${G - 10} V${G - 26} H${x + 18} V${G - 10}"/>`;
+  const 石獅 = (x) => `<rect class="石" x="${x}" y="${G - 8}" width="14" height="8"/><path class="石" d="M${x + 2} ${G - 8} v-9 a5 5 0 0 1 10 0 v9 Z"/><circle class="石" cx="${x + 7}" cy="${G - 20}" r="4.2"/>`;
+  const 桌 = (x, w, h) => { h = h || 12; return `<rect class="木" x="${x}" y="${G - h}" width="${w}" height="3.5"/><path class="木線" d="M${x + 3} ${G - h + 3} V${G} M${x + w - 3} ${G - h + 3} V${G}"/>`; };
+  const 煙 = (x, y) => `<path class="煙" d="M${x} ${y} q-5 -8 0 -15 q5 -7 0 -15"/><path class="煙 慢" d="M${x + 6} ${y - 2} q-4 -7 0 -13 q4 -6 0 -12"/>`;
+  const 爐 = (x) => `<path class="鐵" d="M${x} ${G} l2 -12 h14 l2 12 Z"/><rect class="鐵" x="${x + 3}" y="${G - 17}" width="12" height="5" rx="2"/>${煙(x + 9, G - 18)}`;
+  const 鍋 = (x) => `<path class="木線" d="M${x - 2} ${G} L${x + 11} ${G - 30} L${x + 24} ${G} M${x + 11} ${G - 30} V${G - 14}"/><path class="鐵" d="M${x + 2} ${G - 14} h18 a9 9 0 0 1 -18 0 Z"/>${煙(x + 11, G - 16)}`;
+  const 水面 = (x1, x2, y) => { y = y == null ? G : y; const n = Math.max(1, Math.floor((x2 - x1 - 24) / 16)); return `<rect class="水" x="${x1}" y="${y}" width="${x2 - x1}" height="${200 - y}"/>${[9, 22, 38].map((d, i) => `<path class="浪 浪${i}" d="M${x1 + 6 + i * 5} ${y + d} q4 -3 8 0${" t8 0".repeat(Math.max(1, n * 2 - 2 - i))}"/>`).join("")}`; };
+  const 棧 = (x, w, y) => { y = y == null ? G : y; let s = `<rect class="木" x="${x}" y="${y - 3}" width="${w}" height="5"/>`; for (let i = x + 6; i < x + w; i += 22) s += `<path class="木線 粗" d="M${i} ${y + 2} V${y + 22}"/>`; return s; };
+  const 階 = (x, w, n) => { n = n || 3; let s = ""; for (let i = 0; i < n; i++) s += `<rect class="石" x="${x - i * 5}" y="${G - (n - i) * 4}" width="${w + i * 10}" height="4"/>`; return s; };
+  const 山 = (pts, cls) => `<path class="${cls || "遠"}" d="M0 ${G} ${pts.map(([x, y]) => `L${x} ${y}`).join(" ")} L400 ${G} Z"/>`;
+  const 柵 = (x, w) => { let s = `<path class="木線" d="M${x} ${G - 9} h${w} M${x} ${G - 4} h${w}"/>`; for (let i = x; i <= x + w; i += 9) s += `<path class="木線" d="M${i} ${G} v-13"/>`; return s; };
+  const 板 = (x, w, h, 行) => { let s = `<path class="木線" d="M${x + 5} ${G} V${G - 16} M${x + w - 5} ${G} V${G - 16}"/><rect class="紙板" x="${x}" y="${G - 16 - h}" width="${w}" height="${h}"/>`; for (let i = 0; i < (行 || 3); i++) s += `<path class="字線" d="M${x + 5} ${G - 16 - h + 7 + i * 6} h${w - 10 - (i % 2) * 8}"/>`; return s; };
+  const 牌坊 = (x, w) => `<path class="朱線 粗" d="M${x + 4} ${G} V${G - 62} M${r1(x + w * 0.3)} ${G} V${G - 72} M${r1(x + w * 0.7)} ${G} V${G - 72} M${x + w - 4} ${G} V${G - 62}"/><rect class="朱柱" x="${x}" y="${G - 60}" width="${w}" height="5"/><rect class="朱柱" x="${r1(x + w * 0.24)}" y="${G - 74}" width="${r1(w * 0.52)}" height="5"/>${頂(r1(x + w * 0.26), G - 74, r1(w * 0.48), 7, 9)}${頂(x + 2, G - 60, r1(w * 0.22), 5, 7)}${頂(r1(x + w * 0.78) - 2, G - 60, r1(w * 0.22), 5, 7)}`;
+
+  // ---------- 遠景：每一州一種 ----------
+  const 遠景 = {
+    汀: () => 山([[0, 100], [58, 100], [58, 90], [74, 90], [74, 100], [168, 100], [168, 84], [176, 76], [200, 66], [224, 76], [232, 84], [232, 100], [326, 100], [326, 90], [342, 90], [342, 100], [400, 100]]),
+    渡: () => `<rect class="水 遠水" x="0" y="104" width="400" height="${G - 104}"/><path class="遠" d="M0 104 h400 v3 h-400 Z"/>` + [30, 150, 290].map((x) => `<path class="遠" d="M${x} 108 q16 8 34 0 l-5 5 h-24 Z"/>`).join(""),
+    鹽: () => `<rect class="水 遠水" x="0" y="100" width="400" height="${G - 100}"/>` + [60, 96, 250, 300, 336].map((x, i) => `<path class="遠線" d="M${x} 112 V${80 + (i % 3) * 6} M${x - 7} ${92 + (i % 3) * 5} h14"/>`).join(""),
+    淵: () => 山([[0, 96], [50, 62], [92, 86], [150, 40], [208, 82], [262, 56], [320, 88], [370, 66], [400, 80]]) + 山([[0, 118], [70, 96], [140, 114], [230, 92], [320, 112], [400, 98]], "遠 近") + `<rect class="霧" x="0" y="96" width="400" height="10"/>`,
+    霜: () => 山([[0, 112], [80, 96], [170, 108], [260, 92], [340, 106], [400, 98]]) + [70, 250, 300].map((x) => `<path class="遠" d="M${x} ${G} l10 -18 l10 18 Z"/>`).join(""),
+    陶: () => 山([[0, 108], [90, 90], [180, 106], [280, 88], [400, 104]]) + [120, 232, 318].map((x, i) => `<rect class="遠" x="${x}" y="${78 - i * 4}" width="7" height="${G - 78 + i * 4}"/>${煙(x + 3.5, 76 - i * 4)}`).join(""),
+    灰: () => 山([[0, 100], [40, 78], [72, 96], [120, 70], [170, 98], [230, 74], [280, 96], [330, 72], [400, 94]]) + `<rect class="遠" x="286" y="96" width="60" height="${G - 96}"/><rect class="遠" x="300" y="86" width="14" height="12"/>`,
+  };
+
+  // ---------- 汀州 13 個地點 ----------
+  const 景表 = {
+    "汀-碼頭": () => 水面(0, 196) + 船(14, 72) + 船(104, 56, G + 34, false) + 棧(118, 100) + 箱(248) + 箱(266, 18, 14) + 箱(256, 16, 12, G - 12) + 幌(318, "渡口") + 樹(372, 52),
+    "汀-城南": () => 攤(18, 76, "朱篷") + 袋堆(26, 3, G - 16) + 幌(104, "米") + 攤(140, 82, "靛篷") + 袋堆(232, 6) + 攤(290, 78, "朱篷") + 幌(378, "糧", 58),
+    "汀-書院": () => 圍牆(0, 108) + 樹(46, 58, true) + 屋(118, 164, 64, { 柱: 4, 門: true, 匾: "書院", 簷: 12, 脊: 18 }) + 階(190, 20, 2) + 圍牆(292, 108) + 樹(350, 52, true),
+    "汀-宮門": () => `<rect class="牆" x="158" y="${G - 116}" width="84" height="24"/>` + 頂(158, G - 116, 84, 12, 14) + 城牆(0, 400, 92, 200) + 石獅(140) + 石獅(246) + 板(304, 46, 30, 4),
+    "汀-寢宮": () => `<rect class="牆" x="0" y="${G - 100}" width="400" height="100"/>` + [40, 150, 260].map((x) => `<rect class="窗" x="${x}" y="${G - 74}" width="60" height="34"/><path class="格" d="M${x + 20} ${G - 74} v34 M${x + 40} ${G - 74} v34 M${x} ${G - 57} h60"/>`).join("")
+      + `<rect class="屋頂" x="0" y="${G - 112}" width="400" height="12"/>` + 柱列(8, 384, 6, 100) + `<path class="朱線" d="M0 ${G - 16} H400 M0 ${G - 8} H400"/>` + 爐(318) + 燈籠(122, G - 98) + 燈籠(284, G - 98),
+    "汀-宗祠": () => 樹(42, 52) + 屋(150, 100, 46, { 門: true }) + 牌坊(104, 192) + 匾(200, G - 68, "宗祠") + 樹(356, 58),
+    "汀-當鋪": () => 屋(104, 190, 72, { 匾: "當鋪", 簷: 11 }) + `<rect class="暗" x="150" y="${G - 52}" width="98" height="22"/><path class="鐵線" d="${[0, 1, 2, 3, 4, 5, 6].map((i) => `M${158 + i * 14} ${G - 52} v22`).join(" ")}"/><rect class="木" x="144" y="${G - 30}" width="110" height="30"/>`
+      + `<path class="木線" d="M330 ${G} V${G - 86} h-16"/><circle class="當牌" cx="314" cy="${G - 70}" r="15"/><text class="當字" x="314" y="${G - 65}">當</text>` + 燈籠(118, G - 70),
+    "汀-糧號": () => 屋(58, 284, 76, { 開: true, 匾: "糧號", 柱: 3, 簷: 12 }) + 袋堆(76, 6) + `<rect class="木" x="150" y="${G - 22}" width="120" height="22"/><rect class="木 淺木" x="146" y="${G - 25}" width="128" height="4"/>`
+      + `<rect class="紙板" x="286" y="${G - 62}" width="38" height="36"/><path class="字線" d="M292 ${G - 54} h26 M292 ${G - 47} h20 M292 ${G - 40} h26 M292 ${G - 33} h14"/>` + 袋堆(352, 3),
+    "汀-女學": () => 圍牆(0, 400, 30) + 屋(26, 92, 44, { 窗: [14, 60] }) + 屋(150, 100, 48, { 門: true, 匾: "女學" }) + 屋(282, 92, 44, { 窗: [14, 60] }) + 桌(96, 44) + 爐(254) + 樹(388, 46),
+    "汀-老家": () => 樹(66, 62) + 屋(136, 124, 52, { 門: true, 窗: [14, 92] }) + 井(288) + 柵(326, 74),
+    "汀-太醫院": () => `<rect class="牆" x="0" y="${G - 114}" width="400" height="114"/>` + 櫃(34, 216, 98, 10, 6) + 匾(142, G - 113, "藥房") + `<rect class="木" x="270" y="${G - 24}" width="74" height="24"/><path class="木線" d="M306 ${G - 24} V${G - 46} M292 ${G - 44} H320"/><path class="格" d="M292 ${G - 44} l-4 10 h8 Z M320 ${G - 44} l-4 10 h8 Z"/>`
+      + `<path class="木線" d="M360 ${G} V${G - 60} M392 ${G} V${G - 60} M360 ${G - 20} h32 M360 ${G - 38} h32 M360 ${G - 56} h32"/>` + 燈籠(250, G - 106),
+    "汀-南郊": () => `<path class="水" d="M0 ${G + 14} h118 l10 12 h-128 Z"/><rect class="木" x="96" y="${G + 13}" width="40" height="3"/>` + 蘆(4, 6) + 棚(36, 74) + 鍋(142) + 棚(196, 84, 38) + 棚(304, 70, 30) + 蘆(378, 5, 22),
+    "汀-分號": () => 屋(98, 204, 76, { 匾: "澤通", 簷: 11 }) + `<rect class="暗" x="126" y="${G - 58}" width="94" height="30"/><path class="鐵線" d="${[0, 1, 2, 3, 4, 5, 6, 7].map((i) => `M${134 + i * 11.4} ${G - 58} v30`).join(" ")}"/><rect class="木" x="122" y="${G - 28}" width="102" height="8"/>`
+      + `<rect class="鐵" x="246" y="${G - 42}" width="32" height="42"/><circle class="鈕點" cx="252" cy="${G - 22}" r="1.4"/>` + 幌(326, "票") + 燈籠(112, G - 72),
+  };
+  // 其他州還沒有自己的景：照地名猜。
+  function 通用景(名) {
+    const 尾 = 名.slice(-2);
+    if (/碼頭|泊|灣|汊|溝|岸|泉/.test(名)) return 水面(0, 190) + 船(20, 70) + 棧(120, 96) + 箱(250) + 幌(312, 尾);
+    if (/棚/.test(名)) return 蘆(6, 6) + 棚(40, 80) + 鍋(150) + 棚(210, 86, 38) + 蘆(372, 5, 22);
+    if (/市/.test(名)) return 攤(24, 76, "朱篷") + 幌(110, 尾) + 攤(150, 82, "靛篷") + 袋堆(244, 5) + 攤(296, 76, "朱篷");
+    if (/田|場|屯|界|坡|渠|山門|北山/.test(名)) return 樹(50, 54) + 柵(96, 110) + `<rect class="石" x="238" y="${G - 16}" width="26" height="16" rx="5"/>` + 樹(330, 46, true);
+    if (/帳/.test(名) && !/帳房/.test(名)) return `<path class="篷 朱篷" d="M120 ${G} L200 ${G - 70} L280 ${G} Z"/><path class="暗" d="M188 ${G} L200 ${G - 34} L212 ${G} Z"/>` + 柵(300, 80);
+    if (/堡|牆|廟|閣/.test(名)) return 城牆(60, 280, 80, 200) + 石獅(150) + 石獅(238);
+    return 屋(110, 180, 68, { 門: true, 匾: 尾, 簷: 11 }) + 樹(52, 54) + 燈籠(124, G - 64) + 幌(330, 尾.slice(0, 1));
+  }
+  const 飄 = { 冬: Array.from({ length: 14 }, (_, i) => `<circle class="雪 飄${i % 4}" cx="${(i * 71) % 400}" cy="${(i * 37) % 120}" r="${1 + (i % 3) * 0.4}"/>`).join(""),
+    秋: Array.from({ length: 6 }, (_, i) => `<path class="落葉 飄${i % 4}" d="M${(i * 83 + 20) % 400} ${(i * 29) % 90} q3 -3 6 0 q-3 3 -6 0 Z"/>`).join("") };
+  function 景圖(地, 地名, 州, 季) {
+    const 中 = (景表[地] || (() => 通用景(地名 || "")))();
+    return `<svg class="景圖" viewBox="0 0 400 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+      <defs><linearGradient id="天漸" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--天a)"/><stop offset="0.75" style="stop-color:var(--天b)"/></linearGradient></defs><rect width="400" height="200" fill="url(#天漸)"/><circle class="日" cx="338" cy="34" r="12"/>
+      ${(遠景[州] || 遠景.汀)()}
+      <rect class="地" x="0" y="${G}" width="400" height="${200 - G}"/><path class="地紋" d="M0 ${G + 22} H400 M0 ${G + 44} H400"/>
+      ${中}${飄[季] || ""}</svg>`;
+  }
+
+  // ---------- 紙偶 ----------
+  const 州色相 = { 渡: 178, 鹽: 214, 汀: 12, 淵: 258, 霜: 104, 陶: 28, 灰: 212 };
+  function 扮相(名, 身分, 性別) {
+    const t = `${名} ${身分 || ""}`;
+    const o = { 頭: "髻", 持: "", 小: /童|孩|小夥計|新學徒|小徒|小祭/.test(t), 老: /老|翁|婆|帳母|四十年|三十年|五十年/.test(t), 女: 性別 === "女" || /婆|娘|嫂|姑|妹|婦|嬤|帳母|阿穗|阿漣|阿鷺/.test(名) || /婦人|女兒|女師/.test(身分 || "") };
+    if (/篙|船工|船家|漁/.test(t)) { o.頭 = "笠"; o.持 = "篙"; }
+    else if (/兵|屯長|屯官|軍|卒|都督|差役/.test(t)) { o.頭 = "盔"; o.持 = /軍醫/.test(t) ? "" : "槍"; }
+    else if (/祭|廟|誓證/.test(t)) o.頭 = "冠";
+    else if (/吏|官|禮部|內侍|太醫|供奉|朝奉/.test(t)) o.頭 = "紗";
+    else if (/山長|先生|書院|藥師|河醫|軍醫|帳房/.test(t)) { o.頭 = "巾"; o.持 = /帳房/.test(t) ? "算" : "卷"; }
+    else if (/掌櫃|東家|商|票|當|牙|鋪|販|家主|客棧/.test(t)) { o.頭 = "帽"; o.持 = "算"; }
+    if (o.女 && ["髻", "帽", "巾"].includes(o.頭)) o.頭 = "鬟";
+    if (o.老 && !o.持) o.持 = "杖";
+    return o;
+  }
+  function 偶(人, 我) {
+    const p = 扮相(人.名 || "", 人.身分, 人.性別);
+    const h = ((州色相[人.州] == null ? 30 : 州色相[人.州]) + (雜(人.名) % 44) - 22 + 360) % 360;
+    const 衣 = 我 ? "var(--州)" : `hsl(${h} ${30 + (雜(人.名 + "彩") % 18)}% ${40 + (雜(人.名 + "明") % 12)}%)`;
+    const 髮 = p.老 ? "髮 白" : "髮";
+    const 頭飾 = {
+      笠: `<path class="笠" d="M5 15 L22 3 L39 15 Z"/>`,
+      盔: `<path class="鐵" d="M13.5 14 a8.5 9 0 0 1 17 0 Z"/><path class="朱線" d="M22 5 V0.5"/>`,
+      冠: `<path class="${髮}" d="M15 12 L17 0.5 H27 L29 12 Z"/>`,
+      紗: `<rect class="髮" x="15" y="4.5" width="14" height="7.5" rx="2"/><path class="髮線" d="M15 9 H4.5 M29 9 H39.5"/>`,
+      巾: `<rect class="${髮}" x="14.5" y="3.5" width="15" height="8.5" rx="1.5"/><path class="髮線" d="M28 11 q4 5 3 11"/>`,
+      帽: `<path class="${髮}" d="M13.5 13 a8.5 9 0 0 1 17 0 Z"/><circle class="朱點" cx="22" cy="3.6" r="1.5"/>`,
+      鬟: `<path class="${髮}" d="M13.2 16 a8.8 9.4 0 0 1 17.6 0 q-2 -6 -8.8 -6 q-6.8 0 -8.8 6 Z"/><circle class="${髮}" cx="22" cy="4" r="3.8"/><path class="朱線" d="M26 3.6 h5.5"/>`,
+      髻: `<path class="${髮}" d="M13.2 15 a8.8 9.4 0 0 1 17.6 0 q-3 -4.6 -8.8 -4.6 q-5.8 0 -8.8 4.6 Z"/><circle class="${髮}" cx="22" cy="4" r="2.7"/>`,
+    }[p.頭];
+    const 鬚 = p.老 && !p.女 ? `<path class="髮 白" d="M18 21.5 q4 7.5 8 0 q-4 2 -8 0 Z"/>` : "";
+    const 持 = { 篙: `<path class="木線" d="M38 66 L34 3"/>`, 槍: `<path class="木線" d="M38 66 V7"/><path class="鐵" d="M36 9 L38 1.5 L40 9 Z"/>`, 杖: `<path class="木線 粗" d="M37 66 V31 q0 -4 -4 -4"/>`,
+      卷: `<rect class="紙片" x="30.5" y="39" width="9" height="5" rx="2"/>`, 算: `<rect class="木" x="29.5" y="38.5" width="11" height="7" rx="1"/><path class="格" d="M31.5 41 h7 M31.5 43.6 h7"/>` }[p.持] || "";
+    return `<svg class="偶${p.小 ? " 小" : ""}" viewBox="0 0 44 68" aria-hidden="true" focusable="false" style="--衣:${衣}">
+      <ellipse class="影" cx="22" cy="65" rx="13" ry="2.6"/>
+      <g class="身"><path class="衣" d="M14 26 Q22 22 30 26 L35 62 Q22 66 9 62 Z"/>
+        <path class="袖" d="M14 27 L7 44 L11 46 L16 34 Z M30 27 L37 44 L33 46 L28 34 Z"/>
+        <path class="帶" d="M12.6 41 Q22 44 31.4 41 L31.8 44.4 Q22 47.4 12.2 44.4 Z"/>
+        <path class="襟" d="M19 25 L22 33 L25 25"/>
+        <circle class="臉" cx="22" cy="16" r="8"/>${頭飾}${鬚}
+        <circle class="眼" cx="19" cy="16.6" r="0.9"/><circle class="眼" cx="25" cy="16.6" r="0.9"/>${持}</g></svg>`;
+  }
+
+  // ---------- 可以做的事：每一件是地上的一樣東西 ----------
+  const 珠 = [9, 14, 19, 24, 29].map((x) => `<circle class="珠" cx="${x - 1}" cy="11.6" r="1.6"/><circle class="珠" cx="${x - 1}" cy="17.6" r="1.6"/><circle class="珠" cx="${x - 1}" cy="21.4" r="1.6"/>`).join("");
+  const 物圖 = {
+    算盤: `<rect class="木" x="4" y="8" width="28" height="17" rx="1.5"/><path class="格" d="M6 14.4 h24"/>${珠}`,
+    書: `<path class="紙片" d="M5 9 Q12 6 18 9 V25 Q12 22 5 25 Z M31 9 Q24 6 18 9 V25 Q24 22 31 25 Z"/><path class="字線" d="M8 13 h7 M8 17 h7 M21 13 h7 M21 17 h7"/>`,
+    筆: `<rect class="石" x="4" y="18" width="18" height="7" rx="1.5"/><ellipse class="暗" cx="13" cy="20.6" rx="5" ry="1.6"/><path class="木線 粗" d="M30 5 L20 19"/><path class="暗" d="M20 19 l-2.4 4 l4 -2.6 Z"/>`,
+    袋: `<path class="袋" d="M8 26 Q4 16 11 9 h14 Q32 16 28 26 Z"/><path class="格" d="M12 9 q6 4 12 0"/>`,
+    藥: `<path class="石" d="M7 14 h22 q-1 12 -11 12 q-10 0 -11 -12 Z"/><path class="木線 粗" d="M25 4 L16 17"/>`,
+    篙: `<path class="木線 粗" d="M6 26 L30 4"/><path class="浪" d="M3 25 q4 -3 8 0 t8 0 t8 0"/>`,
+    茶: `<path class="鐵" d="M8 13 h16 v8 a5 5 0 0 1 -5 5 h-6 a5 5 0 0 1 -5 -5 Z"/><path class="木線" d="M24 15 q7 0 5 6 q-1 3 -5 3 M11 12 q5 -8 10 0"/>`,
+    路: `<path class="木線 粗" d="M18 27 V7"/><path class="木" d="M8 7 h17 l4 3.5 l-4 3.5 h-17 Z"/><path class="木 淺木" d="M28 16 h-15 l-4 3 l4 3 h15 Z"/>`,
+    工: `<path class="木線 粗" d="M9 25 L22 12"/><rect class="鐵" x="19" y="4" width="13" height="8" rx="1.5" transform="rotate(45 25.5 8)"/>`,
+  };
+  function 物選(類, 名) {
+    if (類 === "歇息") return "茶";
+    if (類 === "走動") return "路";
+    if (類 === "修習") return /算|帳/.test(名) ? "算盤" : /藥|認|配/.test(名) ? "藥" : /寫|抄|字|記|訂/.test(名) ? "筆" : "書";
+    if (/帳|算|櫃|鋪|票|兌/.test(名)) return "算盤";
+    if (/抄|寫|記|謄|冊|講|課/.test(名)) return "筆";
+    if (/藥|煎|配|秤/.test(名)) return "藥";
+    if (/扛|搬|卸|糧|米|貨|袋/.test(名)) return "袋";
+    if (/船|撐|篙|渡|水|網/.test(名)) return "篙";
+    return "工";
+  }
+  const 嘆 = `<i class="嘆" title="這裡有跟眼下相關的事">！</i>`;
+
+  // o：{ 地, 地名, 州, 季, 物:[{key,類,名,可,理由,事,鍵}], 人:[{key,名,稱,段,已訪,事,鍵,身分,性別,州}], 我:{名,身分,性別}, 我x, ap, 滿, 觀, 曆, 新旬, 報 }
+  // 曆：台上那塊小曆的字；新旬：剛換旬（小曆跳一下）；報：剛剛發生的事（介面.js 排好的 HTML）。
+  // 觀：事件進行中，只看不點（人只列出文字裡提到的）。
+  function 場景(o) {
+    const 觀 = !!o.觀;
+    const 人 = (o.人 || []).map((p) => {
+      const 內 = `<span class="名牌">${p.事 && !觀 ? 嘆 : ""}${esc(p.稱 || p.名)}${p.段 && !觀 ? `<small>${esc(p.段)}${p.已訪 ? "・找過了" : ""}</small>` : ""}</span>${偶(p)}`;
+      return 觀 ? `<div class="位 人">${內}</div>`
+        : `<button class="位 人${p.已訪 ? " 已訪" : ""}" data-act="行:${esc(p.key)}" data-鍵="${p.鍵}" aria-label="找${esc(p.名)}">${內}</button>`;
+    }).join("");
+    const 物 = 觀 ? "" : (o.物 || []).map((a) => `<button class="位 物" data-act="行:${esc(a.key)}" data-鍵="${a.鍵}" ${a.可 ? "" : `disabled title="${esc(a.理由 || "")}"`}>
+        <svg class="物件" viewBox="0 0 36 30" aria-hidden="true" focusable="false">${物圖[物選(a.類, a.名)]}</svg>
+        <span class="名牌">${a.事 ? 嘆 : ""}<small>${esc(a.類)}</small>${esc(a.名)}${a.可 ? "" : `<small class="因">${esc(a.理由 || "")}</small>`}</span></button>`).join("");
+    const 燈 = 觀 ? "" : `<div class="燈列" title="這一旬還能做的事" aria-hidden="true">${Array.from({ length: o.滿 || 0 }, (_, i) => `<i class="${i < o.ap ? "亮" : ""}"></i>`).join("")}</div>
+      <button class="出門" data-act="疊:地圖">出門<span class="鍵提示">（M）</span></button>`;
+    return `<div class="舞台 季-${esc(o.季 || "春")}${觀 ? " 觀" : ""}">
+      ${景圖(o.地, o.地名, o.州, o.季)}${燈}
+      ${!觀 && o.曆 ? `<div class="台曆${o.新旬 ? " 新旬" : ""}">${esc(o.曆)}</div>` : ""}${o.報 || ""}
+      <div class="列 人列">${人}</div>
+      <div class="我" style="left:${r1(o.我x == null ? 50 : o.我x)}%">${偶(Object.assign({ 州: o.州 }, o.我), true)}</div>
+      ${觀 ? "" : `<div class="列 物列">${物}</div>`}</div>`;
+  }
+  return { 場景, 偶 };
+})();
+
+</script>
+<script>
 /* 環澤七州 養成版｜介面
  * 只負責畫面、存檔、按鍵；規則全在 七州引擎。
  */
@@ -1680,7 +2057,9 @@ if (typeof module !== "undefined") module.exports = 七州引擎;
   let S = null;
   const 教鍵 = "七州養成版-教過";
   const UI = { 分頁: "你", 疊: "標題", 開發: LS.get(開發鍵) === "1", 有存檔: null, 畫面鍵: "", 報告: null, 訊: "", 訊錯: false, 匯出文: "",
-    帳開: false, 全動態: false, 教過: LS.get(教鍵) === "1" };
+    帳開: false, 全動態: false, 教過: LS.get(教鍵) === "1",
+    // 互動版：這一旬能做的事畫成場景（舞台.js）；文字版：照舊是選單。我x 是主角站在台上的哪裡（百分比）。
+    互動: LS.get("七州養成版-版型") !== "文字", 我x: 24, 走中: false };
 
   // ================= 存檔 =================
   const 存 = {
@@ -1753,15 +2132,60 @@ if (typeof module !== "undefined") module.exports = 七州引擎;
     return r ? `看起來該做的都做了。等到${E.短時(r.t).replace(/^\d+年/, (y) => (E.拆時(r.t).年 === E.拆時(S.t).年 ? "" : y))}，就知道了。` : "";
   }
   const 地名 = (id) => ((P.地點[id] || {}).名 || id);
+  const 段隔 = 0.16;   // 互動版：每一段晚多少秒浮出來
   function 段落(文, 新) {
-    return 文.map((p) => `<p${新 ? ' class="新"' : ""}>${esc(p)}</p>`).join("");
+    const 排 = 新 && UI.互動;
+    return 文.map((p, i) => `<p${新 ? ' class="新"' : ""}${排 && i ? ` style="animation-delay:${Math.min(i * 段隔, 1.6).toFixed(2)}s"` : ""}>${esc(p)}</p>`).join("");
   }
+  const 段後 = (文) => (UI.互動 ? `--後:${Math.min((文 || []).length * 段隔, 1.6).toFixed(2)}s` : "");
   function 變化HTML(arr) {
     if (!arr || !arr.length) return "";
-    return `<div class="變">${arr.map((c) => {
+    return `<div class="變">${arr.map((c, i) => {
       const cls = c.印 ? "印記" : c.線索 ? "線索" : c.正 ? "得" : c.正 === false ? "失" : "";
-      return `<span class="${cls}${c.重 ? " 重" : ""}">${esc(c.字)}</span>`;
+      return `<span class="${cls}${c.重 ? " 重" : ""}" style="--序:${i}">${esc(c.字)}</span>`;
     }).join("")}</div>`;
+  }
+  // ---------- 舞台（互動版）----------
+  const 季名 = (t) => { const m = E.拆時(t).月; return m <= 3 ? "春" : m <= 6 ? "夏" : m <= 9 ? "秋" : "冬"; };
+  const 我偶 = () => ({ 名: S.pc.叫法, 身分: S.pc.身分, 性別: S.pc.性別 });
+  const 人偶 = (n) => { const o = P.人物[n] || {}; return { 名: n, 身分: o.身分, 性別: o.性別, 州: o.州 }; };
+  // 自由行動：能做的事是地上的東西，在場的人站在台上。號碼跟文字版一樣，數字鍵照舊能用。
+  function 舞台HTML(L, 事) {
+    const id = S.pc.地點, 地 = P.地點[id];
+    let n = 0;
+    const 物 = L.行動.map((a) => ({ key: a.key, 類: a.類, 名: a.名, 可: a.可, 理由: a.理由, 鍵: ++n, 事: !!(a.可 && (事.行[a.類 + "@" + id] || 事.行[a.類 + "@"])) }));
+    const 人 = L.拜訪.map((a) => Object.assign(人偶(a.名), { key: a.key, 稱: a.稱號, 段: a.段, 已訪: a.今旬已訪, 鍵: ++n, 事: !!事.人[a.名] }));
+    // 剛剛發生的事：上一次畫台子以後多出來的近況，在台上浮一下（最多兩則）。
+    const 末 = S.動態[S.動態.length - 1] || null;
+    let 新報 = [];
+    if (UI.上報 && 末 && 末 !== UI.上報) { const i = S.動態.indexOf(UI.上報); 新報 = S.動態.slice(i < 0 ? -1 : i + 1).slice(-2); }
+    const 新旬 = UI.上t != null && UI.上t !== S.t;
+    UI.上報 = 末; UI.上t = S.t;
+    const 報 = 新報.length ? `<div class="台報" aria-live="polite">${新報.map((x) => `<div><span>${esc(x.文)}</span>${變化HTML(x.變化)}</div>`).join("")}</div>` : "";
+    const d = E.拆時(S.t);
+    const 曆 = `${["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"][d.月 - 1]}月・${["上旬", "中旬", "下旬"][d.旬]}`;
+    return 七州舞台.場景({ 地: id, 地名: 地.名, 州: 地.州, 季: 季名(S.t), 物, 人, 我: 我偶(), 我x: UI.我x, ap: S.ap, 滿: P.參數.每旬行動點, 曆, 新旬, 報 });
+  }
+  // 事件進行中：只看不點。台上站的是這一段文字裡提到的人（在場的排前面，最多三個）。
+  function 觀台HTML(畫) {
+    const id = S.pc.地點, 地 = P.地點[id];
+    if (!地) return "";
+    let 文 = (畫.文 || []).join("") + (畫.名 || "");
+    const 在 = E.在場(P, S, id);
+    // 長的名字先比，比到了就從文字裡拿掉：「老掌櫃」不會再算成另一個「掌櫃」。
+    const 提 = [];
+    for (const x of Object.keys(P.人物).sort((a, b) => b.length - a.length)) if (文.includes(x)) { 提.push(x); 文 = 文.split(x).join("＿"); }
+    const 名 = [...提.filter((x) => 在.includes(x)), ...提.filter((x) => !在.includes(x))];
+    const 人 = 名.map(人偶);
+    for (const [身, x] of Object.entries(S.出場 || {})) {
+      if (x.叫法 && x.叫法 !== S.pc.叫法 && 文.includes(x.叫法)) 人.push({ 名: x.叫法, 身分: (P.身世[身] || {}).身分, 性別: x.性別, 州: (P.身世[身] || {}).州 });
+    }
+    return 七州舞台.場景({ 地: id, 地名: 地.名, 州: 地.州, 季: 季名(S.t), 人: 人.slice(0, 3), 我: 我偶(), 觀: true });
+  }
+  function 骰尺HTML(骰) {
+    return `<div class="骰尺" style="--成:${骰.成}%;--代:${骰.代價}%;--點:${Math.max(1, Math.min(99, 骰.點))}%" aria-hidden="true">
+      <div class="尺"><i class="區 代"></i><i class="區 成"></i><i class="針"></i></div>
+      <div class="尺註"><span>成 ≤ ${骰.成}</span><span>成但有代價 ≤ ${骰.代價}</span><span>100</span></div></div>`;
   }
   function 籤(c) {
     const 誰 = c.誰 ? `｜${c.誰}${c.層 === "推論" ? "猜" : "說"}` : "";
@@ -1948,16 +2372,16 @@ if (typeof module !== "undefined") module.exports = 七州引擎;
       <li class="${esc(x.類)}"><span class="時 數">${esc(E.短時(x.t).replace(/^\d+年/, ""))}</span>
       <span class="內">${esc(x.文)}</span>${變化HTML(x.變化)}</li>`).join("");
     const 教 = UI.教過 ? "" : `<div class="教"><b>怎麼過日子</b><ul>
-      <li>一旬可以做 ${P.參數.每旬行動點} 件事：做工、修習、歇息、走動，或去找人。做完就到下一旬。</li>
-      <li>換地方不花行動。有藍點的地方或人，有跟「眼下」相關的事。</li>
+      <li>一旬可以做 ${P.參數.每旬行動點} 件事：做工、修習、歇息、走動，或去找人。做完就到下一旬。${UI.互動 ? "點台上的人或地上的東西，就走過去做那件事；右上的燈籠是這一旬還能做幾件。" : ""}</li>
+      <li>換地方不花行動。${UI.互動 ? "頭上有紅色「！」的人或東西、有點的地方" : "有藍點的地方或人"}，有跟「眼下」相關的事。</li>
       <li>心境太低，做事不順手，記得歇息。右上的「你」「局勢」「帳本」隨時可以看。</li></ul>
       <div><button class="鈕 小" data-act="收教">知道了</button></div></div>`;
-    return `<article class="卡 樞">${景HTML(地.州)}
+    return `<article class="卡 樞${UI.互動 ? " 互動" : ""}">${UI.互動 ? 舞台HTML(L, 事) : 景HTML(地.州)}
       <div class="所在">${眉}<h2>${esc(地.名)}</h2><p>${esc(E.地說明(P, S, S.pc.地點))}</p></div>
       <div class="標"><div class="欄題" style="margin:0">眼下</div>${標}</div>
       ${教}
-      <div><h3 class="欄題">這一旬做什麼<span class="點">${行動點HTML()}</span><span class="鍵提示" style="font-weight:400;letter-spacing:0">按數字鍵也可以</span></h3>
-        <div class="行動格">${行動}${拜訪}</div></div>
+      ${UI.互動 ? "" : `<div><h3 class="欄題">這一旬做什麼<span class="點">${行動點HTML()}</span><span class="鍵提示" style="font-weight:400;letter-spacing:0">按數字鍵也可以</span></h3>
+        <div class="行動格">${行動}${拜訪}</div></div>`}
       <div><h3 class="欄題">換地方（不花行動）</h3><div class="地點列">${移動}</div>
         ${遠 ? `<details class="遠" style="margin-top:10px"><summary>遠行到別州（用掉這一旬）</summary><div class="地點列">${遠}</div></details>` : ""}</div>
       <div class="曆"><span>${esc(月)}月</span><span class="旬列">${["上旬", "中旬", "下旬"].map((x, i) => `<span class="${i === d.旬 ? "今" : i < d.旬 ? "過" : ""}">${x}</span>`).join("")}</span>
@@ -1999,12 +2423,13 @@ if (typeof module !== "undefined") module.exports = 七州引擎;
             ${o.可 ? "" : `<span class="註">${esc(o.理由)}</span>`}
           </button>`).join("")}</div>`
         : `<div class="回"><button class="鈕 主" data-act="繼續">繼續</button><span class="淡 鍵提示">（Enter）</span></div>`;
-      box.innerHTML = `<article class="卡">${眉}<h2>${esc(畫.名)}</h2>
-        <div class="文">${段落(畫.文, 新)}</div>${開局}${變化HTML(畫.變化)}${選}</article>`;
+      const 選後 = 新 && UI.互動 ? 選.replace(/^<div class="(選項|回)"/, `<div class="$1" style="${段後(畫.文)}"`) : 選;
+      box.innerHTML = `<article class="卡${UI.互動 ? " 互動" : ""}">${UI.互動 ? 觀台HTML(畫) : ""}${眉}<h2>${esc(畫.名)}</h2>
+        <div class="文">${段落(畫.文, 新)}</div>${開局}${變化HTML(畫.變化)}${選後}</article>`;
     } else if (畫.類 === "結果") {
       const 骰 = 畫.骰 ? `<div class="骰果 ${esc(畫.骰.果)}">擲骰｜${esc(畫.骰.標)}｜擲出 ${畫.骰.點}｜${畫.骰.果 === "成" ? "成" : 畫.骰.果 === "代價" ? "成，但有代價" : "不成"}</div>` : "";
-      box.innerHTML = `<article class="卡">${眉}<h2>${esc(畫.名)}</h2>
-        <p class="所選">你：${esc(畫.選)}</p>${骰}
+      box.innerHTML = `<article class="卡${UI.互動 ? " 互動" : ""}">${UI.互動 ? 觀台HTML(畫) : ""}${眉}<h2>${esc(畫.名)}</h2>
+        <p class="所選">你：${esc(畫.選)}</p>${UI.互動 && 畫.骰 && 新 ? 骰尺HTML(畫.骰) : ""}${骰}
         <div class="文">${段落(畫.文, 新)}</div>${變化HTML(畫.變化)}
         <div class="回"><button class="鈕 主" data-act="繼續">繼續</button><span class="淡 鍵提示">（Enter）</span></div></article>`;
     } else if (畫.類 === "結章") {
@@ -2381,6 +2806,8 @@ if (typeof module !== "undefined") module.exports = 七州引擎;
             <button class="鈕" data-act="疊:匯入">匯入存檔</button>
             <button class="鈕" data-act="疊:史冊">史冊</button>
           </div></div>
+        <div class="框"><p>畫面：${UI.互動 ? "互動版。這一旬能做的事畫成場景，點人或東西就走過去。" : "文字版。這一旬能做的事列成選單。"}</p>
+          <div class="鈕組" style="justify-content:flex-start"><button class="鈕" data-act="版型">${UI.互動 ? "換成文字版" : "換成互動版"}</button></div></div>
         <div class="框"><label style="display:flex;gap:8px;align-items:center"><input type="checkbox" id="開發模式" data-act="開發切換" ${UI.開發 ? "checked" : ""}> 開發者模式（看世界種子、暗流、謊言，可以跑自動試玩）</label></div>
         <div class="框"><p class="淡">開新局會蓋掉目前的存檔。想留著，先匯出。</p>
           <div class="鈕組" style="justify-content:flex-start"><button class="鈕" data-act="重開確認">開新局</button></div></div>
@@ -2479,6 +2906,7 @@ if (typeof module !== "undefined") module.exports = 七州引擎;
       case "帳": UI.分頁 = v; UI.帳開 = true; document.body.classList.add("帳開"); 畫帳(); break;
       case "關帳": UI.帳開 = false; document.body.classList.remove("帳開"); break;
       case "收教": UI.教過 = true; LS.set(教鍵, "1"); 畫敘事(); break;
+      case "版型": UI.互動 = !UI.互動; LS.set("七州養成版-版型", UI.互動 ? "互動" : "文字"); UI.畫面鍵 = ""; 畫(); break;
       case "全動態": UI.全動態 = !UI.全動態; 畫敘事(); break;
       case "疊": UI.疊 = v; UI.訊 = ""; UI.訊錯 = false; 畫疊(); $("疊").scrollTop = 0; break;
       case "關疊": UI.疊 = S ? null : "標題"; 畫(); break;
@@ -2576,8 +3004,30 @@ if (typeof module !== "undefined") module.exports = 七州引擎;
     const el = ev.target.closest("[data-act]");
     if (!el || el.disabled) return;
     if (el.tagName === "INPUT" && el.type === "checkbox") return;
+    if (el.classList.contains("位") && el.closest(".舞台")) { 走去(el); return; }
     動作(el.getAttribute("data-act"), el);
   });
+  function 走去(el) {
+    if (UI.走中) return;
+    const act = el.getAttribute("data-act");
+    const 台 = el.closest(".舞台"), 我 = 台.querySelector(".我");
+    const 靜 = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const r = 台.getBoundingClientRect(), t = el.getBoundingClientRect();
+    let x = r.width ? ((t.left + t.width / 2 - r.left) / r.width) * 100 : UI.我x;
+    const 現 = UI.我x;
+    if (el.classList.contains("人")) x += x > 現 ? -9 : 9;   // 找人：站在他旁邊
+    x = Math.max(6, Math.min(94, x));
+    UI.我x = x;
+    if (!我 || 靜 || !r.width) { 動作(act, el); return; }
+    const 久 = Math.round(160 + Math.abs(x - 現) * 9);
+    UI.走中 = true;
+    el.classList.add("選中");
+    我.classList.toggle("左", x < 現);
+    我.classList.add("走");
+    我.style.transitionDuration = 久 + "ms";
+    我.style.left = x + "%";
+    setTimeout(() => { UI.走中 = false; 動作(act, el); }, 久 + 40);
+  }
   document.addEventListener("change", (ev) => {
     const el = ev.target;
     if (el && el.matches && el.matches('input[type="checkbox"][data-act]')) 動作(el.getAttribute("data-act"), el);
