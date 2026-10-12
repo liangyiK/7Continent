@@ -45,6 +45,7 @@
   color-scheme: dark;
 }
 html, body { height: 100%; }
+html.有疊, html.有疊 body { overflow: hidden; }
 body {
   --州h: 190; --州s: 42%;
   --州: hsl(var(--州h) var(--州s) var(--州l));
@@ -335,13 +336,13 @@ textarea { width: 100%; min-height: 10em; font-family: ui-monospace, monospace; 
   :root:not([data-theme="light"]) .舞台 {
     --天a: #142029; --天b: #20313a; --遠c: #1b2a32; --地a: #2b3231; --地紋c: #353d3b; --牆c: #3b4347; --頂c: #0d1317; --木c: #5d4935; --淺木c: #77603f;
     --暗c: #12171a; --石c: #4b5153; --水c: #1f404a; --浪c: #3e6670; --紙c: #cfc8b4; --臉c: #d9c3a6; --髮c: #0c0f12; --白髮c: #a9aaa6; --鐵c: #252b30;
-    --葉c: #2f4a3a; --葉淺c: #3b5c48; --蘆c: #5f5936; --袋c: #7c7153; --燈c: #f2b04a; --日c: #dfe6e2; --陶c: #6e3f28; --深水c: #10262d; --鹽c: #b9b8ad;
+    --葉c: #2f4a3a; --葉淺c: #3b5c48; --蘆c: #5f5936; --袋c: #7c7153; --燈c: #f2b04a; --日c: #dfe6e2; --陶c: #6e3f28; --深水c: #10262d; --鹽c: #b9b8ad; --物鐵: #93a0a6; --物木: #c09a66;
   }
 }
 :root[data-theme="dark"] .舞台 {
   --天a: #142029; --天b: #20313a; --遠c: #1b2a32; --地a: #2b3231; --地紋c: #353d3b; --牆c: #3b4347; --頂c: #0d1317; --木c: #5d4935; --淺木c: #77603f;
   --暗c: #12171a; --石c: #4b5153; --水c: #1f404a; --浪c: #3e6670; --紙c: #cfc8b4; --臉c: #d9c3a6; --髮c: #0c0f12; --白髮c: #a9aaa6; --鐵c: #252b30;
-  --葉c: #2f4a3a; --葉淺c: #3b5c48; --蘆c: #5f5936; --袋c: #7c7153; --燈c: #f2b04a; --日c: #dfe6e2; --陶c: #6e3f28; --深水c: #10262d; --鹽c: #b9b8ad;
+  --葉c: #2f4a3a; --葉淺c: #3b5c48; --蘆c: #5f5936; --袋c: #7c7153; --燈c: #f2b04a; --日c: #dfe6e2; --陶c: #6e3f28; --深水c: #10262d; --鹽c: #b9b8ad; --物鐵: #93a0a6; --物木: #c09a66;
 }
 .舞台 .景圖 { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .舞台 .日 { fill: var(--日c); opacity: 0.9; }
@@ -441,9 +442,13 @@ textarea { width: 100%; min-height: 10em; font-family: ui-monospace, monospace; 
 .舞台 .物 .名牌 small { font-family: var(--字-介); color: var(--州); font-weight: 700; }
 .舞台 .物 .名牌 small.因 { color: var(--淡墨); font-weight: 400; }
 .舞台 .物件 { display: block; height: clamp(26px, 6vw, 36px); width: auto; overflow: visible; transition: transform 0.15s ease; }
+.舞台 .物件 .鐵 { fill: var(--物鐵, var(--鐵c)); } .舞台 .物件 .木線 { stroke: var(--物木, var(--木c)); } .舞台 .物件 .暗 { fill: var(--物鐵, var(--暗c)); }
 .舞台 .位[disabled] { cursor: not-allowed; opacity: 0.55; }
-.舞台 button.位:hover:not([disabled]) .名牌, .舞台 button.位:focus-visible .名牌, .舞台 .位.選中 .名牌 { border-color: var(--州); background: var(--州淡); }
-.舞台 button.位:hover:not([disabled]) .偶, .舞台 button.位:hover:not([disabled]) .物件 { transform: translateY(-3px); }
+.舞台 button.位:focus-visible .名牌, .舞台 .位.選中 .名牌 { border-color: var(--州); background: var(--州淡); }
+@media (hover: hover) {
+  .舞台 button.位:hover:not([disabled]) .名牌 { border-color: var(--州); background: var(--州淡); }
+  .舞台 button.位:hover:not([disabled]) .偶, .舞台 button.位:hover:not([disabled]) .物件 { transform: translateY(-3px); }
+}
 .舞台 .位 .偶 { transition: transform 0.15s ease; }
 .舞台 .位.已訪 .偶 { opacity: 0.78; }
 .舞台 .嘆 {
@@ -2067,21 +2072,30 @@ const 七州舞台 = (function () {
 
   // ---------- 紙偶 ----------
   const 州色相 = { 渡: 178, 鹽: 214, 汀: 12, 淵: 258, 霜: 104, 陶: 28, 灰: 212 };
-  function 扮相(名, 身分, 性別) {
-    const t = `${名} ${身分 || ""}`;
-    const o = { 頭: "髻", 持: "", 小: /童|孩|小夥計|新學徒|小徒|小祭/.test(t), 老: /老|翁|婆|帳母|四十年|三十年|五十年/.test(t), 女: 性別 === "女" || /婆|娘|嫂|姑|妹|婦|嬤|帳母|阿穗|阿漣|阿鷺/.test(名) || /婦人|女兒|女師/.test(身分 || "") };
-    if (/篙|船工|船家|漁/.test(t)) { o.頭 = "笠"; o.持 = "篙"; }
-    else if (/兵|屯長|屯官|軍|卒|都督|差役/.test(t)) { o.頭 = "盔"; o.持 = /軍醫/.test(t) ? "" : "槍"; }
-    else if (/祭|廟|誓證/.test(t)) o.頭 = "冠";
-    else if (/吏|官|禮部|內侍|太醫|供奉|朝奉/.test(t)) o.頭 = "紗";
-    else if (/山長|先生|書院|藥師|河醫|軍醫|帳房/.test(t)) { o.頭 = "巾"; o.持 = /帳房/.test(t) ? "算" : "卷"; }
-    else if (/掌櫃|東家|商|票|當|牙|鋪|販|家主|客棧/.test(t)) { o.頭 = "帽"; o.持 = "算"; }
-    if (o.女 && ["髻", "帽", "巾"].includes(o.頭)) o.頭 = "鬟";
+  // 扮相：先看名字和身分的頭一句（「小牙人，逃兵的孩子」是牙人，不是兵），頭一句看不出來才看整段。
+  const 行當 = [
+    [/通譯|刻版|刻字|學徒的|鐵行的學徒/, "髻", ""],
+    [/醫|藥師|藥童/, "巾", ""],
+    [/篙|船工|船家|漁|撐船/, "笠", "篙"],
+    [/牙人|牙婆|掌櫃|東家|商|票號|當鋪|朝奉|販|家主|客棧|夥計|帳房|糧號|櫃上/, "帽", "算"],
+    [/屯兵|屯長|屯官|兵|軍|卒|都督|差役/, "盔", "槍"],
+    [/祭|廟|誓證/, "冠", ""],
+    [/吏|官|禮部|內侍|供奉|宮人/, "紗", ""],
+    [/山長|先生|女師|書院/, "巾", "卷"],
+  ];
+  function 扮相(名, 身分, 性別, 我) {
+    const 首 = `${名} ${String(身分 || "").split(/[，,；。]/)[0]}`, 全 = `${名} ${身分 || ""}`;
+    const 找 = (t) => 行當.find(([re]) => re.test(t));
+    const 當 = 找(首) || 找(全);
+    const o = { 頭: 當 ? 當[1] : "髻", 持: 當 ? 當[2] : "", 小: /童|孩|小夥計|新學徒|小徒|小祭/.test(首),
+      老: !我 && /老|翁|婆|帳母|四十年|三十年|五十年/.test(全.replace(/老王|老家|老燈/g, "")),
+      女: 性別 === "女" || /婆|娘|嫂|姑|妹|婦|嬤|帳母|阿穗|阿漣|阿鷺/.test(名) || /婦人|女兒|女師/.test(身分 || "") };
+    if (o.女 && ["髻", "帽", "巾", "紗"].includes(o.頭)) o.頭 = "鬟";
     if (o.老 && !o.持) o.持 = "杖";
     return o;
   }
   function 偶(人, 我) {
-    const p = 扮相(人.名 || "", 人.身分, 人.性別);
+    const p = 扮相(人.名 || "", 人.身分, 人.性別, 我);
     const h = ((州色相[人.州] == null ? 30 : 州色相[人.州]) + (雜(人.名) % 44) - 22 + 360) % 360;
     const 衣 = 我 ? "var(--州)" : `hsl(${h} ${30 + (雜(人.名 + "彩") % 18)}% ${40 + (雜(人.名 + "明") % 12)}%)`;
     const 髮 = p.老 ? "髮 白" : "髮";
@@ -2281,10 +2295,11 @@ const 七州舞台 = (function () {
     // 剛剛發生的事：上一次畫台子以後多出來的近況，在台上浮一下（最多兩則）。
     const 末 = S.動態[S.動態.length - 1] || null;
     let 新報 = [];
-    if (UI.上報 && 末 && 末 !== UI.上報) { const i = S.動態.indexOf(UI.上報); 新報 = S.動態.slice(i < 0 ? -1 : i + 1).slice(-2); }
+    if (UI.上報 && 末 && 末 !== UI.上報) { const i = S.動態.indexOf(UI.上報); 新報 = S.動態.slice(i < 0 ? -1 : i + 1).slice(-3); }
     const 新旬 = UI.上t != null && UI.上t !== S.t;
     UI.上報 = 末; UI.上t = S.t;
-    const 報 = 新報.length ? `<div class="台報" aria-live="polite">${新報.map((x) => `<div><span>${esc(x.文)}</span>${變化HTML(x.變化)}</div>`).join("")}</div>` : "";
+    const 報字 = 新報.reduce((n, x) => n + x.文.length + (x.變化 || []).length * 6, 0);
+    const 報 = 新報.length ? `<div class="台報" aria-live="polite" style="animation-duration:${(3.6 + Math.min(7, 報字 * 0.09)).toFixed(1)}s">${新報.map((x) => `<div><span>${esc(x.文)}</span>${變化HTML(x.變化)}</div>`).join("")}</div>` : "";
     const d = E.拆時(S.t);
     const 曆 = `${["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"][d.月 - 1]}月・${["上旬", "中旬", "下旬"][d.旬]}`;
     return 七州舞台.場景({ 地: id, 地名: 地.名, 州: 地.州, 季: 季名(S.t), 物, 人, 我: 我偶(), 我x: UI.我x, ap: S.ap, 滿: P.參數.每旬行動點, 曆, 新旬, 報 });
@@ -2293,15 +2308,22 @@ const 七州舞台 = (function () {
   function 觀台HTML(畫) {
     const id = S.pc.地點, 地 = P.地點[id];
     if (!地) return "";
-    let 文 = (畫.文 || []).join("") + (畫.名 || "");
+    const 全文 = (畫.文 || []).join("") + (畫.名 || "");
     const 在 = E.在場(P, S, id);
-    // 長的名字先比，比到了就從文字裡拿掉：「老掌櫃」不會再算成另一個「掌櫃」。
-    const 提 = [];
-    for (const x of Object.keys(P.人物).sort((a, b) => b.length - a.length)) if (文.includes(x)) { 提.push(x); 文 = 文.split(x).join("＿"); }
-    const 名 = [...提.filter((x) => 在.includes(x)), ...提.filter((x) => !在.includes(x))];
+    // 誰站上台：在場而且文字提到的人；不在場的，要是同一州的人、而且是在敘述裡（不是別人嘴裡）被提到，才算他到了場。
+    // 「軍醫棚的鍋也見底了」說的是地方，不是軍醫。長的名字先比，比到了就從文字裡拿掉：「老掌櫃」不會再算成另一個「掌櫃」。
+    let 文 = 全文, 敘 = 全文.replace(/「[^」]*」/g, "＿");
+    const 名 = [];
+    for (const x of Object.keys(P.人物).sort((a, b) => b.length - a.length)) {
+      if (!文.includes(x)) continue;
+      const 敘到 = new RegExp(x + "(?!棚)").test(敘);
+      if (在.includes(x) || (敘到 && String(P.人物[x].在 || "").startsWith(地.州 + "-"))) 名.push(x);
+      文 = 文.split(x).join("＿"); 敘 = 敘.split(x).join("＿");
+    }
+    名.sort((a, b) => (在.includes(b) ? 1 : 0) - (在.includes(a) ? 1 : 0));
     const 人 = 名.map(人偶);
     for (const [身, x] of Object.entries(S.出場 || {})) {
-      if (x.叫法 && x.叫法 !== S.pc.叫法 && 文.includes(x.叫法)) 人.push({ 名: x.叫法, 身分: (P.身世[身] || {}).身分, 性別: x.性別, 州: (P.身世[身] || {}).州 });
+      if (x.叫法 && x.叫法 !== S.pc.叫法 && 全文.includes(x.叫法)) 人.push({ 名: x.叫法, 身分: (P.身世[身] || {}).身分, 性別: x.性別, 州: (P.身世[身] || {}).州 });
     }
     return 七州舞台.場景({ 地: id, 地名: 地.名, 州: 地.州, 季: 季名(S.t), 人: 人.slice(0, 3), 我: 我偶(), 觀: true });
   }
@@ -2536,6 +2558,10 @@ const 七州舞台 = (function () {
     const key = 畫.類 + (畫.id || "") + S.t + (畫.選 || "") + S.動態.length;
     const 新 = key !== UI.畫面鍵;
     UI.畫面鍵 = key;
+    // 在卡片最底下按了「繼續」或選項，下一張卡要從頭看起（不然台子會捲在畫面外面）。
+    const 畫鍵 = 畫.類 + "|" + (畫.id || "");
+    if (新 && UI.上畫 != null && (UI.互動 || UI.上畫 !== 畫鍵)) UI.要捲頂 = true;
+    UI.上畫 = 畫鍵;
     const 眉 = `<div class="眉"><span>${esc(E.時間字(S.t))}</span></div>`;
     if (畫.類 === "事件") {
       const 開局 = 畫.開局 ? 主角卡HTML() : "";
@@ -2881,7 +2907,7 @@ const 七州舞台 = (function () {
   // 你走過的人：以前玩過的主角。之後的局裡，他們會用這個名字、照當時做過的事出場。
   function 走過HTML() {
     const 列 = Object.entries(人庫.表).filter(([id]) => P.身世[id]).map(([id, r]) =>
-      `<li class="行"><span><b>${esc(r.全名 || r.叫法)}</b><span class="淡">，${esc(州名(P.身世[id].州))}・${esc(P.身世[id].名)}</span></span><span class="淡">${r.結局 ? "「" + esc(r.結局) + "」" : ""}・第${E.幕字[r.幕 || 1]}幕</span></li>`).join("");
+      `<li class="行"><span><b>${esc(r.全名 || r.叫法)}</b><span class="淡">，${esc(州名(P.身世[id].州))}${P.身世[id].名 === (r.全名 || r.叫法) ? "" : "・" + esc(P.身世[id].名)}</span></span><span class="淡">${r.結局 ? "「" + esc(r.結局) + "」" : ""}・第${E.幕字[r.幕 || 1]}幕</span></li>`).join("");
     if (!列) return "";
     return `<div class="框 走過"><h3 class="欄題" style="margin:0">你走過的人</h3><ul>${列}</ul>
       <p class="淡" style="margin:0;font-size:var(--小)">再開一局，抽到別的人的時候，這些人會在那一局裡出場：同一個名字，照你當時做過的事。</p></div>`;
@@ -2891,6 +2917,7 @@ const 七州舞台 = (function () {
     + ["渡", "鹽", "汀", "淵", "霜", "陶", "灰"].map((k) => `<button class="鈕" data-act="開新局:${k}">只抽${k === "霜" ? "霜原" : k + "州"}</button>`).join("");
   function 畫疊() {
     const box = $("疊");
+    document.documentElement.classList.toggle("有疊", !!UI.疊);
     if (!UI.疊) { box.hidden = true; box.innerHTML = ""; return; }
     box.hidden = false;
     let 內 = "";
@@ -2900,11 +2927,10 @@ const 七州舞台 = (function () {
         ${澤圖()}
         <p class="淡">七個州環繞大澤，每一州對「人該怎麼活」都有自己的答案。你會被抽成其中一個人，從澤曆 311 年春天開始過日子。</p>
         <div class="鈕組">
-          ${開局鈕}
-          ${UI.有存檔 ? `<button class="鈕" data-act="讀檔">繼續上一局</button>` : ""}
+          ${UI.有存檔 ? `<button class="鈕 主" data-act="讀檔">繼續上一局</button><button class="鈕" data-act="重開確認">開新局</button>` : 開局鈕}
           <button class="鈕" data-act="疊:匯入">匯入存檔</button>
         </div>
-        ${二紀卡名().length ? `<div class="鈕組"><button class="鈕" data-act="開新局二">從第二紀元開始</button></div>
+        ${二紀卡名().length ? `<div class="鈕組"><button class="鈕" data-act="${UI.有存檔 ? "重開確認" : "開新局二"}">從第二紀元開始</button></div>
         <p class="淡">第二紀元（澤曆 317 年到 319 年）目前寫了這幾張接棒卡：${esc(二紀卡名().join("、"))}。從這裡開始的話，程式會先替你走完一局第一紀元，再把那一局的世界和那個人交給你。</p>` : ""}
         ${走過HTML()}
         ${window.claude ? "" : `<p class="淡">這是單機版：存檔放在這個瀏覽器裡。換電腦、換瀏覽器，或清掉瀏覽器資料以前，先在「選單 → 匯出存檔」存成檔案。</p>`}
@@ -2939,11 +2965,12 @@ const 七州舞台 = (function () {
     } else if (UI.疊 === "重開") {
       內 = `<div class="疊內"><h2>確定開新局？</h2><p>目前這一局的存檔會被蓋掉。想留著，先匯出。</p>
         <div class="鈕組">${開局鈕}</div>
+        ${二紀卡名().length ? `<div class="鈕組"><button class="鈕" data-act="開新局二">從第二紀元開始</button></div>` : ""}
         <div class="鈕組"><button class="鈕" data-act="疊:匯出">先匯出</button><button class="鈕" data-act="關疊">算了</button></div></div>`;
     } else if (UI.疊 === "史冊") {
       內 = 史冊HTML();
     } else if (UI.疊 === "匯出") {
-      UI.匯出文 = S ? JSON.stringify(S) : "";
+      UI.匯出文 = S ? JSON.stringify(S) : (UI.有存檔 || "");
       內 = `<div class="疊內"><h2>匯出存檔</h2>
         <p>存成一個 JSON 檔，之後可以在「匯入存檔」讀回來，也可以換一台電腦繼續。</p>
         <div class="鈕組" style="justify-content:flex-start">
@@ -2993,6 +3020,7 @@ const 七州舞台 = (function () {
     畫敘事();
     畫帳();
     畫疊();
+    if (UI.要捲頂) { UI.要捲頂 = false; window.scrollTo(0, 0); }
   }
 
   // ================= 操作 =================
@@ -3024,7 +3052,7 @@ const 七州舞台 = (function () {
     switch (k) {
       case "選": if (E.選(P, S, Number(v))) { 存檔(); 畫(); } break;
       case "繼續": E.繼續(P, S); 存檔(); 畫(); break;
-      case "行": if (E.執行(P, S, v)) { UI.疊 = null; 存檔(); 畫(); if (/^(遠行|移動)/.test(v)) window.scrollTo(0, 0); } break;
+      case "行": { const 換地 = /^(遠行|移動)/.test(v); if (E.執行(P, S, v)) { if (換地) UI.我x = 14; UI.疊 = null; 存檔(); 畫(); if (換地) window.scrollTo(0, 0); } break; }
       case "分頁": UI.分頁 = v; 畫帳(); break;
       case "帳": UI.分頁 = v; UI.帳開 = true; document.body.classList.add("帳開"); 畫帳(); break;
       case "關帳": UI.帳開 = false; document.body.classList.remove("帳開"); break;
@@ -3084,7 +3112,7 @@ const 七州舞台 = (function () {
         break;
       }
       case "下載存檔": {
-        const 名 = `環澤七州-${S.pc.叫法}-${E.短時(S.t)}.json`;
+        const 名 = S ? `環澤七州-${S.pc.叫法}-${E.短時(S.t)}.json` : "環澤七州-存檔.json";
         try {
           if (存.下載) await 存.下載.save({ filename: 名, data: UI.匯出文 });
           else {
@@ -3142,7 +3170,7 @@ const 七州舞台 = (function () {
     x = Math.max(6, Math.min(94, x));
     UI.我x = x;
     if (!我 || 靜 || !r.width) { 動作(act, el); return; }
-    const 久 = Math.round(160 + Math.abs(x - 現) * 9);
+    const 久 = Math.round(140 + Math.abs(x - 現) * 6);
     UI.走中 = true;
     el.classList.add("選中");
     我.classList.toggle("左", x < 現);
