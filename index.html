@@ -400,7 +400,8 @@ textarea { width: 100%; min-height: 10em; font-family: ui-monospace, monospace; 
 .舞台 .草 { stroke: var(--葉c); stroke-width: 1.3; fill: none; stroke-linecap: round; }
 .舞台 .旗 { fill: var(--朱); } .舞台 .旗.靛旗 { fill: var(--澤); } .舞台 .旗.紫旗 { fill: #7a66ad; } .舞台 .旗.綠旗 { fill: var(--葉c); }
 .舞台 .網線 { stroke: var(--淡墨); stroke-width: 0.9; fill: none; } .舞台 .柳絲 { stroke: var(--葉淺c); stroke-width: 1.3; fill: none; stroke-linecap: round; }
-.舞台 .泥 { fill: var(--地紋c); } .舞台 .水.淺水 { opacity: 0.75; } .舞台 .水.深水 { fill: var(--深水c); }
+.舞台 .泥 { fill: var(--地紋c); } .舞台 .泥.露 { opacity: 0.85; } .舞台 .裂 { fill: none; stroke: var(--地a); stroke-width: 0.9; opacity: 0.8; }
+.舞台 .隊人 { opacity: 0.55; } .舞台 .白布 { fill: #efece4; stroke: var(--地紋c); stroke-width: 0.6; opacity: 0.92; transform-box: fill-box; transform-origin: 50% 0; animation: 晃 4.5s ease-in-out infinite alternate; } .舞台 .水.淺水 { opacity: 0.75; } .舞台 .水.深水 { fill: var(--深水c); }
 .舞台 .浪圈 { fill: none; stroke: var(--浪c); stroke-width: 1.1; } .舞台 .浪圈.外 { opacity: 0.5; }
 .舞台 .渦 .浪圈 { stroke-dasharray: 9 6; animation: 旋 2.6s linear infinite; }
 @keyframes 旋 { to { stroke-dashoffset: -30; } }
@@ -1972,7 +1973,23 @@ const 七州舞台 = (function () {
   const 煙 = (x, y) => `<path class="煙" d="M${x} ${y} q-5 -8 0 -15 q5 -7 0 -15"/><path class="煙 慢" d="M${x + 6} ${y - 2} q-4 -7 0 -13 q4 -6 0 -12"/>`;
   const 爐 = (x) => `<path class="鐵" d="M${x} ${G} l2 -12 h14 l2 12 Z"/><rect class="鐵" x="${x + 3}" y="${G - 17}" width="12" height="5" rx="2"/>${煙(x + 9, G - 18)}`;
   const 鍋 = (x) => `<path class="木線" d="M${x - 2} ${G} L${x + 11} ${G - 30} L${x + 24} ${G} M${x + 11} ${G - 30} V${G - 14}"/><path class="鐵" d="M${x + 2} ${G - 14} h18 a9 9 0 0 1 -18 0 Z"/>${煙(x + 11, G - 16)}`;
-  const 水面 = (x1, x2, y) => { y = y == null ? G : y; const n = Math.max(1, Math.floor((x2 - x1 - 24) / 16)); return `<rect class="水" x="${x1}" y="${y}" width="${x2 - x1}" height="${200 - y}"/>${[9, 22, 38].map((d, i) => `<path class="浪 浪${i}" d="M${x1 + 6 + i * 5} ${y + d} q4 -3 8 0${" t8 0".repeat(Math.max(1, n * 2 - 2 - i))}"/>`).join("")}`; };
+  // 世：這一刻世界的樣子（退：大澤的水比開局又退了幾級；喪：汀京在服喪；兌：票號門口在排隊）。景圖畫之前設好，畫完清掉。
+  let 世 = {};
+  // 水退了：水面靠岸的那一邊往回縮，露出一段泥灘，舊水線的地方留一根量水的樁。整面都是水的景，改成水位往下降。
+  const 水面 = (x1, x2, y) => { y = y == null ? G : y; let 露 = "";
+    if (世.退 > 0 && y <= G + 16) {
+      if (x1 === 0 && x2 < 400) {
+        const 新 = Math.max(x1 + 44, x2 - 世.退 * 22);
+        露 = `<rect class="泥 露" x="${新}" y="${y}" width="${x2 - 新}" height="${200 - y}"/>` + [0, 1, 2].map((i) => `<path class="裂" d="M${新 + 6 + i * 13} ${y + 8 + i * 9} l5 4 l-3 5 l6 3"/>`).join("")
+          + `<path class="木線 粗" d="M${x2 - 3} ${y - 12} V${y + 12}"/><path class="木線" d="M${x2 - 6} ${y - 7} h6 M${x2 - 6} ${y - 2} h6 M${x2 - 6} ${y + 3} h6"/>`;
+        x2 = 新;
+      } else if (x1 === 0 && x2 >= 400) {
+        const 新y = y + 世.退 * 5;
+        露 = `<rect class="泥 露" x="0" y="${y}" width="400" height="${新y - y}"/>` + [40, 150, 260, 350].map((x) => `<path class="裂" d="M${x} ${y + 1} l6 ${新y - y - 1} l7 -${Math.max(1, 新y - y - 2)}"/>`).join("");
+        y = 新y;
+      }
+    }
+    const n = Math.max(1, Math.floor((x2 - x1 - 24) / 16)); return 露 + `<rect class="水" x="${x1}" y="${y}" width="${x2 - x1}" height="${200 - y}"/>${[9, 22, 38].map((d, i) => `<path class="浪 浪${i}" d="M${x1 + 6 + i * 5} ${y + d} q4 -3 8 0${" t8 0".repeat(Math.max(1, n * 2 - 2 - i))}"/>`).join("")}`; };
   const 棧 = (x, w, y) => { y = y == null ? G : y; let s = `<rect class="木" x="${x}" y="${y - 3}" width="${w}" height="5"/>`; for (let i = x + 6; i < x + w; i += 22) s += `<path class="木線 粗" d="M${i} ${y + 2} V${y + 22}"/>`; return s; };
   const 階 = (x, w, n) => { n = n || 3; let s = ""; for (let i = 0; i < n; i++) s += `<rect class="石" x="${x - i * 5}" y="${G - (n - i) * 4}" width="${w + i * 10}" height="4"/>`; return s; };
   const 山 = (pts, cls) => `<path class="${cls || "遠"}" d="M0 ${G} ${pts.map(([x, y]) => `L${x} ${y}`).join(" ")} L400 ${G} Z"/>`;
@@ -2128,9 +2145,16 @@ const 七州舞台 = (function () {
     秋: Array.from({ length: 6 }, (_, i) => `<path class="落葉 飄${i % 4}" d="M${(i * 83 + 20) % 400} ${(i * 29) % 90} q3 -3 6 0 q-3 3 -6 0 Z"/>`).join("") };
   // 整面都是牆的景：屋子裡不下雪、不落葉，也看不到日頭。
   const 室內 = new Set(["汀-寢宮", "汀-太醫院", "鹽-盛家", "鹽-櫃檯", "陶-鐵行"]);
-  function 景圖(地, 地名, 州, 季) {
-    const 中 = (景表[地] || (() => 通用景(地名 || "")))();
+  const 隊 = (x, n) => Array.from({ length: n }, (_, i) => { const cx = x + i * 13, h = i % 2 ? 22 : 25; return `<path class="暗 隊人" d="M${cx - 4} ${G} L${cx - 3} ${G - h + 7} Q${cx} ${G - h + 4} ${cx + 3} ${G - h + 7} L${cx + 4} ${G} Z"/><circle class="暗 隊人" cx="${cx}" cy="${G - h + 2}" r="3"/>`; }).join("");
+  function 景圖(地, 地名, 州, 季, 界) {
+    界 = 界 || {};
     const 內 = 室內.has(地);
+    // 退水只畫在大澤邊上的兩州；別州的水是河、是海。
+    世 = { 退: 州 === "渡" || 州 === "汀" ? Math.min(3, 界.退 || 0) : 0 };
+    let 中 = (景表[地] || (() => 通用景(地名 || "")))();
+    世 = {};
+    if (界.兌 && (地 === "鹽-票號" || 地 === "汀-分號")) 中 += 隊(292, 6);
+    if (界.喪 && 州 === "汀" && !內) 中 += [34, 122, 278, 366].map((x, i) => `<g class="白布" style="animation-delay:${-i * 0.9}s"><path d="M${x - 5} 0 h10 v${40 + (i % 2) * 10} l-5 -6 l-5 6 Z"/></g>`).join("");
     return `<svg class="景圖" viewBox="0 0 400 200" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
       <defs><linearGradient id="天漸" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--天a)"/><stop offset="0.75" style="stop-color:var(--天b)"/></linearGradient></defs><rect width="400" height="200" fill="url(#天漸)"/>${內 ? "" : `<circle class="日" cx="338" cy="34" r="12"/>`}
       ${(遠景[州] || 遠景.汀)()}
@@ -2232,7 +2256,7 @@ const 七州舞台 = (function () {
     const 燈 = 觀 ? "" : `<div class="燈列" title="這一旬還能做的事" aria-hidden="true">${Array.from({ length: o.滿 || 0 }, (_, i) => `<i class="${i < o.ap ? "亮" : ""}"></i>`).join("")}</div>
       <button class="出門" data-act="疊:地圖">出門<span class="鍵提示">（M）</span></button>`;
     return `<div class="舞台 季-${esc(o.季 || "春")}${觀 ? " 觀" : ""}">
-      ${景圖(o.地, o.地名, o.州, o.季)}${燈}
+      ${景圖(o.地, o.地名, o.州, o.季, o.世)}${燈}
       ${!觀 && o.曆 ? `<div class="台曆${o.新旬 ? " 新旬" : ""}">${esc(o.曆)}</div>` : ""}${o.報 || ""}
       <div class="列 人列">${人}</div>
       <div class="我" style="left:${r1(o.我x == null ? 50 : o.我x)}%">${偶(Object.assign({ 州: o.州 }, o.我), true)}</div>
@@ -2355,6 +2379,14 @@ const 七州舞台 = (function () {
   const 我偶 = () => ({ 名: S.pc.叫法, 身分: S.pc.身分, 性別: S.pc.性別 });
   const 人偶 = (n) => { const o = P.人物[n] || {}; return { 名: n, 身分: o.身分, 性別: o.性別, 州: o.州 }; };
   // 自由行動：能做的事是地上的東西，在場的人站在台上。號碼跟文字版一樣，數字鍵照舊能用。
+  // 場景跟著世界變：大澤的水比開局又退了幾級、老王駕崩後的那一個多月、票號門口有沒有人排隊兌銀。
+  function 世態() {
+    const w = S.世界 || {}, 流 = w.暗流 || {};
+    const 開 = ((P.canon.暗流 || {}).退水 || {}).開局等級 || 2;
+    const 崩 = (P.曆法.公開大事 || {}).老王駕崩;
+    return { 退: Math.max(0, (流.退水 || 開) - 開), 兌: (流.票危 || 0) >= 2,
+      喪: !!(崩 && w.公開大事 && "老王駕崩" in w.公開大事 && S.t >= 崩.日子 && S.t - 崩.日子 <= 4) };
+  }
   // 這個行動有沒有跟眼下相關的事。事件指定了哪一種工的，只標在那一種上。
   function 行有事(事, a, 地) {
     return !!(事.行[a.類 + "@" + 地] || 事.行[a.類 + "@"] || (事.行[a.類 + "@" + 地 + "#"] || []).some((x) => a.名.includes(x)));
@@ -2375,7 +2407,7 @@ const 七州舞台 = (function () {
       : 新報.length ? `<div class="台報" aria-live="polite" style="animation-duration:${(3.6 + Math.min(7, 報字 * 0.09)).toFixed(1)}s">${新報.map((x) => `<div><span>${esc(x.文)}</span>${變化HTML(x.變化)}</div>`).join("")}</div>` : "";
     const d = E.拆時(S.t);
     const 曆 = `${["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"][d.月 - 1]}月・${["上旬", "中旬", "下旬"][d.旬]}`;
-    return 七州舞台.場景({ 地: id, 地名: 地.名, 州: 地.州, 季: 季名(S.t), 物, 人, 我: 我偶(), 我x: UI.我x, ap: S.ap, 滿: P.參數.每旬行動點, 曆, 新旬, 報 });
+    return 七州舞台.場景({ 地: id, 地名: 地.名, 州: 地.州, 季: 季名(S.t), 物, 人, 我: 我偶(), 我x: UI.我x, ap: S.ap, 滿: P.參數.每旬行動點, 曆, 新旬, 報, 世: 世態() });
   }
   // 事件進行中：只看不點。台上站的是這一段文字裡提到的人（在場的排前面，最多三個）。
   function 觀台HTML(畫) {
@@ -2402,7 +2434,7 @@ const 七州舞台 = (function () {
     }
     // 事件寫了「台上」的：沒有名字的路人（老船娘、孩子）也站上去。
     for (const x of 件.台上 || []) 人.push({ 名: x.名, 身分: x.身分, 州: 地.州 });
-    return 七州舞台.場景({ 地: id, 地名: 地.名, 州: 地.州, 季: 季名(S.t), 人: 人.slice(0, 3), 我: 我偶(), 觀: true });
+    return 七州舞台.場景({ 地: id, 地名: 地.名, 州: 地.州, 季: 季名(S.t), 人: 人.slice(0, 3), 我: 我偶(), 觀: true, 世: 世態() });
   }
   function 骰尺HTML(骰) {
     return `<div class="骰尺" style="--成:${骰.成}%;--代:${骰.代價}%;--點:${Math.max(1, Math.min(99, 骰.點))}%" aria-hidden="true">
