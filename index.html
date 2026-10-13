@@ -2295,7 +2295,7 @@ const 七州舞台 = (function () {
     // 剛剛發生的事：上一次畫台子以後多出來的近況，在台上浮一下（最多兩則）。
     const 末 = S.動態[S.動態.length - 1] || null;
     let 新報 = [];
-    if (UI.上報 && 末 && 末 !== UI.上報) { const i = S.動態.indexOf(UI.上報); 新報 = S.動態.slice(i < 0 ? -1 : i + 1).slice(-3); }
+    if (UI.上報 && 末 && 末 !== UI.上報) { const i = S.動態.indexOf(UI.上報); 新報 = S.動態.slice(i < 0 ? -1 : i + 1).filter((x) => x.類 !== "事件").slice(-3); }   // 事件的結果在卡片上看過了，台上不再重複
     const 新旬 = UI.上t != null && UI.上t !== S.t;
     UI.上報 = 末; UI.上t = S.t;
     const 報字 = 新報.reduce((n, x) => n + x.文.length + (x.變化 || []).length * 6, 0);
