@@ -2283,7 +2283,7 @@ const 七州舞台 = (function () {
     }).join("")}</div>`;
   }
   // ---------- 舞台（互動版）----------
-  const 季名 = (t) => { const m = E.拆時(t).月; return m <= 3 ? "春" : m <= 6 ? "夏" : m <= 9 ? "秋" : "冬"; };
+  const 季名 = (t) => { const m = E.拆時(t).月; return m === 1 ? "冬" : m <= 3 ? "春" : m <= 6 ? "夏" : m <= 9 ? "秋" : "冬"; };   // 曆上正月算春，可是雪還沒化，景照冬天畫
   const 我偶 = () => ({ 名: S.pc.叫法, 身分: S.pc.身分, 性別: S.pc.性別 });
   const 人偶 = (n) => { const o = P.人物[n] || {}; return { 名: n, 身分: o.身分, 性別: o.性別, 州: o.州 }; };
   // 自由行動：能做的事是地上的東西，在場的人站在台上。號碼跟文字版一樣，數字鍵照舊能用。
@@ -2492,7 +2492,8 @@ const 七州舞台 = (function () {
       : `<div class="文"><p>${S.章.眼下 ? esc(S.章.眼下) : "日子照常過。"}</p></div>
         ${剩 != null ? `<div class="期條 ${剩 <= 2 ? "急" : ""}" title="這一章已經過了多少"><i style="width:${過}%"></i></div><p class="註">期限 ${esc(E.短時(S.章.期限).replace(/^\d+年/, ""))}，還剩 ${剩} 旬</p>` : ""}
         ${差額字() ? `<p class="註">${esc(差額字())}</p>` : ""}
-        ${等那天字() ? `<p class="註 好">${esc(等那天字())}</p>` : ""}`;
+        ${等那天字() ? `<p class="註 好">${esc(等那天字())}</p>
+          <div><button class="鈕 小" data-act="歇到那天">照常過到那一天</button> <span class="註">做工、累了就歇，一旬一旬過去；中途有事會停下來。</span></div>` : ""}`;
     // 這一旬做什麼
     let n = 0;
     const 行動 = L.行動.map((a) => {
@@ -3056,6 +3057,20 @@ const 七州舞台 = (function () {
       case "分頁": UI.分頁 = v; 畫帳(); break;
       case "帳": UI.分頁 = v; UI.帳開 = true; document.body.classList.add("帳開"); 畫帳(); break;
       case "關帳": UI.帳開 = false; document.body.classList.remove("帳開"); break;
+      case "歇到那天": {
+        // 照常過日子到見分曉的那一旬；碰到事件就停。日子照過，該發生的照樣發生。
+        const 見 = E.見分曉(P, S);
+        let 圈 = 0;
+        while (見 && S.畫面 && S.畫面.類 === "自由" && S.t < 見.t && 圈++ < 80) {
+          const L = E.行動清單(P, S);
+          // 心境還夠就做工（有進帳），低了才歇；只會歇的話，錢會一路花光。
+          const 找 = (類) => L.行動.find((x) => x.類 === 類 && x.可);
+          const a = (S.pc.感情.心境 > P.參數.心境低落 + 15 ? 找("做工") : null) || 找("歇息") || 找("走動");
+          if (!a || !E.執行(P, S, a.key)) break;
+        }
+        存檔(); 畫();
+        break;
+      }
       case "收教": UI.教過 = true; LS.set(教鍵, "1"); 畫敘事(); break;
       case "版型": UI.互動 = !UI.互動; LS.set("七州養成版-版型", UI.互動 ? "互動" : "文字"); UI.畫面鍵 = ""; 畫(); break;
       case "全動態": UI.全動態 = !UI.全動態; 畫敘事(); break;
@@ -3167,6 +3182,10 @@ const 七州舞台 = (function () {
     let x = r.width ? ((t.left + t.width / 2 - r.left) / r.width) * 100 : UI.我x;
     const 現 = UI.我x;
     if (el.classList.contains("人")) x += x > 現 ? -9 : 9;   // 找人：站在他旁邊
+    else if (r.width) {   // 找東西：那個位置站著人，就往旁邊讓一步
+      const 佔 = [...台.querySelectorAll(".位.人")].map((p) => { const q = p.getBoundingClientRect(); return ((q.left + q.width / 2 - r.left) / r.width) * 100; });
+      for (const 步 of [0, -11, 11, -20, 20]) if (!佔.some((c) => Math.abs(c - (x + 步)) < 9)) { x += 步; break; }
+    }
     x = Math.max(6, Math.min(94, x));
     UI.我x = x;
     if (!我 || 靜 || !r.width) { 動作(act, el); return; }
