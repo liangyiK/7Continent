@@ -340,13 +340,13 @@ textarea { width: 100%; min-height: 10em; font-family: ui-monospace, monospace; 
 .舞台.季-秋 { --天a: #e6cfa6; --天b: #f4ecd9; --遠c: #c7b697; --葉c: #b9843c; --葉淺c: #d2a85a; --地a: #ddd0b0; --地紋c: #cdbf9c; }
 .舞台.季-冬 { --天a: #cfd7dc; --天b: #eef0f0; --遠c: #b9c0c3; --葉c: #8b978d; --葉淺c: #a9b3aa; --地a: #e4e5df; --地紋c: #d3d5ce; --水c: #a9c3ca; }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .舞台 {
+  :root:not([data-theme="light"]) .舞台, :root:not([data-theme="light"]) .頭像 {
     --天a: #142029; --天b: #20313a; --遠c: #1b2a32; --地a: #2b3231; --地紋c: #353d3b; --牆c: #3b4347; --頂c: #0d1317; --木c: #5d4935; --淺木c: #77603f;
     --暗c: #12171a; --石c: #4b5153; --水c: #1f404a; --浪c: #3e6670; --紙c: #cfc8b4; --臉c: #d9c3a6; --髮c: #0c0f12; --白髮c: #a9aaa6; --鐵c: #252b30;
     --葉c: #2f4a3a; --葉淺c: #3b5c48; --蘆c: #5f5936; --袋c: #7c7153; --燈c: #f2b04a; --日c: #dfe6e2; --陶c: #6e3f28; --深水c: #10262d; --鹽c: #b9b8ad; --物鐵: #93a0a6; --物木: #c09a66;
   }
 }
-:root[data-theme="dark"] .舞台 {
+:root[data-theme="dark"] .舞台, :root[data-theme="dark"] .頭像 {
   --天a: #142029; --天b: #20313a; --遠c: #1b2a32; --地a: #2b3231; --地紋c: #353d3b; --牆c: #3b4347; --頂c: #0d1317; --木c: #5d4935; --淺木c: #77603f;
   --暗c: #12171a; --石c: #4b5153; --水c: #1f404a; --浪c: #3e6670; --紙c: #cfc8b4; --臉c: #d9c3a6; --髮c: #0c0f12; --白髮c: #a9aaa6; --鐵c: #252b30;
   --葉c: #2f4a3a; --葉淺c: #3b5c48; --蘆c: #5f5936; --袋c: #7c7153; --燈c: #f2b04a; --日c: #dfe6e2; --陶c: #6e3f28; --深水c: #10262d; --鹽c: #b9b8ad; --物鐵: #93a0a6; --物木: #c09a66;
@@ -531,6 +531,116 @@ textarea { width: 100%; min-height: 10em; font-family: ui-monospace, monospace; 
 .標題頁 .引 { font-family: var(--字-文); font-size: var(--大); margin: 0; }
 .性子 { font-family: var(--字-文); font-size: var(--中); color: var(--淡墨); margin: 8px 0 0; }
 .性子.變了 { color: var(--州); font-weight: 700; }
+/* ===== 對話式事件（互動版）：上面是台子，下面一段一段說 ===== */
+.對話卡 .對話 .眉 { justify-content: space-between; align-items: center; }
+.對話卡 h2 { margin: 2px 0 12px; }
+.對話卡 .句群 { display: grid; gap: 10px; max-width: 40em; }
+.句 { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 10px; align-items: start; }
+.句.旁白 { grid-template-columns: minmax(0, 1fr); }
+.句[hidden], .對話卡 .收尾[hidden], .對話卡 .續[hidden], .對話卡 .略過[hidden] { display: none; }
+.句:not([hidden]) { animation: 浮 0.3s ease both; }
+.句 .頭像 {
+  width: 56px; height: 64px; border-radius: 10px; background: var(--州淡); border: 1px solid var(--線);
+  overflow: hidden; display: flex; align-items: flex-start; justify-content: center;
+}
+.句 .頭像 .偶 { width: 62px; height: auto; flex: none; margin-top: 2px; }
+.句 .話 { font-family: var(--字-文); font-size: var(--文); line-height: 1.9; min-width: 0; }
+.句 .話 p { margin: 0; }
+.句.有人 .話 { background: var(--紙); border: 1px solid var(--線); border-radius: 3px 12px 12px 12px; padding: 6px 14px 8px; }
+.句.我說 .話 { background: var(--州淡); border-color: color-mix(in srgb, var(--州) 40%, var(--線)); }
+.句.旁白 .話 { padding: 0 2px; }
+.句 .名牌 { font-family: var(--字-介); font-size: var(--小); font-weight: 700; color: var(--州); letter-spacing: 0.06em; line-height: 1.5; }
+.句[data-所選] .話 p::before { content: "你選了："; font-family: var(--字-介); font-size: var(--小); color: var(--淡墨); margin-right: 4px; }
+.打字中::after { content: "▍"; color: var(--州); animation: 閃 0.8s steps(1) infinite; margin-left: 1px; }
+@keyframes 閃 { 50% { opacity: 0; } }
+.對話卡 .續 {
+  display: block; margin: 6px auto 0; border: 0; background: none; color: var(--州); font-size: 18px; line-height: 1;
+  cursor: pointer; padding: 8px 28px; animation: 點 1s ease-in-out infinite;
+}
+@keyframes 點 { 50% { transform: translateY(4px); opacity: 0.55; } }
+.對話卡 .略過 {
+  border: 1px solid var(--線); background: var(--紙); border-radius: 999px; font: 12px/1.6 var(--字-介);
+  padding: 2px 10px; cursor: pointer; color: var(--淡墨); letter-spacing: 0;
+}
+.對話卡 .收尾.出 > * { animation: 浮 0.35s ease both; }
+.對話卡 .收尾.出 .選項 { animation-delay: 0.1s; }
+.對話卡 .選項 { margin-top: 14px; max-width: 40em; }
+.對話卡 .選 { border-left: 4px solid var(--州); background: var(--紙); }
+.對話卡 .選:hover:not([disabled]) { transform: translateX(3px); }
+.對話卡 .選 { transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease; }
+.對話卡 .選[disabled] { border-left-style: dashed; }
+.對話卡 { cursor: default; }
+.對話卡:has(.續:not([hidden])) .對話 { cursor: pointer; }
+/* 台上誰在說話：那個人往前一步，其他人退一點 */
+.舞台.觀 .位.人 { transition: opacity 0.25s ease, transform 0.25s ease; }
+.舞台.觀 .我 { transition: opacity 0.25s ease, transform 0.25s ease; }
+.舞台.有人說 .位.人:not(.說), .舞台.有人說 .我:not(.說) { opacity: 0.45; }
+.舞台 .位.人.說 { transform: translateY(-5px) scale(1.1); z-index: 3; }
+.舞台 .位.人.說 .名牌 { border-color: var(--州); background: var(--州淡); }
+.舞台 .我.說 { transform: translateX(-50%) translateY(-5px) scale(1.1); }
+
+/* 頭像：人偶的顏色原本只在舞台裡，頭像在舞台外，另外給一份 */
+.頭像 { --天a: #c3d9d8; --天b: #f0f1e6; --遠c: #b6c6c2; --地a: #dbd5be; --地紋c: #cac3a9; --牆c: #eee8d6; --頂c: #3a434b; --木c: #96744f; --淺木c: #b8976c; --暗c: #4b4139; --石c: #bcbab0; --水c: #93bfc7; --浪c: #ecf5f4; --紙c: #f8f3e4; --臉c: #f3dfc4; --髮c: #2a2e35; --白髮c: #d9d9d4; --鐵c: #555c62; --葉c: #6f9069; --葉淺c: #8fad81; --蘆c: #a89a5e; --袋c: #d9c9a0; --燈c: #e9a03b; --日c: #f6efd2; --陶c: #b96f45; --深水c: #4f7f8c; --鹽c: #fbfaf4; }
+.頭像 .偶 .影 { fill: #000; opacity: 0.16; }
+.頭像 .偶 .衣 { fill: var(--衣); stroke: var(--頂c); stroke-width: 0.8; }
+.頭像 .偶 .袖 { fill: var(--衣); stroke: var(--頂c); stroke-width: 0.8; filter: brightness(0.88); }
+.頭像 .偶 .帶 { fill: var(--紙c); opacity: 0.85; } .頭像 .偶 .襟 { stroke: var(--紙c); stroke-width: 1.2; fill: none; opacity: 0.85; }
+.頭像 .偶 .臉 { fill: var(--臉c); stroke: var(--頂c); stroke-width: 0.8; }
+.頭像 .偶 .髮 { fill: var(--髮c); } .頭像 .偶 .髮.白 { fill: var(--白髮c); stroke: var(--頂c); stroke-width: 0.5; } .頭像 .偶 .髮線 { stroke: var(--髮c); stroke-width: 1.6; fill: none; stroke-linecap: round; }
+.頭像 .偶 .笠 { fill: var(--蘆c); stroke: var(--頂c); stroke-width: 0.8; }
+.頭像 .偶 .眼 { fill: var(--髮c); }
+.頭像 .偶 .木線 { stroke: var(--木c); stroke-width: 1.6; fill: none; stroke-linecap: round; } .頭像 .偶 .木線.粗 { stroke-width: 2.6; } .頭像 .偶 .木 { fill: var(--木c); stroke: var(--頂c); stroke-width: 0.6; }
+.頭像 .偶 .鐵 { fill: var(--鐵c); } .頭像 .偶 .朱線 { stroke: var(--朱); stroke-width: 1.4; fill: none; } .頭像 .偶 .朱點 { fill: var(--朱); } .頭像 .偶 .紙片 { fill: var(--紙c); stroke: var(--木c); stroke-width: 0.7; } .頭像 .偶 .格 { stroke: var(--頂c); stroke-width: 0.7; fill: none; opacity: 0.7; }
+/* ===== 回饋：做了事，看得見 ===== */
+.頂 .片 { position: relative; }
+.頂 .片.跳 { animation: 片跳 0.55s ease; }
+@keyframes 片跳 { 30% { transform: scale(1.14); border-color: var(--州); } }
+.飄 {
+  position: absolute; left: 50%; top: 100%; transform: translateX(-50%); font: 700 13px/1 var(--字-介); white-space: nowrap;
+  pointer-events: none; padding: 3px 7px; border-radius: 999px; background: var(--紙二); border: 1px solid currentColor;
+  animation: 飄 1.6s ease-out forwards; z-index: 6;
+}
+.飄.得 { color: var(--澤); } .飄.失 { color: var(--朱); }
+@keyframes 飄 { 0% { opacity: 0; transform: translate(-50%, -4px) scale(0.8); } 15% { opacity: 1; transform: translate(-50%, 4px) scale(1.05); } 70% { opacity: 1; transform: translate(-50%, 8px); } 100% { opacity: 0; transform: translate(-50%, 16px); } }
+#捷報區 { position: fixed; top: 32vh; left: 50%; transform: translateX(-50%); z-index: 60; display: grid; gap: 8px; pointer-events: none; width: min(92vw, 380px); }
+.捷報 {
+  background: var(--紙二); border: 2px solid var(--赭); border-radius: 12px; padding: 10px 16px; text-align: center;
+  font-family: var(--字-文); font-size: var(--大); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2); animation: 捷 3.1s ease both;
+  display: block; line-height: 1.5;
+}
+.捷報 small { display: block; width: 100%; white-space: nowrap; font-family: var(--字-介); font-size: 11px; letter-spacing: 0.24em; color: var(--赭); margin-bottom: 2px; }
+.捷報 b { font-family: var(--字-題); margin-right: 6px; color: var(--州); }
+.捷報.情 { border-color: var(--州); } .捷報.情 small { color: var(--州); }
+.捷報.失 { border-color: var(--線); } .捷報.失 small { color: var(--淡墨); }
+@keyframes 捷 { 0% { opacity: 0; transform: translateY(-16px) scale(0.9); } 9% { opacity: 1; transform: translateY(0) scale(1.05); } 15% { transform: scale(1); } 85% { opacity: 1; } 100% { opacity: 0; transform: translateY(-10px); } }
+.卡.有印 { position: relative; }
+.卡.有印 h2 { padding-right: 104px; }
+.印章 {
+  position: absolute; top: 20px; right: 18px; font-family: var(--字-題); font-weight: 900; font-size: 21px; letter-spacing: 0.12em;
+  color: var(--朱); border: 3px double var(--朱); border-radius: 8px; padding: 3px 10px; transform: rotate(-8deg); opacity: 0.92;
+  animation: 蓋印 0.55s cubic-bezier(0.2, 1.4, 0.4, 1) 0.25s both; pointer-events: none;
+}
+.印章.失敗, .印章.放棄 { color: var(--淡墨); border-color: var(--淡墨); }
+@keyframes 蓋印 { 0% { opacity: 0; transform: rotate(-8deg) scale(2.3); } 70% { opacity: 0.95; transform: rotate(-8deg) scale(0.94); } 100% { opacity: 0.92; transform: rotate(-8deg) scale(1); } }
+.結章 .框 ul li { animation: 浮 0.35s ease both; }
+.步驟 li.剛勾 { animation: 亮 1.4s ease; border-radius: 6px; }
+.步驟 li.剛勾 .勾 { animation: 勾 0.6s cubic-bezier(0.3, 1.6, 0.5, 1) both; }
+@keyframes 勾 { 0% { transform: translateY(2px) scale(0.3); } 60% { transform: translateY(2px) scale(1.4); } 100% { transform: translateY(2px) scale(1); } }
+@keyframes 亮 { 0% { background: var(--州淡); } 100% { background: transparent; } }
+@media (max-width: 560px) {
+  .句 { grid-template-columns: 46px minmax(0, 1fr); gap: 8px; }
+  .句.旁白 { grid-template-columns: minmax(0, 1fr); }
+  .句 .頭像 { width: 46px; height: 54px; }
+  .句 .頭像 .偶 { width: 52px; }
+  .句.有人 .話 { padding: 5px 11px 7px; }
+  .卡.有印 h2 { padding-right: 0; margin-top: 44px; }
+  .印章 { top: 14px; font-size: 18px; }
+  #捷報區 { top: 30vh; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .句:not([hidden]), .打字中::after, .對話卡 .續, .對話卡 .收尾.出 > *, .頂 .片.跳, .飄, .捷報, .印章, .結章 .框 ul li, .步驟 li.剛勾, .步驟 li.剛勾 .勾 { animation: none !important; }
+  .舞台 .位.人.說, .舞台 .我.說 { transform: none; }
+}
 </style>
 
 <header class="頂" id="頂"></header>
@@ -2290,7 +2400,7 @@ const 七州舞台 = (function () {
     const 觀 = !!o.觀;
     const 人 = (o.人 || []).map((p) => {
       const 內 = `<span class="名牌">${p.事 && !觀 ? 嘆 : p.副 && !觀 ? 小點 : ""}${esc(p.稱 || p.名)}${p.段 && !觀 ? `<small>${esc(p.段)}${p.已訪 ? "・找過了" : ""}</small>` : ""}</span>${偶(p)}`;
-      return 觀 ? `<div class="位 人">${內}</div>`
+      return 觀 ? `<div class="位 人" data-名="${esc(p.名)}">${內}</div>`
         : `<button class="位 人${p.已訪 ? " 已訪" : ""}" data-act="行:${esc(p.key)}" data-鍵="${p.鍵}" aria-label="找${esc(p.名)}">${內}</button>`;
     }).join("");
     const 物 = 觀 ? "" : (o.物 || []).map((a) => `<button class="位 物" data-act="行:${esc(a.key)}" data-鍵="${a.鍵}" ${a.可 ? "" : `disabled title="${esc(a.理由 || "")}"`}>
@@ -2302,7 +2412,7 @@ const 七州舞台 = (function () {
       ${景圖(o.地, o.地名, o.州, o.季, o.世)}${燈}
       ${!觀 && o.曆 ? `<div class="台曆${o.新旬 ? " 新旬" : ""}">${esc(o.曆)}</div>` : ""}${o.報 || ""}
       <div class="列 人列">${人}</div>
-      <div class="我" style="left:${r1(o.我x == null ? 50 : o.我x)}%">${偶(Object.assign({ 州: o.州 }, o.我), true)}</div>
+      <div class="我" data-名="你" style="left:${r1(o.我x == null ? 50 : o.我x)}%">${偶(Object.assign({ 州: o.州 }, o.我), true)}</div>
       ${觀 ? "" : `<div class="列 物列">${物}</div>`}</div>`;
   }
   return { 場景, 偶 };
@@ -2425,8 +2535,11 @@ const 七州舞台 = (function () {
   // 這一章可以做的事：做完的打勾；還沒做的，畫面上同一件事會有「！」。
   function 步驟HTML() {
     const 表 = E.步驟表(P, S);
+    const 章 = S.章.目標 + "@" + (S.紀元 || 1);
+    const 前 = UI.勾 && UI.勾.章 === 章 ? UI.勾.完 : null;
+    UI.勾 = { 章, 完: new Set(表.filter((x) => x.完).map((x) => x.文)) };
     if (!表.length) return "";
-    return `<ul class="步驟" aria-label="這一章可以做的事">${表.map((x) => `<li class="${x.完 ? "完" : ""}"><span class="勾" aria-hidden="true">${x.完 ? "✓" : ""}</span>${esc(x.文)}</li>`).join("")}</ul>`;
+    return `<ul class="步驟" aria-label="這一章可以做的事">${表.map((x) => `<li class="${x.完 ? "完" : ""}${x.完 && 前 && !前.has(x.文) ? " 剛勾" : ""}"><span class="勾" aria-hidden="true">${x.完 ? "✓" : ""}</span>${esc(x.文)}</li>`).join("")}</ul>`;
   }
   // 場景跟著世界變：大澤的水比開局又退了幾級、老王駕崩後的那一個多月、票號門口有沒有人排隊兌銀。
   function 世態() {
@@ -2451,6 +2564,8 @@ const 七州舞台 = (function () {
     const 末 = S.動態[S.動態.length - 1] || null;
     let 新報 = [];
     if (UI.上報 && 末 && 末 !== UI.上報) { const i = S.動態.indexOf(UI.上報); 新報 = S.動態.slice(i < 0 ? -1 : i + 1).filter((x) => x.類 !== "事件").slice(-3); }   // 事件的結果在卡片上看過了，台上不再重複
+    const 重 = 新報.flatMap((x) => x.變化 || []).filter((c) => c.重 && !c.印 && !c.線索);
+    if (重.length) UI.待捷 = 重;
     const 新旬 = UI.上t != null && UI.上t !== S.t;
     UI.上報 = 末; UI.上t = S.t;
     const 報字 = 新報.reduce((n, x) => n + x.文.length + (x.變化 || []).length * 6, 0);
@@ -2461,11 +2576,12 @@ const 七州舞台 = (function () {
     return 七州舞台.場景({ 地: id, 地名: 地.名, 州: 地.州, 季: 季名(S.t), 物, 人, 我: 我偶(), 我x: UI.我x, ap: S.ap, 滿: P.參數.每旬行動點, 曆, 新旬, 報, 世: 世態() });
   }
   // 事件進行中：只看不點。台上站的是這一段文字裡提到的人（在場的排前面，最多三個）。
-  function 觀台HTML(畫) {
+  function 觀台HTML(畫) { return 台上人(畫).html; }
+  function 台上人(畫) {
     // 事件寫了「景」的，小台子換成那個地點的景（路上碰到的事，不一定在你剛剛做事的地方）。
     const 件 = P.事件[畫.id] || {};
     const id = 件.景 && P.地點[件.景] ? 件.景 : S.pc.地點, 地 = P.地點[id];
-    if (!地) return "";
+    if (!地) return { html: "", 人: [], 州: "" };
     const 全文 = (畫.文 || []).join("") + (畫.名 || "");
     const 在 = E.在場(P, S, id);
     // 誰站上台：在場而且文字提到的人；不在場的，要是同一州的人、而且是在敘述裡（不是別人嘴裡）被提到，才算他到了場。
@@ -2485,8 +2601,199 @@ const 七州舞台 = (function () {
     }
     // 事件寫了「台上」的：沒有名字的路人（老船娘、孩子）也站上去。
     for (const x of 件.台上 || []) 人.push({ 名: x.名, 身分: x.身分, 州: 地.州 });
-    return 七州舞台.場景({ 地: id, 地名: 地.名, 州: 地.州, 季: 季名(S.t), 人: 人.slice(0, 3), 我: 我偶(), 觀: true, 世: 世態() });
+    const 台上 = 人.slice(0, 3);
+    return { html: 七州舞台.場景({ 地: id, 地名: 地.名, 州: 地.州, 季: 季名(S.t), 人: 台上, 我: 我偶(), 觀: true, 世: 世態() }), 人: 台上, 州: 地.州 };
   }
+  // ================= 對話式事件（互動版）=================
+  // 事件和結果畫成對話：上面是台子，下面一段一段出來；說話的人有名牌和頭像，台上那個人往前一步。
+  // 點一下：還在打字就打完，打完了就出下一段；最後才出選項。不想等可以按「略過」。
+  const 靜 = () => !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const 正則 = (s) => String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const 說動 = "說|問|喊|笑|道|答|叫|唸|念|罵|嘆|哼|開口|應";
+  // 這一段是誰在說話：只在有把握的時候回答（敘述裡寫了「某某說」「某某：」「」某某說」），不然當旁白。
+  function 說話者(p, 名單) {
+    if (!/「/.test(p)) return null;
+    const 敘 = p.replace(/「[^」]*」/g, "＿");
+    let best = null, 位 = Infinity;
+    for (const n of [...名單].sort((a, b) => b.length - a.length)) {
+      const N = 正則(n);
+      const m = 敘.match(new RegExp(`${N}[^＿。，]{0,6}(${說動})|＿${N}[^＿。]{0,3}(${說動})|${N}[^＿。]{0,8}：＿`));
+      if (m && m.index < 位) { best = n; 位 = m.index; }
+    }
+    const 我 = 敘.match(new RegExp(`(?<![著對跟給向替叫看])你[^＿。，]{0,4}(${說動})|＿你(${說動})`));
+    if (我 && 我.index < 位) return "你";
+    if (best) return best;
+    if (名單.length === 1 && new RegExp(`(他|她)[^＿。]{0,4}(${說動})|＿(他|她)(${說動})`).test(敘)) return 名單[0];
+    return null;
+  }
+  function 句HTML(p, 誰, 像, 藏, 我) {
+    const 頭 = 像 ? `<div class="頭像" aria-hidden="true">${七州舞台.偶(像, 我)}</div>` : "";
+    const 牌 = 誰 ? `<div class="名牌">${esc(誰)}</div>` : "";
+    return `<div class="句${像 ? " 有人" : " 旁白"}${我 ? " 我說" : ""}" data-說="${esc(誰 || "")}"${藏 ? " hidden" : ""}>${頭}<div class="話">${牌}<p data-字="${esc(p)}">${藏 ? "" : esc(p)}</p></div></div>`;
+  }
+  function 對話HTML(畫, 新, 收尾) {
+    const 台 = 台上人(畫);
+    const 名單 = 台.人.map((x) => x.名);
+    const 文 = 畫.文 || [];
+    // 一整段都是引號裡的話（前面沒有「某某說」）：算前一段剛提到的那個人說的；台上只有一個人，就是他。
+    let 前提 = null;
+    const 句 = 文.map((p, i) => {
+      let 誰 = 說話者(p, 名單);
+      if (!誰 && /^「/.test(p.trim())) 誰 = 前提 || (名單.length === 1 ? 名單[0] : null);
+      const 敘 = p.replace(/「[^」]*」/g, "＿");
+      let 末 = -1;
+      for (const n of 名單) { const k = 敘.lastIndexOf(n); if (k > 末) { 末 = k; 前提 = n; } }
+      if (誰 && 誰 !== "你") 前提 = 誰;
+      const 我 = 誰 === "你";
+      const 像 = 我 ? 我偶() : 誰 ? 台.人.find((x) => x.名 === 誰) : null;
+      return 句HTML(p, 我 ? S.pc.叫法 : 誰, 像 ? Object.assign({ 州: 台.州 }, 像) : null, 新 && i > 0, 我);
+    }).join("");
+    const 我選 = 畫.類 === "結果" && 畫.選 ? 句HTML(畫.選, S.pc.叫法, Object.assign({ 州: 台.州 }, 我偶()), false, true).replace(' data-說="', ' data-所選="1" data-說="') : "";
+    const 藏尾 = 新 && 文.length;
+    return `<article class="卡 互動 對話卡${新 ? " 播" : ""}">${台.html}
+      <div class="對話">
+        <div class="眉"><span>${esc(E.時間字(S.t))}</span>${新 && 文.length > 1 ? `<button class="略過" data-act="全段" title="一次出完">略過 ▸▸</button>` : ""}</div>
+        <h2>${esc(畫.名)}</h2>
+        ${我選}${畫.類 === "結果" && UI.互動 && 畫.骰 && 新 ? 骰尺HTML(畫.骰) : ""}${畫.類 === "結果" && 畫.骰 ? `<div class="骰果 ${esc(畫.骰.果)}">擲骰｜${esc(畫.骰.標)}｜擲出 ${畫.骰.點}｜${畫.骰.果 === "成" ? "成" : 畫.骰.果 === "代價" ? "成，但有代價" : "不成"}</div>` : ""}
+        <div class="句群">${句}</div>
+        ${藏尾 ? `<button class="續" data-act="下一段" aria-label="下一段">▼</button>` : ""}
+        <div class="收尾"${藏尾 ? " hidden" : ""}>${收尾}</div>
+      </div></article>`;
+  }
+  const 打 = { 計: null, el: null };
+  function 打出(p) {
+    const 全 = p.getAttribute("data-字") || "";
+    if (靜() || !全) { p.textContent = 全; return; }
+    let i = 0;
+    p.textContent = "";
+    p.classList.add("打字中");
+    打.el = p;
+    const 步 = () => {
+      i = Math.min(全.length, i + 2);
+      p.textContent = 全.slice(0, i);
+      if (i < 全.length) 打.計 = setTimeout(步, 26);
+      else { p.classList.remove("打字中"); 打.el = null; 打.計 = null; }
+    };
+    步();
+  }
+  function 打完() {
+    if (!打.el) return false;
+    clearTimeout(打.計);
+    打.el.textContent = 打.el.getAttribute("data-字");
+    打.el.classList.remove("打字中");
+    打.el = null; 打.計 = null;
+    return true;
+  }
+  // 台上誰在說話：那個人往前一步，其他人退一點；說話的是你，就是你往前。
+  function 標說話(卡, 句) {
+    const 誰 = 句 ? 句.getAttribute("data-說") : "";
+    const 台 = 卡.querySelector(".舞台");
+    if (!台) return;
+    const 我說 = 句 && 句.classList.contains("我說");
+    let 有 = false;
+    台.querySelectorAll(".位.人").forEach((x) => { const 是 = !!誰 && !我說 && x.getAttribute("data-名") === 誰; x.classList.toggle("說", 是); 有 = 有 || 是; });
+    const 我 = 台.querySelector(".我");
+    if (我) 我.classList.toggle("說", !!我說);
+    台.classList.toggle("有人說", 有 || !!我說);
+  }
+  function 更新續(卡) {
+    const 還有 = 卡.querySelector(".句[hidden]") || 卡.querySelector(".收尾[hidden]");
+    const 續 = 卡.querySelector(".續"), 略 = 卡.querySelector(".略過");
+    if (續) 續.hidden = !還有;
+    if (略) 略.hidden = !還有;
+  }
+  function 出尾(卡) {
+    const 尾 = 卡.querySelector(".收尾[hidden]");
+    if (!尾) return false;
+    尾.hidden = false;
+    尾.classList.add("出");
+    標說話(卡, null);
+    更新續(卡);
+    結算回饋();
+    if (!靜()) setTimeout(() => 尾.scrollIntoView({ block: "nearest", behavior: "smooth" }), 60);
+    return true;
+  }
+  function 下一段() {
+    if (打完()) return true;
+    const 卡 = document.querySelector("#敘事 .對話卡");
+    if (!卡) return false;
+    const 下 = 卡.querySelector(".句[hidden]");
+    if (下) {
+      下.hidden = false;
+      標說話(卡, 下);
+      打出(下.querySelector("p"));
+      更新續(卡);
+      if (!靜()) 下.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      return true;
+    }
+    return 出尾(卡);
+  }
+  function 全段() {
+    打完();
+    const 卡 = document.querySelector("#敘事 .對話卡");
+    if (!卡) return;
+    卡.querySelectorAll(".句[hidden]").forEach((x) => { x.hidden = false; const p = x.querySelector("p"); p.textContent = p.getAttribute("data-字"); });
+    出尾(卡);
+  }
+  function 對話還沒完() {
+    return !!(打.el || document.querySelector("#敘事 .對話卡 .句[hidden], #敘事 .對話卡 .收尾[hidden]"));
+  }
+  // 新的一張對話卡：第一段開始打字（擲骰的結果，等針停了再打）。
+  function 開對話() {
+    clearTimeout(打.計); 打.el = null; 打.計 = null;
+    const 卡 = document.querySelector("#敘事 .對話卡.播");
+    if (!卡) { 結算回饋(); return; }
+    const 首 = 卡.querySelector(".句:not([hidden]):not([data-所選])");
+    if (!首) { 出尾(卡); return; }
+    標說話(卡, 首);
+    const p = 首.querySelector("p");
+    const 等 = 卡.querySelector(".骰尺") && !靜() ? 1250 : 0;
+    p.textContent = "";
+    setTimeout(() => 打出(p), 等);
+    更新續(卡);
+  }
+
+  // ================= 回饋 =================
+  // 頂欄的錢、心境變了：數字跳一下，旁邊冒出「+70」。對話還沒講完的，等到出結果那一刻才冒。
+  function 播頂(差) {
+    if (!差) return;
+    for (const [k, d] of Object.entries(差)) {
+      if (!d) continue;
+      const 片 = document.querySelector(`#頂 [data-頂="${k}"]`);
+      if (!片) continue;
+      片.classList.remove("跳"); void 片.offsetWidth; 片.classList.add("跳");
+      const 飄 = document.createElement("span");
+      飄.className = "飄 " + (d > 0 ? "得" : "失");
+      飄.textContent = (d > 0 ? "+" : "") + d + (k === "錢" ? " 文" : "");
+      飄.setAttribute("aria-hidden", "true");
+      片.appendChild(飄);
+      setTimeout(() => 飄.remove(), 1700);
+    }
+  }
+  // 技能升級、交情換了一段：畫面上方跳出一張捷報。
+  function 捷報(arr) {
+    if (!arr || !arr.length || 靜()) return;
+    let 區 = document.getElementById("捷報區");
+    if (!區) { 區 = document.createElement("div"); 區.id = "捷報區"; 區.setAttribute("aria-live", "polite"); document.body.appendChild(區); }
+    arr.slice(0, 3).forEach((c, i) => {
+      const m = String(c.字).match(/^(.+?)：(.+?) → (.+)$/);
+      if (!m) return;
+      const 技 = (P.參數.技能 || []).includes(m[1]);
+      const 條 = document.createElement("div");
+      條.className = "捷報 " + (技 ? "技" : "情") + (c.正 === false ? " 失" : "");
+      條.innerHTML = 技 ? `<small>本事長進了</small><b>${esc(m[1])}</b>升到「${esc(m[3])}」`
+        : `<small>${c.正 === false ? "交情變了" : "交情更近了"}</small><b>${esc(m[1])}</b>${esc(m[2])} → ${esc(m[3])}`;
+      條.style.animationDelay = (i * 0.9) + "s";
+      區.appendChild(條);
+      setTimeout(() => 條.remove(), 3200 + i * 900);
+    });
+  }
+  // 結果出來的那一刻：頂欄的數字和捷報一起來。
+  function 結算回饋() {
+    if (UI.待頂) { 播頂(UI.待頂); UI.待頂 = null; }
+    if (UI.待捷 && UI.待捷.length) { 捷報(UI.待捷); UI.待捷 = null; }
+  }
+
   function 骰尺HTML(骰) {
     return `<div class="骰尺" style="--成:${骰.成}%;--代:${骰.代價}%;--點:${Math.max(1, Math.min(99, 骰.點))}%" aria-hidden="true">
       <div class="尺"><i class="區 代"></i><i class="區 成"></i><i class="針"></i></div>
@@ -2534,14 +2841,18 @@ const 七州舞台 = (function () {
     const 果 = { 達成: "做成了", 失敗: "沒做成", 放棄: "放下了" }[S.章.結果];
     const 標 = S.章.名 ? `${S.章.名}${果 ? "：" + 果 : 剩 != null ? `・剩 ${剩} 旬` : ""}` : "";
     const 低 = S.pc.感情.心境 < P.參數.心境低落;
+    const 今 = { 錢: S.pc.錢, 心境: S.pc.感情.心境, 身: S.pc.身世, 紀: S.紀元 || 1 };
+    const 前 = UI.頂值;
+    UI.頂差 = 前 && 前.身 === 今.身 && 前.紀 === 今.紀 ? { 錢: 今.錢 - 前.錢, 心境: 今.心境 - 前.心境 } : null;
+    UI.頂值 = 今;
     h.innerHTML = `
       <div class="印">七州</div>
       <div><div class="時">${esc(E.時間字(S.t))}</div>
         <div class="章">${esc(州名(地.州))}・${esc(地.名)}｜${紀字(S.紀元)}第${E.幕字[S.幕 || 1]}幕・第 ${E.幕內序(S)} 章</div></div>
       <div class="況">
         ${標 ? `<button class="片 標" data-act="帳:局勢" title="眼下的事">${esc(標)}</button>` : ""}
-        <button class="片" data-act="帳:帳本" title="手上的錢">${esc(錢字(S.pc.錢))}</button>
-        <button class="片 ${低 ? "警" : ""}" data-act="帳:你" title="心境太低，做事不順手">心境 ${S.pc.感情.心境}${低 ? "・低落" : ""}</button>
+        <button class="片" data-頂="錢" data-act="帳:帳本" title="手上的錢">${esc(錢字(S.pc.錢))}</button>
+        <button class="片 ${低 ? "警" : ""}" data-頂="心境" data-act="帳:你" title="心境太低，做事不順手">心境 ${S.pc.感情.心境}${低 ? "・低落" : ""}</button>
         <span class="點" title="這一旬還能做的事">行動 ${行動點HTML()}</span>
       </div>
       <div class="右">
@@ -2744,15 +3055,20 @@ const 七州舞台 = (function () {
             ${o.可 ? "" : `<span class="註">${esc(o.理由)}</span>`}
           </button>`).join("")}</div>`
         : `<div class="回"><button class="鈕 主" data-act="繼續">繼續</button><span class="淡 鍵提示">（Enter）</span></div>`;
-      const 選後 = 新 && UI.互動 ? 選.replace(/^<div class="(選項|回)"/, `<div class="$1" style="${段後(畫.文)}"`) : 選;
-      box.innerHTML = `<article class="卡${UI.互動 ? " 互動" : ""}">${UI.互動 ? 觀台HTML(畫) : ""}${眉}<h2>${esc(畫.名)}</h2>
-        <div class="文">${段落(畫.文, 新)}</div>${開局}${變化HTML(畫.變化)}${選後}</article>`;
+      if (UI.互動) {
+        if (新) UI.待捷 = (畫.變化 || []).filter((c) => c.重 && !c.印 && !c.線索);
+        box.innerHTML = 對話HTML(畫, 新, `${開局}${變化HTML(畫.變化)}${選}`);
+      } else box.innerHTML = `<article class="卡">${眉}<h2>${esc(畫.名)}</h2>
+        <div class="文">${段落(畫.文, 新)}</div>${開局}${變化HTML(畫.變化)}${選}</article>`;
     } else if (畫.類 === "結果") {
       const 骰 = 畫.骰 ? `<div class="骰果 ${esc(畫.骰.果)}">擲骰｜${esc(畫.骰.標)}｜擲出 ${畫.骰.點}｜${畫.骰.果 === "成" ? "成" : 畫.骰.果 === "代價" ? "成，但有代價" : "不成"}</div>` : "";
-      box.innerHTML = `<article class="卡${UI.互動 ? " 互動" : ""}">${UI.互動 ? 觀台HTML(畫) : ""}${眉}<h2>${esc(畫.名)}</h2>
-        <p class="所選">你：${esc(畫.選)}</p>${UI.互動 && 畫.骰 && 新 ? 骰尺HTML(畫.骰) : ""}${骰}
-        <div class="文">${段落(畫.文, 新)}</div>${變化HTML(畫.變化)}
-        <div class="回"><button class="鈕 主" data-act="繼續">繼續</button><span class="淡 鍵提示">（Enter）</span></div></article>`;
+      const 回 = `<div class="回"><button class="鈕 主" data-act="繼續">繼續</button><span class="淡 鍵提示">（Enter）</span></div>`;
+      if (UI.互動) {
+        if (新) UI.待捷 = (畫.變化 || []).filter((c) => c.重 && !c.印 && !c.線索);
+        box.innerHTML = 對話HTML(畫, 新, `${變化HTML(畫.變化)}${回}`);
+      } else box.innerHTML = `<article class="卡">${眉}<h2>${esc(畫.名)}</h2>
+        <p class="所選">你：${esc(畫.選)}</p>${骰}
+        <div class="文">${段落(畫.文, 新)}</div>${變化HTML(畫.變化)}${回}</article>`;
     } else if (畫.類 === "結章") {
       box.innerHTML = 結章HTML();
     } else if (畫.類 === "終幕") {
@@ -2909,7 +3225,7 @@ const 七州舞台 = (function () {
         <div class="框"><h3 class="欄題">世人都在等的日子</h3><div class="文">${R.需決定.大事.map((x) => `<p>${esc(x)}</p>`).join("")}</div></div>
         ${R.需決定.願望.length ? `<div class="框"><h3 class="欄題">紀元願望</h3><p class="淡">願望只是你想看見的結果，世界不會因此照你走。</p><div class="決定">${願}</div></div>` : ""}`;
     }
-    return `<article class="卡 結章"><div class="眉"><span>${紀字(S.紀元)}第${E.幕字[R.幕 || 1]}幕・第 ${R.幕章 || R.章} 章結束</span><span>${esc(E.短時(R.時間[0]))} 至 ${esc(E.短時(R.時間[1]))}</span></div>
+    return `<article class="卡 結章 有印"><div class="印章 ${esc(R.結果)}" aria-hidden="true">${esc(果字)}</div><div class="眉"><span>${紀字(S.紀元)}第${E.幕字[R.幕 || 1]}幕・第 ${R.幕章 || R.章} 章結束</span><span>${esc(E.短時(R.時間[0]))} 至 ${esc(E.短時(R.時間[1]))}</span></div>
       <h2>${esc(R.目標)}：${esc(果字)}</h2>
       <div class="文">${段落(R.後來, true)}</div>
       <div class="框"><h3 class="欄題">【成長】第 ${R.幕章 || R.章} 章</h3>${成長}${心}${性變()}</div>
@@ -3202,6 +3518,8 @@ const 七州舞台 = (function () {
     畫帳();
     畫疊();
     if (UI.要捲頂) { UI.要捲頂 = false; window.scrollTo(0, 0); }
+    if (UI.頂差) { UI.待頂 = UI.頂差; UI.頂差 = null; }
+    if (document.querySelector("#敘事 .對話卡.播")) 開對話(); else 結算回饋();
   }
 
   // ================= 操作 =================
@@ -3233,6 +3551,8 @@ const 七州舞台 = (function () {
     switch (k) {
       case "選": if (E.選(P, S, Number(v))) { 存檔(); 畫(); } break;
       case "繼續": E.繼續(P, S); 存檔(); 畫(); break;
+      case "下一段": 下一段(); break;
+      case "全段": 全段(); break;
       case "行": { const 換地 = /^(遠行|移動)/.test(v); if (E.執行(P, S, v)) { if (換地) UI.我x = 14; UI.疊 = null; 存檔(); 畫(); if (換地) window.scrollTo(0, 0); } break; }
       case "分頁": UI.分頁 = v; 畫帳(); break;
       case "帳": UI.分頁 = v; UI.帳開 = true; document.body.classList.add("帳開"); 畫帳(); break;
@@ -3363,6 +3683,7 @@ const 七州舞台 = (function () {
   }
   document.addEventListener("click", (ev) => {
     const el = ev.target.closest("[data-act]");
+    if (!el && ev.target.closest && ev.target.closest("#敘事 .對話卡") && !ev.target.closest("a, input, label, summary, textarea") && 對話還沒完()) { 下一段(); return; }
     if (!el || el.disabled) return;
     if (el.tagName === "INPUT" && el.type === "checkbox") return;
     if (el.classList.contains("位") && el.closest(".舞台")) { 走去(el); return; }
@@ -3415,6 +3736,10 @@ const 七州舞台 = (function () {
         if (b && !b.disabled) { ev.preventDefault(); 動作(b.getAttribute("data-act"), b); }
       } else if (/^m$/i.test(ev.key)) { ev.preventDefault(); 動作("疊:地圖"); }
       return;
+    }
+    if ((畫面.類 === "事件" || 畫面.類 === "結果") && 對話還沒完()) {
+      if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); 下一段(); return; }
+      if (/^[1-4]$/.test(ev.key)) 全段();
     }
     if (畫面.類 === "事件" && 畫面.選項.length && /^[1-4]$/.test(ev.key)) {
       const o = 畫面.選項[Number(ev.key) - 1];
