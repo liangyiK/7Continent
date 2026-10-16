@@ -531,6 +531,33 @@ textarea { width: 100%; min-height: 10em; font-family: ui-monospace, monospace; 
 .過列 { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
 .過列 .註 { font-size: var(--小); color: var(--淡墨); flex: 1 1 14em; }
 .過列 .鈕.開 { border-color: var(--赭); color: var(--赭); font-weight: 700; }
+/* ===== 開局：大按鈕、三個小問題、角色介紹 ===== */
+.鈕.大 { font-size: 18px; padding: 12px 34px; letter-spacing: 0.2em; }
+.其他開始 { width: 100%; max-width: 34em; text-align: center; }
+.其他開始 summary { cursor: pointer; color: var(--淡墨); font: 13px/2 var(--字-介); letter-spacing: 0.1em; }
+.其他開始[open] summary { margin-bottom: 6px; }
+.問頁, .揭曉頁 { text-align: center; justify-items: center; max-width: 30em; margin: 0 auto; }
+.問頁 { padding-top: 8vh; }
+.問步 { font: 12px/1 var(--字-介); letter-spacing: 0.3em; color: var(--淡墨); }
+.問頁 h2 { font-size: var(--大); margin: 10px 0 18px; }
+.問答 { display: grid; gap: 10px; width: 100%; max-width: 22em; }
+.問選 { width: 100%; padding: 12px 16px; font-size: 16px; text-align: center; animation: 浮 0.3s ease both; }
+.問選:nth-child(2) { animation-delay: 0.05s; } .問選:nth-child(3) { animation-delay: 0.1s; } .問選:nth-child(4) { animation-delay: 0.15s; } .問選:nth-child(5) { animation-delay: 0.2s; }
+.揭曉頁 { padding-top: 4vh; }
+.揭眉 { font: 12px/1 var(--字-介); letter-spacing: 0.3em; color: var(--淡墨); margin-bottom: 8px; }
+.揭像 { width: 92px; height: 104px; border-radius: 14px; background: var(--州淡); border: 1px solid var(--線); overflow: hidden; display: flex; justify-content: center; align-items: flex-start; margin: 0 auto 10px; }
+.揭像 .偶 { width: 104px; height: auto; flex: none; margin-top: 4px; }
+.揭 { display: grid; gap: 10px; margin: 6px 0 16px; text-align: left; width: 100%; }
+.揭 > div { display: grid; grid-template-columns: 6.5em minmax(0, 1fr); gap: 10px; align-items: baseline; animation: 浮 0.45s ease both; }
+.揭 dt { font: 700 13px/1.6 var(--字-介); color: var(--州); letter-spacing: 0.06em; text-align: right; }
+.揭 dd { margin: 0; font-family: var(--字-文); font-size: var(--文); line-height: 1.8; }
+.揭曉頁 > .鈕組 { animation: 浮 0.45s ease both; }
+@media (max-width: 560px) {
+  .揭 > div { grid-template-columns: 1fr; gap: 0; }
+  .揭 dt { text-align: left; }
+  .問頁 { padding-top: 4vh; }
+}
+@media (prefers-reduced-motion: reduce) { .問選, .揭 > div, .揭曉頁 > .鈕組 { animation: none !important; } }
 .標題頁 .引 { font-family: var(--字-文); font-size: var(--大); margin: 0; }
 .性子 { font-family: var(--字-文); font-size: var(--中); color: var(--淡墨); margin: 8px 0 0; }
 .性子.變了 { color: var(--州); font-weight: 700; }
@@ -3541,6 +3568,73 @@ const 七州舞台 = (function () {
       <p class="淡" style="margin:0;font-size:var(--小)">再開一局，抽到別的人的時候，這些人會在那一局裡出場：同一個名字，照你當時做過的事。</p></div>`;
   }
   const 二紀卡名 = () => Object.values(P.身世).filter((o) => o.紀元 === 2).map((o) => 州名(o.州) + o.名);
+
+  // ================= 開局：三個小問題、角色介紹 =================
+  // 問題只用來挑「可能想過的日子」：答案不記進存檔，也不影響之後的心性。每題都沒有標準答案。
+  // 挑的時候留一點隨機：分數最高的、跟最高差一分以內的，一起抽；還沒玩過的人多半分。
+  const 開局問 = [
+    { 問: "一天從哪裡開始？", 答: [
+      ["碼頭，水邊", ["渡-船家", "渡-上岸的人"]],
+      ["鋪子，櫃檯後面", ["汀-糧商", "鹽-票號夥計", "灰-牙人", "鹽-盛家帳房"]],
+      ["爐子旁邊，作坊裡", ["陶-學徒", "陶-刻版", "汀-宮人", "淵-還俗"]],
+      ["書桌前，香案邊", ["汀-女師", "淵-小祭", "鹽-盛家帳房", "陶-刻版"]],
+      ["邊地，田埂上", ["灰-屯兵", "霜-誓證", "霜-通譯"]],
+    ] },
+    { 問: "手上的錢只夠辦一件事，先顧哪一樣？", 答: [
+      ["家裡的急用", ["渡-船家", "渡-上岸的人", "汀-宮人", "陶-刻版", "霜-誓證", "鹽-票號夥計"]],
+      ["明天的生計", ["汀-糧商", "灰-牙人", "陶-學徒", "淵-還俗", "霜-通譯", "灰-屯兵"]],
+      ["欠下的人情", ["鹽-盛家帳房", "汀-女師", "淵-小祭", "汀-糧商", "灰-牙人", "霜-誓證"]],
+    ] },
+    { 問: "熟悉的日子過不下去了，先怎麼做？", 答: [
+      ["找人商量", ["霜-通譯", "渡-上岸的人", "汀-女師", "霜-誓證", "淵-還俗"]],
+      ["換個法子", ["灰-牙人", "陶-刻版", "鹽-票號夥計", "淵-小祭", "鹽-盛家帳房"]],
+      ["守住手上的", ["渡-船家", "灰-屯兵", "汀-糧商", "汀-宮人", "陶-學徒"]],
+    ] },
+  ];
+  const 問權 = [2, 1, 1];
+  function 依答挑人(答) {
+    const 一 = Object.entries(P.身世).filter(([, o]) => (o.紀元 || 1) === 1).map(([id]) => id);
+    const 分 = Object.fromEntries(一.map((id) => [id, 1]));
+    答.forEach((a, q) => { if (a == null || !開局問[q]) return; for (const id of 開局問[q].答[a][1]) if (id in 分) 分[id] += 問權[q]; });
+    const 玩過 = new Set(Object.keys(人庫.表 || {}));
+    for (const id of 一) if (!玩過.has(id)) 分[id] += 0.5;
+    const 高 = Math.max(...Object.values(分));
+    const 候 = 一.filter((id) => 分[id] >= 高 - 1);
+    let r = Math.random() * 候.reduce((n, id) => n + 分[id], 0);
+    for (const id of 候) { r -= 分[id]; if (r < 0) return id; }
+    return 候[候.length - 1];
+  }
+  // 抽到的這個人：住哪裡、身邊有誰、手上有什麼、心裡掛著誰、今天最急的事。一行一行浮出來。
+  function 揭曉HTML() {
+    const pc = S.pc, o = P.身世[pc.身世] || {}, 地 = P.地點[o.起點 || pc.地點] || {};
+    const 綽 = pc.叫法 && pc.叫法 !== pc.全名 && !pc.全名.includes(pc.叫法) ? `，大家叫你「${esc(pc.叫法)}」` : "";
+    const 人 = E.在場(P, S, o.起點 || pc.地點).map((n) => `${esc(n)}${P.人物[n] && P.人物[n].稱號 && P.人物[n].稱號 !== n ? `<span class="淡">（${esc(P.人物[n].稱號)}）</span>` : ""}`);
+    const 物 = [...Object.entries(pc.物).map(([k, n]) => (n > 1 ? `${k} × ${n}` : k)), 錢字(pc.錢)];
+    const g = P.章目標[S.章.目標] || {};
+    const 行 = [
+      ["你是", `${esc(pc.全名)}${綽}。${esc(pc.身分)}，${pc.年齡} 歲。`],
+      ["住在", `${esc(州名(地.州))}・${esc(地.名 || "")}`],
+      ["身邊", 人.length ? 人.join("、") : "沒有誰"],
+      ["手上", esc(物.join("、"))],
+      ["心裡掛著", esc(pc.牽掛 || "")],
+      ["今天最急的事", esc(g.眼下 || S.章.眼下 || "")],
+    ];
+    const 像 = 七州舞台.偶(Object.assign({ 州: 地.州 }, 我偶()), true);
+    return `<div class="疊內 揭曉頁">
+      <div class="揭眉">抽到的是這個人</div>
+      <div class="頭像 揭像" aria-hidden="true">${像}</div>
+      <dl class="揭">${行.map(([k, v], i) => `<div style="animation-delay:${(0.2 + i * 0.32).toFixed(2)}s"><dt>${k}</dt><dd>${v}</dd></div>`).join("")}</dl>
+      <div class="鈕組" style="animation-delay:${(0.2 + 行.length * 0.32).toFixed(2)}s"><button class="鈕 主 大" data-act="揭曉完">開始這一天</button></div>
+      <p class="淡">從${esc(地.名 || "這裡")}開始。</p></div>`;
+  }
+  function 問HTML() {
+    const q = 開局問[UI.問.步];
+    return `<div class="疊內 問頁"><div class="問步">${UI.問.步 + 1}／${開局問.length}</div><h2>${esc(q.問)}</h2>
+      <div class="問答">${q.答.map((a, i) => `<button class="鈕 問選" data-act="答:${i}">${esc(a[0])}</button>`).join("")}</div>
+      <p class="淡">這三題只是替你挑一個可能想過的日子，答什麼都不會記下來，也不影響之後。</p>
+      <div class="鈕組"><button class="鈕 小" data-act="隨緣">跳過，直接抽一個人</button><button class="鈕 小" data-act="回問">回去</button></div></div>`;
+  }
+  const 州鈕 = () => ["渡", "鹽", "汀", "淵", "霜", "陶", "灰"].map((k) => `<button class="鈕 小" data-act="開新局:${k}">只抽${k === "霜" ? "霜原" : k + "州"}</button>`).join("");
   const 開局鈕 = `<button class="鈕 主" data-act="開新局">開新局（隨機）</button>`
     + ["渡", "鹽", "汀", "淵", "霜", "陶", "灰"].map((k) => `<button class="鈕" data-act="開新局:${k}">只抽${k === "霜" ? "霜原" : k + "州"}</button>`).join("");
   function 畫疊() {
@@ -3555,15 +3649,20 @@ const 七州舞台 = (function () {
         ${澤圖()}
         <p class="引">澤曆 311 年春天。七個州圍著一片大澤過日子，誰也不服誰。</p>
         <p class="淡">你不是王，也不是英雄。你會被抽成其中一個人：撐船的、站櫃檯的、守藥爐的、在邊市替兩邊傳話的。日子一旬一旬過；三年以後，誰坐上那張椅子、水去了哪裡，有你的一份。</p>
-        <div class="鈕組">
-          ${UI.有存檔 ? `<button class="鈕 主" data-act="讀檔">繼續上一局</button><button class="鈕" data-act="重開確認">開新局</button>` : 開局鈕}
-          <button class="鈕" data-act="疊:匯入">匯入存檔</button>
+        <div class="鈕組 開局">
+          ${UI.有存檔 ? `<button class="鈕 主 大" data-act="讀檔">繼續上一局</button>` : `<button class="鈕 主 大" data-act="開局問">開始過日子</button>`}
         </div>
-        ${二紀卡名().length ? `<div class="鈕組"><button class="鈕" data-act="${UI.有存檔 ? "重開確認" : "開新局二"}">從第二紀元開始</button></div>
-        <p class="淡">第二紀元（澤曆 317 年到 319 年）目前寫了這幾張接棒卡：${esc(二紀卡名().join("、"))}。從這裡開始的話，程式會先替你走完一局第一紀元，再把那一局的世界和那個人交給你。</p>` : ""}
+        ${UI.有存檔 ? `<div class="鈕組"><button class="鈕" data-act="重開確認">開新局</button><button class="鈕" data-act="疊:匯入">匯入存檔</button></div>`
+          : `<div class="鈕組"><button class="鈕 小" data-act="隨緣">隨緣開始：直接抽一個人</button></div>
+        <details class="其他開始"><summary>其他開始方式</summary>
+          <p class="淡">想從哪一州開始，可以只抽那一州的人。</p><div class="鈕組">${州鈕()}</div>
+          ${二紀卡名().length ? `<div class="鈕組"><button class="鈕 小" data-act="開新局二">從第二紀元開始</button></div>
+          <p class="淡">第二紀元（澤曆 317 年到 319 年）目前寫了這幾張接棒卡：${esc(二紀卡名().join("、"))}。從這裡開始的話，程式會先替你走完一局第一紀元，再把那一局的世界和那個人交給你。</p>` : ""}
+          <div class="鈕組"><button class="鈕 小" data-act="疊:匯入">匯入存檔</button></div>
+        </details>`}
         ${走過HTML()}
         ${window.claude ? "" : `<p class="淡">這是單機版：存檔放在這個瀏覽器裡。換電腦、換瀏覽器，或清掉瀏覽器資料以前，先在「選單 → 匯出存檔」存成檔案。</p>`}
-        <p class="淡">這一版寫到哪裡：從澤曆 311 年正月開始。可能抽到渡州的船家、上岸的人，鹽州的票號夥計、議席家的帳房，汀州書院的女師、王宮的宮人、城南的糧商，淵州神廟的小祭、山門下還俗的人，霜原誓石坡的誓證人徒弟、北邊市的通譯，陶州爐城鐵行的學徒、下城被逐的刻版匠，或灰州舊界屯孤兒營出身的屯兵、燈下的市的牙人。第一幕到 312 年三月，第二幕到 312 年秋天的澤會，第三幕到 313 年冬天北誓期滿，走完第一紀元。誰立為儲君、北誓續不續，你那一州的票、你看見的事，都算一份。</p>
+        <details class="其他開始"><summary>這一版寫到哪裡</summary><p class="淡">從澤曆 311 年正月開始。可能抽到渡州的船家、上岸的人，鹽州的票號夥計、議席家的帳房，汀州書院的女師、王宮的宮人、城南的糧商，淵州神廟的小祭、山門下還俗的人，霜原誓石坡的誓證人徒弟、北邊市的通譯，陶州爐城鐵行的學徒、下城被逐的刻版匠，或灰州舊界屯孤兒營出身的屯兵、燈下的市的牙人。第一幕到 312 年三月，第二幕到 312 年秋天的澤會，第三幕到 313 年冬天北誓期滿，走完第一紀元。誰立為儲君、北誓續不續，你那一州的票、你看見的事，都算一份。</p></details>
       </div>`;
     } else if (UI.疊 === "地圖") {
       const L = E.行動清單(P, S);
@@ -3593,9 +3692,14 @@ const 七州舞台 = (function () {
         <p class="底">世界種子只在開發者模式顯示。存檔裡含有隱藏真相，自己玩的話，不要打開來看。</p></div>`;
     } else if (UI.疊 === "重開") {
       內 = `<div class="疊內"><h2>確定開新局？</h2><p>目前這一局的存檔會被蓋掉。想留著，先匯出。</p>
-        <div class="鈕組">${開局鈕}</div>
-        ${二紀卡名().length ? `<div class="鈕組"><button class="鈕" data-act="開新局二">從第二紀元開始</button></div>` : ""}
+        <div class="鈕組"><button class="鈕 主" data-act="開局問">開始過日子</button><button class="鈕" data-act="隨緣">隨緣開始</button></div>
+        <details class="其他開始"><summary>其他開始方式</summary><div class="鈕組">${州鈕()}</div>
+          ${二紀卡名().length ? `<div class="鈕組"><button class="鈕 小" data-act="開新局二">從第二紀元開始</button></div>` : ""}</details>
         <div class="鈕組"><button class="鈕" data-act="疊:匯出">先匯出</button><button class="鈕" data-act="關疊">算了</button></div></div>`;
+    } else if (UI.疊 === "問") {
+      內 = 問HTML();
+    } else if (UI.疊 === "揭曉") {
+      內 = 揭曉HTML();
     } else if (UI.疊 === "史冊") {
       內 = 史冊HTML();
     } else if (UI.疊 === "匯出") {
@@ -3655,9 +3759,9 @@ const 七州舞台 = (function () {
   }
 
   // ================= 操作 =================
-  function 開新局(州) {
-    S = E.新局(P, { ...(州 ? { 州 } : {}), 前人: 人庫.表 });
-    UI.疊 = null;
+  function 開新局(州, 限) {
+    S = E.新局(P, { ...(州 ? { 州 } : {}), ...(限 ? { 限 } : {}), 前人: 人庫.表 });
+    UI.疊 = "揭曉";
     UI.分頁 = "你";
     UI.報告 = null;
     存檔();
@@ -3725,6 +3829,17 @@ const 七州舞台 = (function () {
       case "關疊": UI.疊 = S ? null : "標題"; 畫(); break;
       case "開新局": 開新局(v); break;
       case "重開確認": UI.疊 = "重開"; 畫疊(); break;
+      case "開局問": UI.問 = { 步: 0, 答: [], 回: UI.疊 || "標題" }; UI.疊 = "問"; 畫疊(); break;
+      case "答": {
+        if (!UI.問) break;
+        UI.問.答[UI.問.步] = Number(v);
+        UI.問.步 += 1;
+        if (UI.問.步 >= 開局問.length) 開新局(null, [依答挑人(UI.問.答)]); else 畫疊();
+        break;
+      }
+      case "回問": UI.疊 = (UI.問 && UI.問.回) || "標題"; 畫疊(); break;
+      case "隨緣": 開新局(); break;
+      case "揭曉完": UI.疊 = null; UI.畫面鍵 = null; 畫(); window.scrollTo(0, 0); break;
       case "讀檔": if (UI.有存檔) 讀入文字(UI.有存檔); break;
       case "下一幕": if (E.下一幕(P, S)) { 存檔(); 畫(); window.scrollTo(0, 0); } break;
       case "尾聲": if (E.進尾聲(P, S)) { 存檔(); 畫(); window.scrollTo(0, 0); } break;
