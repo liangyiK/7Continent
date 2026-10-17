@@ -496,6 +496,59 @@ textarea { width: 100%; min-height: 10em; font-family: ui-monospace, monospace; 
   border-radius: 999px; padding: 3px 12px; font-size: var(--小); cursor: pointer; font-weight: 700;
 }
 .舞台 .出門:hover { border-color: var(--州); color: var(--州); }
+/* 台子左右的路牌：點了就走到那裡。牌子是一根柱子上掛的木板，箭頭朝那個地方。 */
+.舞台 .出口 { position: absolute; top: 46px; bottom: calc(30% - 2px); display: flex; flex-direction: column; gap: 7px; pointer-events: none; z-index: 1; }
+.舞台 .出口.左 { left: 0; align-items: flex-start; }
+.舞台 .出口.右 { right: 0; align-items: flex-end; }
+.舞台 .出口::before { content: ""; position: absolute; top: -6px; bottom: 0; width: 5px; border-radius: 2px; background: var(--木c); }
+.舞台 .出口.左::before { left: 15px; } .舞台 .出口.右::before { right: 15px; }
+.舞台 .路牌 { pointer-events: auto; position: relative; border: 0; padding: 0; margin: 0 5px; background: none; cursor: pointer; filter: drop-shadow(0 2px 0 var(--頂c)); max-width: 46vw; }
+.舞台 .路牌 .牌 { display: block; font: 700 12.5px/1.25 var(--字-介); letter-spacing: 0.04em; color: var(--紙c); background: var(--木c); padding: 5px 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: background 0.15s ease; }
+.舞台 .出口.左 .路牌 .牌 { clip-path: polygon(11px 0, 100% 0, 100% 100%, 11px 100%, 0 50%); padding-left: 17px; }
+.舞台 .出口.右 .路牌 .牌 { clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 50%, calc(100% - 11px) 100%, 0 100%); padding-right: 17px; }
+.舞台 .出口.右 .路牌 .嘆, .舞台 .出口.右 .路牌 .小點 { right: auto; left: -6px; }
+.舞台 .路牌:hover .牌, .舞台 .路牌:focus-visible .牌, .舞台 .路牌.選中 .牌 { background: var(--州); color: #fff; }
+.舞台 .路牌:focus-visible { outline: 2px solid var(--州); outline-offset: 2px; }
+.舞台 .台曆 { white-space: nowrap; max-width: calc(100% - 190px); overflow: hidden; text-overflow: ellipsis; }
+.舞台 .台曆 b { font-weight: 900; letter-spacing: 0.06em; margin-right: 8px; }
+.舞台 .台曆 span { font-weight: 400; opacity: 0.8; }
+.舞台 .台報 .台說 { display: block; max-width: 30em; margin-top: 3px; font: 12.5px/1.6 var(--字-文); color: var(--淡墨); }
+.舞台 .物件 .足 { fill: var(--物木, var(--木c)); opacity: 0.75; }
+.舞台 .物.成事 .名牌 { border-color: var(--朱); color: var(--墨); font-weight: 700; }
+@media (max-width: 560px) {
+  .舞台 .出口 { top: 42px; gap: 5px; }
+  .舞台 .路牌 .牌 { font-size: 11.5px; padding: 4px 9px; }
+  .舞台 .出口.左 .路牌 .牌 { padding-left: 14px; } .舞台 .出口.右 .路牌 .牌 { padding-right: 14px; }
+  .舞台 .台曆 { max-width: calc(100% - 150px); }
+}
+/* 台子上方一條：現在要做的那一步，點開看這一章的全部 */
+.目標 { margin: 0 calc(-1 * clamp(16px, 4vw, 36px)); }
+.目標條 { display: flex; align-items: center; gap: 10px; width: 100%; margin: 0; text-align: left; border: 0; border-bottom: 1px solid var(--線); background: var(--州淡); color: var(--墨);
+  padding: 9px clamp(16px, 4vw, 36px); cursor: pointer; font: inherit; border-radius: var(--圓) var(--圓) 0 0; }
+.目標條:hover { background: color-mix(in srgb, var(--州淡) 80%, var(--州)); }
+.目標條:focus-visible { outline: 2px solid var(--州); outline-offset: -3px; }
+.目標條.換 { animation: 目標換 1.4s ease both; }
+@keyframes 目標換 { 0%, 25% { background: var(--州); color: var(--紙二); } 100% { background: var(--州淡); color: var(--墨); } }
+.目標題 { flex: none; font: 700 11px/1.3 var(--字-介); color: var(--州); letter-spacing: 0.06em; max-width: 2.6em; text-align: center; }
+.目標條.換 .目標題, .目標條.換 .目標字 span { color: inherit; }
+.目標字 { flex: 1 1 auto; min-width: 0; display: grid; gap: 1px; }
+.目標字 b { font: 700 15px/1.5 var(--字-文); }
+.目標字 span { font-size: var(--小); color: var(--淡墨); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.目標期 { flex: none; font: 700 12px/1 var(--字-介); color: var(--州); border: 1px solid var(--州); border-radius: 999px; padding: 4px 8px; white-space: nowrap; background: var(--紙); }
+.目標期.急 { color: var(--朱); border-color: var(--朱); }
+.目標箭 { flex: none; width: 7px; height: 7px; margin: 0 2px 3px; border-right: 2px solid var(--淡墨); border-bottom: 2px solid var(--淡墨); transform: rotate(45deg); transition: transform 0.2s ease; }
+.目標.開 .目標箭 { transform: rotate(-135deg); margin-bottom: -3px; }
+.目標全 { border: 0; border-bottom: 1px solid var(--線); border-radius: 0; padding: 10px clamp(16px, 4vw, 36px) 12px; animation: 浮 0.25s ease both; }
+/* 台子下面收起來的欄：行事曆、別州的人 */
+details.摺 { border-top: 1px solid var(--線); padding-top: 10px; }
+details.摺 > summary { cursor: pointer; list-style: none; display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; font: 700 var(--小)/1.6 var(--字-介); letter-spacing: 0.04em; }
+details.摺 > summary::-webkit-details-marker { display: none; }
+details.摺 > summary::before { content: ""; width: 6px; height: 6px; border-right: 2px solid var(--州); border-bottom: 2px solid var(--州); transform: rotate(-45deg); align-self: center; margin-right: 2px; transition: transform 0.2s ease; }
+details.摺[open] > summary::before { transform: rotate(45deg); }
+details.摺 > summary span { font-weight: 400; color: var(--淡墨); letter-spacing: 0; }
+details.摺[open] > :not(summary) { margin-top: 10px; }
+.樞.互動 { gap: 14px; }
+.框.說明 ul { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; line-height: 1.75; }
 .舞台 .台曆 {
   position: absolute; top: 8px; left: 50%; transform: translateX(-50%); padding: 2px 12px; border-radius: 999px; font-size: var(--小); font-weight: 700;
   font-family: var(--字-題); letter-spacing: 0.1em; color: var(--墨); background: color-mix(in srgb, var(--紙二) 82%, transparent); border: 1px solid var(--線);
@@ -2530,24 +2583,57 @@ const 七州舞台 = (function () {
     藥: `<path class="石" d="M7 14 h22 q-1 12 -11 12 q-10 0 -11 -12 Z"/><path class="木線 粗" d="M25 4 L16 17"/>`,
     篙: `<path class="木線 粗" d="M6 26 L30 4"/><path class="浪" d="M3 25 q4 -3 8 0 t8 0 t8 0"/>`,
     茶: `<path class="鐵" d="M8 13 h16 v8 a5 5 0 0 1 -5 5 h-6 a5 5 0 0 1 -5 -5 Z"/><path class="木線" d="M24 15 q7 0 5 6 q-1 3 -5 3 M11 12 q5 -8 10 0"/>`,
-    路: `<path class="木線 粗" d="M18 27 V7"/><path class="木" d="M8 7 h17 l4 3.5 l-4 3.5 h-17 Z"/><path class="木 淺木" d="M28 16 h-15 l-4 3 l4 3 h15 Z"/>`,
     工: `<path class="木線 粗" d="M9 25 L22 12"/><rect class="鐵" x="19" y="4" width="13" height="8" rx="1.5" transform="rotate(45 25.5 8)"/>`,
+    床: `<rect class="木" x="3" y="17" width="30" height="5" rx="1"/><path class="木線 粗" d="M5 22 v4 M31 22 v4"/><rect class="紙片" x="5" y="12.5" width="9" height="5" rx="2.2"/><path class="袋" d="M14 13 h17 q1.5 0 1.5 1.5 v3 h-18.5 Z"/>`,
+    雲: `<path class="紙片" d="M9 21 q-6 0 -6 -5 q0 -5 6 -4.6 q1.6 -6 8.4 -5.4 q5.6 0.6 6.6 5.8 q6.4 -0.4 6.6 4.6 q0 4.6 -5.6 4.6 Z"/><path class="格" d="M10 24.5 l-1.4 3 M17 24.5 l-1.4 3 M24 24.5 l-1.4 3"/>`,
+    香: `<path class="石" d="M9 17 h18 l-2.4 8 h-13.2 Z"/><rect class="石" x="7" y="14.5" width="22" height="3" rx="1"/><path class="木線" d="M14 14.5 V5 M18 14.5 V3.5 M22 14.5 V5.5"/><circle class="朱點" cx="14" cy="5" r="1"/><circle class="朱點" cx="18" cy="3.5" r="1"/><circle class="朱點" cx="22" cy="5.5" r="1"/>`,
+    碗: `<path class="石" d="M5 15 h26 q-1.4 10.5 -13 10.5 q-11.6 0 -13 -10.5 Z"/><path class="木線" d="M21 3 L15 16 M26 4 L18.5 16"/>`,
+    酒: `<path class="陶" d="M13 5 h10 v3.4 q7 3 7 9.6 q0 8 -12 8 q-12 0 -12 -8 q0 -6.6 7 -9.6 Z"/><rect class="紙片" x="14" y="13" width="8" height="8" rx="0.6"/><path class="字線" d="M18 14.6 v4.8 M16 17 h4"/>`,
+    火: `<path class="木線 粗" d="M6 27 L30 21 M6 21 L30 27"/><path class="火" d="M18 3 q8 7.4 4.6 15 q-4.6 3.4 -9.2 0 q-3.4 -7.6 4.6 -15 Z"/>`,
+    桶: `<path class="木" d="M9 11 h18 l-2.2 15 h-13.6 Z"/><path class="木線" d="M9 11 q9 -10 18 0"/><path class="格" d="M10 16 h16 M10.8 21.5 h14.4"/><path class="水" d="M10 11 h16 l-0.3 2.2 h-15.4 Z"/>`,
+    蓆: `<rect class="袋" x="3" y="12" width="22" height="14" rx="1"/><path class="格" d="M3 16.6 h22 M3 21.3 h22 M8.5 12 v14 M14 12 v14 M19.5 12 v14"/><ellipse class="袋" cx="29" cy="19" rx="3.6" ry="7"/><ellipse class="木線" cx="29" cy="19" rx="1.4" ry="3.6"/>`,
+    凳: `<rect class="木" x="4" y="14" width="28" height="4" rx="1"/><path class="木線 粗" d="M8 18 L6.5 27 M28 18 L29.5 27"/><path class="木線" d="M12 18 L13 25 M24 18 L23 25"/>`,
+    鎚: `<path class="鐵" d="M4 15 h22 q-1.4 4.6 -7 5 v3.6 h4 v3.4 h-14 v-3.4 h4 v-3.6 q-6 -0.6 -9 -5 Z"/><path class="木線 粗" d="M32 5 L25 13"/><rect class="鐵" x="22" y="2.4" width="11" height="5" rx="1" transform="rotate(42 27.5 4.9)"/>`,
+    陶: `<path class="陶" d="M10 6 h16 v2.4 h-1.6 q6.6 4 6.6 9.6 q0 8.4 -13 8.4 q-13 0 -13 -8.4 q0 -5.6 6.6 -9.6 h-1.6 Z"/><path class="格" d="M7 16 h22"/>`,
+    輪: `<circle class="輪框 細" cx="18" cy="15" r="11"/><circle class="輪框 細" cx="18" cy="15" r="3"/><path class="木線" d="M18 4 V26 M7 15 H29 M10.2 7.2 L25.8 22.8 M25.8 7.2 L10.2 22.8"/>`,
+    水: `<path class="水" d="M3 17 q3.75 -3 7.5 0 t7.5 0 t7.5 0 t7.5 0 V27 H3 Z"/><path class="浪" d="M4 12 q3.5 -3 7 0 t7 0 t7 0 t7 0"/><path class="木線" d="M27 3 V22"/><path class="格" d="M25 8 h4 M25 12 h4"/>`,
+    刀: `<path class="鐵" d="M9 23 L27.5 4.5 Q30 3 30.5 5.5 L12 24 Z"/><path class="木線 粗" d="M6.5 19.5 L13.5 26.5 M7 25.5 L4 28.5"/>`,
+    鋤: `<path class="木線 粗" d="M7 27 L24 6"/><path class="鐵" d="M22 3.4 l9 3.6 l-3.2 4 l-6.6 -3.4 Z"/><path class="草" d="M27 27 q0 -6 -4 -8 M29 27 q0 -6 4 -8 M28 27 v-9"/>`,
+    燈: `<path class="木線" d="M18 1.5 V6"/><rect class="木" x="14" y="5" width="8" height="2" rx="0.6"/><ellipse class="燈" cx="18" cy="15" rx="7.5" ry="8.4"/><path class="格" d="M10.6 15 h14.8 M18 6.6 v16.8"/><rect class="木" x="14" y="23" width="8" height="2" rx="0.6"/><path class="朱線" d="M18 25 v3.6"/>`,
+    刻: `<rect class="石" x="5" y="4" width="17" height="22" rx="2"/><path class="字痕" d="M9 9 h9 M9 13 h9 M9 17 h6"/><path class="木線 粗" d="M32 6 L25.5 14.5"/><path class="鐵" d="M25.5 14.5 l-2.4 3.4 l3.6 -1.8 Z"/>`,
+    繩: `<ellipse class="木線 粗" cx="17" cy="21" rx="13" ry="5.6"/><ellipse class="木線 粗" cx="17" cy="17.6" rx="9.6" ry="4.2"/><ellipse class="木線 粗" cx="17" cy="14.4" rx="6" ry="2.8"/><path class="木線" d="M23 14 q6 -8 10 -10"/>`,
+    擔: `<path class="木線 粗" d="M3 8.6 Q18 5 33 8.6"/><path class="木線" d="M7 8 L4.6 17 M7 8 L9.4 17 M29 8 L26.6 17 M29 8 L31.4 17"/><path class="袋" d="M2.6 17 h8.8 l-1.2 8.4 h-6.4 Z M24.6 17 h8.8 l-1.2 8.4 h-6.4 Z"/>`,
+    信: `<rect class="紙片" x="5" y="9" width="26" height="16" rx="1"/><path class="格" d="M5 9 L18 19 L31 9"/><rect class="朱點" x="16" y="16.4" width="4" height="4" rx="0.8"/>`,
+    船: `<path class="船" d="M2 16 h32 l-5.4 8.6 h-21.2 Z"/><path class="木線" d="M7 16 l2 -3 h18 l2 3"/><path class="木線" d="M27 13 V4"/><path class="蘆頂" d="M24.5 4 h5 l-2.5 4.4 Z"/>`,
+    魚: `<path class="魚" d="M4 15 Q14 5.6 25 15 Q14 24.4 4 15 Z M24 15 L32 9.4 V20.6 Z"/><circle class="暗" cx="10" cy="13.6" r="1.2"/>`,
+    馬: `<path class="木" d="M10 27 L12.4 15 Q13.4 7 20.6 5.4 L25 2 L25.6 6 Q31.6 9 31 15.6 L27.4 16.4 Q25.6 13.4 22 14.4 L20 27 Z"/><path class="暗" d="M20.6 5.4 Q15 7.4 13 14 L11.4 22 L13.6 14 Q15.4 8.6 21 7 Z"/><circle class="暗" cx="25" cy="9" r="0.9"/>`,
+    掃: `<path class="木線 粗" d="M30 3 L15 18"/><path class="蘆頂" d="M15.4 15.2 L19.8 19.6 L10 28 L4.6 26.4 L5.6 22 Z"/>`,
+    足: `<path class="暗 足" d="M9.4 27.6 q-3.4 0 -3 -5 q0.4 -5 3.4 -5 q3 0 2.6 5 q-0.4 5 -3 5 Z M24 16.6 q-3.4 0 -3 -5 q0.4 -5 3.4 -5 q3 0 2.6 5 q-0.4 5 -3 5 Z"/><circle class="暗 足" cx="7.6" cy="15.6" r="1"/><circle class="暗 足" cx="10.4" cy="15.2" r="1"/><circle class="暗 足" cx="22.2" cy="4.6" r="1"/><circle class="暗 足" cx="25" cy="4.2" r="1"/>`,
   };
-  function 物選(類, 名) {
-    if (類 === "歇息") return "茶";
-    if (類 === "走動") return "路";
-    if (類 === "修習") return /算|帳/.test(名) ? "算盤" : /藥|認|配/.test(名) ? "藥" : /寫|抄|字|記|訂/.test(名) ? "筆" : "書";
-    if (/帳|算|櫃|鋪|票|兌/.test(名)) return "算盤";
-    if (/抄|寫|記|謄|冊|講|課/.test(名)) return "筆";
-    if (/藥|煎|配|秤/.test(名)) return "藥";
-    if (/扛|搬|卸|糧|米|貨|袋/.test(名)) return "袋";
-    if (/船|撐|篙|渡|水|網/.test(名)) return "篙";
-    return "工";
+  // 地上的東西照那件事畫：睡覺是床鋪、補船是一條船、編蘆席是蘆席。照順序比，先比到的算。
+  const 物規 = {
+    歇息: [[/看雲|看天|聽雨/, "雲"], [/睡|盹|躺/, "床"], [/香(?!客)/, "香"], [/麵|飯|粥|吃/, "碗"], [/酒/, "酒"], [/茶/, "茶"],
+      [/火|唱歌/, "火"], [/泉|井|洗/, "桶"], [/蓆|席|編/, "蓆"]],
+    修習: [[/藥|接骨/, "藥"], [/帳|算|票|契/, "算盤"], [/打鐵/, "鎚"], [/水輪/, "輪"], [/看水|量水|水深|渠|澤眼/, "水"], [/刀|練/, "刀"],
+      [/田/, "鋤"], [/寫|抄|字|記|訂|冊|念/, "筆"]],
+    做工: [[/撐|篙/, "篙"], [/夜裡|巡/, "燈"], [/藥|看病/, "藥"], [/碑|刻|印|招牌|描字/, "刻"], [/風箱|打鐵|鐵料/, "鎚"], [/窯|揉泥|挑土/, "陶"],
+      [/水輪|葉板/, "輪"], [/繩|縴/, "繩"], [/挑/, "擔"], [/跑腿|送信/, "信"], [/帳|算|櫃|票|兌/, "算盤"], [/扛|搬|卸|包|糧|米|貨|袋|軍需|鹽/, "袋"],
+      [/船/, "船"], [/魚/, "魚"], [/馬|牧/, "馬"], [/田/, "鋤"], [/掃/, "掃"], [/抄|寫|記|謄|冊|講|課/, "筆"], [/洗|擠奶|井|泉/, "桶"]],
+  };
+  const 物底 = { 歇息: "凳", 修習: "書", 做工: "工", 走動: "足" };
+  function 物選(類, 名, 標) {
+    const 比 = (規, 字) => (規 || []).find(([re]) => re.test(字));
+    // 走動本來只是「在這裡走走」；這一章的事在這裡，就照那件事畫（「找賣船的人」是一條船）。
+    if (類 === "走動") { const m = 標 && (比(物規.做工, 標) || 比(物規.歇息, 標)); return m ? m[1] : "足"; }
+    const m = 比(物規[類], 名);
+    return m ? m[1] : 物底[類] || "工";
   }
   const 嘆 = `<i class="嘆" title="這裡有眼下這一章的事">！</i>`;
   const 小點 = `<i class="小點" title="這裡有跟你有關的事，可是不是眼下這一章的"></i>`;
 
-  // o：{ 地, 地名, 州, 季, 物:[{key,類,名,可,理由,事,鍵}], 人:[{key,名,稱,段,已訪,事,鍵,身分,性別,州}], 我:{名,身分,性別}, 我x, ap, 滿, 觀, 曆, 新旬, 報 }
+  // o：{ 地, 地名, 州, 季, 物:[{key,類,名,可,理由,事,鍵}], 人:[{key,名,稱,段,已訪,事,鍵,身分,性別,州}], 我:{名,身分,性別}, 我x, ap, 滿, 觀, 曆, 新旬, 報,
+  //      出口:[{key,名,事,副,邊}], 圖事, 圖副 }
+  // 出口：台子左右的路牌，點了就走過去；圖事／圖副：路牌上沒有的地方（或別州）有事，「地圖」上掛記號。
   // 曆：台上那塊小曆的字；新旬：剛換旬（小曆跳一下）；報：剛剛發生的事（介面.js 排好的 HTML）。
   // 觀：事件進行中，只看不點（人只列出文字裡提到的）。
   function 場景(o) {
@@ -2557,14 +2643,23 @@ const 七州舞台 = (function () {
       return 觀 ? `<div class="位 人" data-名="${esc(p.名)}">${內}</div>`
         : `<button class="位 人${p.已訪 ? " 已訪" : ""}" data-act="行:${esc(p.key)}" data-鍵="${p.鍵}" aria-label="找${esc(p.名)}">${內}</button>`;
     }).join("");
-    const 物 = 觀 ? "" : (o.物 || []).map((a) => `<button class="位 物" data-act="行:${esc(a.key)}" data-鍵="${a.鍵}" ${a.可 ? "" : `disabled title="${esc(a.理由 || "")}"`}>
-        <svg class="物件" viewBox="0 0 36 30" aria-hidden="true" focusable="false">${物圖[物選(a.類, a.名)]}</svg>
-        <span class="名牌">${a.事 ? 嘆 : a.副 ? 小點 : ""}${a.事 && a.標 ? `<small class="事標">${esc(a.標)}</small>` : ""}<small>${esc(a.類)}</small>${esc(a.名)}${a.可 ? "" : `<small class="因">${esc(a.理由 || "")}</small>`}</span></button>`).join("");
+    const 物 = 觀 ? "" : (o.物 || []).map((a) => {
+      // 走動碰得到這一章的事：東西就畫成那件事，牌子寫那件事（「找賣船的人」），不寫「在市集走走」。
+      const 成事 = a.類 === "走動" && a.事 && a.標;
+      return `<button class="位 物${成事 ? " 成事" : ""}" data-act="行:${esc(a.key)}" data-鍵="${a.鍵}" ${a.可 ? "" : `disabled title="${esc(a.理由 || "")}"`} aria-label="${成事 ? `${esc(a.標)}（${esc(a.名)}）` : `${esc(a.類)}：${esc(a.名)}`}${a.可 ? "" : `（${esc(a.理由 || "")}）`}">
+        <svg class="物件" viewBox="0 0 36 30" aria-hidden="true" focusable="false">${物圖[物選(a.類, a.名, a.事 ? a.標 : "")]}</svg>
+        <span class="名牌">${a.事 ? 嘆 : a.副 ? 小點 : ""}${a.事 && a.標 && !成事 ? `<small class="事標">${esc(a.標)}</small>` : ""}<small>${esc(a.類)}</small>${esc(成事 ? a.標 : a.名)}${a.可 ? "" : `<small class="因">${esc(a.理由 || "")}</small>`}</span></button>`;
+    }).join("");
     const 燈 = 觀 ? "" : `<div class="燈列" title="這一旬還能做的事" aria-hidden="true">${Array.from({ length: o.滿 || 0 }, (_, i) => `<i class="${i < o.ap ? "亮" : ""}"></i>`).join("")}</div>
-      <button class="出門" data-act="疊:地圖">出門<span class="鍵提示">（M）</span></button>`;
+      <button class="出門" data-act="疊:地圖" aria-label="地圖：看這一州所有的地方、遠行到別州">${o.圖事 ? 嘆 : o.圖副 ? 小點 : ""}地圖<span class="鍵提示">（M）</span></button>`;
+    // 路牌：一邊最多兩塊，箭頭朝那個地方的方向。
+    const 出口 = 觀 ? "" : ["左", "右"].map((邊) => {
+      const 列 = (o.出口 || []).filter((x) => x.邊 === 邊);
+      return 列.length ? `<div class="出口 ${邊}">${列.map((x) => `<button class="路牌" data-act="行:${esc(x.key)}" aria-label="去${esc(x.名)}${x.事 ? "（有眼下這一章的事）" : ""}">${x.事 ? 嘆 : x.副 ? 小點 : ""}<span class="牌">${esc(x.名)}</span></button>`).join("")}</div>` : "";
+    }).join("");
     return `<div class="舞台 季-${esc(o.季 || "春")}${觀 ? " 觀" : ""}">
-      ${景圖(o.地, o.地名, o.州, o.季, o.世)}${燈}
-      ${!觀 && o.曆 ? `<div class="台曆${o.新旬 ? " 新旬" : ""}">${esc(o.曆)}</div>` : ""}${o.報 || ""}
+      ${景圖(o.地, o.地名, o.州, o.季, o.世)}${燈}${出口}
+      ${!觀 && o.曆 ? `<div class="台曆${o.新旬 ? " 新旬" : ""}"${o.說 ? ` title="${esc(o.說)}"` : ""}>${o.地名 ? `<b>${esc(o.地名)}</b>` : ""}<span>${esc(o.曆)}</span></div>` : ""}${o.報 || ""}
       <div class="列 人列">${人}</div>
       <div class="我" data-名="你" style="left:${r1(o.我x == null ? 50 : o.我x)}%">${偶(Object.assign({ 州: o.州 }, o.我), true)}</div>
       ${觀 ? "" : `<div class="列 物列">${物}</div>`}</div>`;
@@ -2595,7 +2690,9 @@ const 七州舞台 = (function () {
   const UI = { 分頁: "你", 疊: "標題", 開發: LS.get(開發鍵) === "1", 有存檔: null, 畫面鍵: "", 報告: null, 訊: "", 訊錯: false, 匯出文: "",
     帳開: false, 全動態: false, 教過: LS.get(教鍵) === "1",
     // 互動版：這一旬能做的事畫成場景（舞台.js）；文字版：照舊是選單。我x 是主角站在台上的哪裡（百分比）。
-    互動: LS.get("七州養成版-版型") !== "文字", 我x: 24, 走中: false };
+    互動: LS.get("七州養成版-版型") !== "文字", 我x: 24, 走中: false,
+    // 目標開：台子上方那一條展開了沒有；摺：台子下面收起來的欄（行事曆、別州的人）哪幾個是打開的。
+    目標開: false, 摺: {} };
 
   // ================= 存檔 =================
   const 存 = {
@@ -2669,7 +2766,7 @@ const 七州舞台 = (function () {
   }
   // 同一旬，別州的人：十五張卡用同一本日曆。挑三個不同州的人，寫他們這一章在忙什麼（每章換一組）。
   // 名字用這一局替他們排好的（玩過的就是當時的名字）。只說在忙什麼，不說辦成了沒有。
-  function 別州HTML() {
+  function 別州HTML(摺) {
     if (!S || (S.紀元 || 1) !== 1) return "";
     const 種 = Math.abs(Number(S.起始種) || 0) + (S.章.序 || 0) * 7919;
     const 候 = Object.entries(P.身世).filter(([id, o]) => (o.紀元 || 1) === 1 && o.州 !== S.pc.州 && id !== S.pc.身世)
@@ -2689,7 +2786,9 @@ const 七州舞台 = (function () {
       州過.add(o.州);
       if (用.length >= 3) break;
     }
-    return 用.length ? `<div class="別州"><h3 class="欄題">同一旬，別州的人</h3><ul>${用.join("")}</ul></div>` : "";
+    if (!用.length) return "";
+    return 摺 ? `<details class="摺 別州" data-摺="別州"${UI.摺.別州 ? " open" : ""}><summary>同一旬，別州的人</summary><ul>${用.join("")}</ul></details>`
+      : `<div class="別州"><h3 class="欄題">同一旬，別州的人</h3><ul>${用.join("")}</ul></div>`;
   }
   const 月旬字 = (t) => E.短時(t).replace(/^\d+年/, (y) => (E.拆時(t).年 === E.拆時(S.t).年 ? "" : y));
   // 這一章眼下沒有地方要跑，下一件事要等到某一天：直接說要等，免得到處白跑，也不知道自己走對了沒有。
@@ -2744,6 +2843,58 @@ const 七州舞台 = (function () {
     if (!表.length) return "";
     return `<ul class="步驟" aria-label="這一章可以做的事">${表.map((x) => `<li class="${x.完 ? "完" : ""}${x.完 && 前 && !前.has(x.文) ? " 剛勾" : ""}"><span class="勾" aria-hidden="true">${x.完 ? "✓" : ""}</span>${esc(x.文)}</li>`).join("")}</ul>`;
   }
+  // 眼下的全部：這一章要做什麼、清單、期限、還差多少、做不成會怎樣。文字版放在「眼下」框裡，互動版放在目標條展開的地方。
+  function 眼下HTML(事) {
+    const 起 = S.史冊.章.length ? S.史冊.章[S.史冊.章.length - 1].到 : P.參數.開局;
+    const 剩 = S.章.期限 != null ? Math.max(0, S.章.期限 - S.t) : null;
+    const 全 = S.章.期限 != null ? Math.max(1, S.章.期限 - 起) : 1;
+    const 過 = S.章.期限 != null ? Math.min(100, Math.round(((S.t - 起) / 全) * 100)) : 0;
+    const 果 = { 達成: "做成了", 失敗: "沒做成", 放棄: "放下了" }[S.章.結果] || S.章.結果;
+    return S.章.結果
+      ? `<div class="文"><p>${esc(S.章.名 || "這一章的事")}：${esc(果)}。</p></div><p class="註">到${esc(E.短時(S.章.期限).replace(/^\d+年/, ""))}這一章才結束。這之前的日子是你自己的：做工攢錢、修習長本事、多去找說得上話的人。下一件事，到時候會來找你。</p>
+        ${志業字() ? `<p class="註">${esc(志業字())}</p>` : ""}`
+      : `<div class="文"><p>${S.章.眼下 ? esc(S.章.眼下) : "日子照常過。"}</p></div>
+        ${步驟HTML()}
+        ${剩 != null ? `<div class="期條 ${剩 <= 2 ? "急" : ""}" title="這一章已經過了多少"><i style="width:${過}%"></i></div><p class="註">期限 ${esc(E.短時(S.章.期限).replace(/^\d+年/, ""))}，還剩 ${剩} 旬</p>` : ""}
+        ${差額字() ? `<p class="註">${esc(差額字())}</p>` : ""}
+        ${等那天字() ? `<p class="註 好">${esc(等那天字())}</p>` : ""}
+        ${等事字(事) ? `<p class="註 好">${esc(等事字(事))}</p>` : ""}
+        ${志業字() ? `<p class="註">${esc(志業字())}</p>` : ""}
+        ${S.章.做不成 ? `<p class="註">做不成：${esc(S.章.做不成)}</p>` : ""}`;
+  }
+  // 互動版：台子上方一條，只寫現在該做的那一步（清單上第一個還沒打勾的）。點一下展開全部。
+  function 目標條HTML(事) {
+    const 剩 = S.章.期限 != null ? Math.max(0, S.章.期限 - S.t) : null;
+    const 見 = E.見分曉(P, S);
+    let 主 = "", 副 = "";
+    if (S.章.結果) {
+      主 = `${S.章.名 || "這一章的事"}：${{ 達成: "做成了", 失敗: "沒做成", 放棄: "放下了" }[S.章.結果] || S.章.結果}`;
+      副 = S.章.期限 != null && S.t >= S.章.期限 ? "這一章結束了。" : `到${月旬字(S.章.期限)}這一章才結束；這之前的日子是你自己的。`;
+    } else if (見) {
+      主 = "這一章的事辦妥了";
+      副 = `等到${月旬字(見.t)}，就知道了。`;
+    } else {
+      const 步 = E.步驟表(P, S).find((x) => !x.完);
+      if (步) {
+        const k = 步.文.indexOf("：");
+        主 = k > 0 ? 步.文.slice(0, k) : 步.文;
+        副 = k > 0 ? 步.文.slice(k + 1) : "";
+        if (步.去.類 === "做工" && 差額字()) 副 = 差額字();
+      } else {
+        主 = S.章.眼下 || "日子照常過";
+        const r = 等事字(事) ? E.下一件(P, S) : null;
+        副 = r ? `到${月旬字(r.t)}，事情會來找你。` : "";
+      }
+    }
+    const 開 = !!UI.目標開;
+    const 換 = UI.上目標 != null && UI.上目標 !== 主;   // 剛做完一步、換到下一步：亮一下
+    UI.上目標 = 主;
+    return `<div class="目標${開 ? " 開" : ""}"><button class="目標條${換 ? " 換" : ""}" data-act="目標" aria-expanded="${開 ? "true" : "false"}">
+        <small class="目標題">${S.章.結果 ? "眼下" : "現在要做"}</small>
+        <span class="目標字"><b>${esc(主)}</b>${副 ? `<span>${esc(副)}</span>` : ""}</span>
+        ${剩 != null && !S.章.結果 ? `<span class="目標期${剩 <= 2 ? " 急" : ""}">剩 ${剩} 旬</span>` : ""}<i class="目標箭" aria-hidden="true"></i></button>
+      ${開 ? `<div class="目標全 標">${眼下HTML(事)}</div>` : ""}</div>`;
+  }
   // 場景跟著世界變：大澤的水比開局又退了幾級、老王駕崩後的那一個多月、票號門口有沒有人排隊兌銀。
   function 世態() {
     const w = S.世界 || {}, 流 = w.暗流 || {};
@@ -2778,12 +2929,27 @@ const 七州舞台 = (function () {
     if (重.length) UI.待捷 = 重;
     const 新旬 = UI.上t != null && UI.上t !== S.t;
     UI.上報 = 末; UI.上t = S.t;
-    const 報字 = 新報.reduce((n, x) => n + x.文.length + (x.變化 || []).length * 6, 0);
+    // 剛走到一個地方：台報底下多一句那裡是什麼樣子（原本寫在台子下面，現在只在到的時候說一次）。
+    const 到 = 新報.filter((x) => x.類 === "移動").pop();
+    const 說 = E.地說明(P, S, id);
+    const 報字 = 新報.reduce((n, x) => n + x.文.length + (x.變化 || []).length * 6, 0) + (到 ? 說.length * 0.6 : 0);
     const 報 = 略 ? `<div class="台報" aria-live="polite" style="animation-duration:6s"><div><span>${esc(略)}</span></div></div>`
-      : 新報.length ? `<div class="台報" aria-live="polite" style="animation-duration:${(3.6 + Math.min(7, 報字 * 0.09)).toFixed(1)}s">${新報.map((x) => `<div><span>${esc(x.文)}</span>${變化HTML(x.變化)}</div>`).join("")}</div>` : "";
+      : 新報.length ? `<div class="台報" aria-live="polite" style="animation-duration:${(3.6 + Math.min(8, 報字 * 0.09)).toFixed(1)}s">${新報.map((x) => `<div><span>${esc(x.文)}</span>${x === 到 && 說 ? `<small class="台說">${esc(說)}</small>` : ""}${變化HTML(x.變化)}</div>`).join("")}</div>` : "";
+    // 路牌：這一州看得到的地方。有這一章的事的先上牌，再來是跟你有關的、近的；最多四塊，一邊最多兩塊，其他的在地圖上。
+    const 副 = 副事(事), 今位 = 圖位[id] || [50, 50];
+    const 出 = L.移動.map((m) => {
+      const to = m.key.replace(/^移動:/, ""), q = 圖位[to];
+      return { key: m.key, 名: m.名, 事: !!事.地[to], 副: !事.地[to] && !!副.地[to], 距: q ? Math.hypot(q[0] - 今位[0], q[1] - 今位[1]) : 999, 邊: q && q[0] < 今位[0] ? "左" : "右" };
+    }).sort((a, b) => (b.事 - a.事) || (b.副 - a.副) || (a.距 - b.距));
+    const 牌 = 出.slice(0, 4), 沒牌 = 出.slice(4);
+    for (const 邊 of ["左", "右"]) for (const x of 牌.filter((y) => y.邊 === 邊).slice(2)) x.邊 = 邊 === "左" ? "右" : "左";
+    const 別州 = (m) => Object.keys(m || {}).some((k) => k !== 地.州);
+    const 圖事 = 沒牌.some((x) => x.事) || 別州(事.州);
+    const 圖副 = !圖事 && (沒牌.some((x) => x.副) || 別州(副.州));
     const d = E.拆時(S.t);
     const 曆 = `${["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"][d.月 - 1]}月・${["上旬", "中旬", "下旬"][d.旬]}`;
-    return 七州舞台.場景({ 地: id, 地名: 地.名, 州: 地.州, 季: 季名(S.t), 物, 人, 我: 我偶(), 我x: UI.我x, ap: S.ap, 滿: P.參數.每旬行動點, 曆, 新旬, 報, 世: 世態() });
+    return 七州舞台.場景({ 地: id, 地名: 地.名, 說, 州: 地.州, 季: 季名(S.t), 物, 人, 我: 我偶(), 我x: UI.我x, ap: S.ap, 滿: P.參數.每旬行動點, 曆, 新旬, 報, 世: 世態(),
+      出口: 牌, 圖事, 圖副 });
   }
   // 事件進行中：只看不點。台上站的是這一段文字裡提到的人（在場的排前面，最多三個）。
   function 觀台HTML(畫) { return 台上人(畫).html; }
@@ -3113,6 +3279,7 @@ const 七州舞台 = (function () {
         <button class="鈕 小 只窄" data-act="帳:你">你</button>
         <button class="鈕 小 只窄" data-act="帳:局勢">局勢</button>
         <button class="鈕 小 只窄" data-act="帳:帳本">帳本</button>
+        <button class="鈕 小" data-act="疊:說明" aria-label="怎麼玩" title="怎麼玩">？</button>
         <button class="鈕 小" data-act="疊:史冊">史冊</button>
         <button class="鈕 小" data-act="疊:選單">選單</button>
       </div>`;
@@ -3208,28 +3375,12 @@ const 七州舞台 = (function () {
     const 藍 = `<i class="事點" title="這裡有眼下這一章的事"></i>`;
     const 淡 = `<i class="事點 副" title="這裡有跟你有關的事，可是不是眼下這一章的"></i>`;
     const 副 = 副事(事);
-    // 眼下
-    const 起 = S.史冊.章.length ? S.史冊.章[S.史冊.章.length - 1].到 : P.參數.開局;
-    const 剩 = S.章.期限 != null ? Math.max(0, S.章.期限 - S.t) : null;
-    const 全 = S.章.期限 != null ? Math.max(1, S.章.期限 - 起) : 1;
-    const 過 = S.章.期限 != null ? Math.min(100, Math.round(((S.t - 起) / 全) * 100)) : 0;
-    const 果 = { 達成: "做成了", 失敗: "沒做成", 放棄: "放下了" }[S.章.結果] || S.章.結果;
-    const 標 = S.章.結果
-      ? `<div class="文"><p>${esc(S.章.名 || "這一章的事")}：${esc(果)}。</p></div><p class="註">到${esc(E.短時(S.章.期限).replace(/^\d+年/, ""))}這一章才結束。這之前的日子是你自己的：做工攢錢、修習長本事、多去找說得上話的人。下一件事，到時候會來找你。</p>
-        ${志業字() ? `<p class="註">${esc(志業字())}</p>` : ""}`
-      : `<div class="文"><p>${S.章.眼下 ? esc(S.章.眼下) : "日子照常過。"}</p></div>
-        ${步驟HTML()}
-        ${剩 != null ? `<div class="期條 ${剩 <= 2 ? "急" : ""}" title="這一章已經過了多少"><i style="width:${過}%"></i></div><p class="註">期限 ${esc(E.短時(S.章.期限).replace(/^\d+年/, ""))}，還剩 ${剩} 旬</p>` : ""}
-        ${差額字() ? `<p class="註">${esc(差額字())}</p>` : ""}
-        ${等那天字() ? `<p class="註 好">${esc(等那天字())}</p>` : ""}
-        ${等事字(事) ? `<p class="註 好">${esc(等事字(事))}</p>` : ""}
-        ${志業字() ? `<p class="註">${esc(志業字())}</p>` : ""}`;
     // 過日子：沒有事的旬不用一下一下點。手頭：錢要不要換成別的東西。
     const 略 = UI.略報 || ""; UI.略報 = "";
     const 過列 = `<div class="過列">
       <button class="鈕 小" data-act="過日子">${E.見分曉(P, S) ? "照常過到那一天" : "照常過日子，有事再停"}</button>
       <button class="鈕 小${S.捨得 ? " 開" : ""}" data-act="手頭" aria-pressed="${S.捨得 ? "true" : "false"}">手頭：${S.捨得 ? "捨得花" : "省著過"}</button>
-      <span class="註">${S.捨得 ? `找人帶禮 ${E.手頭.帶禮} 文、修習請人指點 ${E.手頭.請教} 文（學得快一倍）、歇息吃好一點 ${E.手頭.吃好} 文。錢不夠就照平常的。` : "過日子：心境夠就做工，累了就歇，有事會停下來。手頭：把錢換成交情、本事和精神。"}</span>
+      ${UI.互動 && !S.捨得 && UI.教過 ? "" : `<span class="註">${S.捨得 ? `找人帶禮 ${E.手頭.帶禮} 文、修習請人指點 ${E.手頭.請教} 文（學得快一倍）、歇息吃好一點 ${E.手頭.吃好} 文。錢不夠就照平常的。` : "過日子：心境夠就做工，累了就歇，有事會停下來。手頭：把錢換成交情、本事和精神。"}</span>`}
       ${略 && !UI.互動 ? `<p class="註 好" style="flex-basis:100%;margin:0">${esc(略)}</p>` : ""}</div>`;
     // 這一旬做什麼
     let n = 0;
@@ -3254,19 +3405,33 @@ const 七州舞台 = (function () {
     const 近 = S.動態.slice(-10).reverse().map((x) => `
       <li class="${esc(x.類)}"><span class="時 數">${esc(E.短時(x.t).replace(/^\d+年/, ""))}</span>
       <span class="內">${esc(x.文)}</span>${變化HTML(x.變化)}</li>`).join("");
-    const 教 = UI.教過 ? "" : `<div class="教"><b>怎麼過日子</b><ul>
+    const 教 = UI.教過 ? "" : UI.互動 ? `<div class="教"><b>怎麼玩</b><ul>${教條(true).slice(0, 3).map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
+      <div><button class="鈕 小" data-act="收教">知道了</button> <span class="淡">右上的「？」隨時可以再看。</span></div></div>`
+      : `<div class="教"><b>怎麼過日子</b><ul>
       <li>一旬可以做 ${P.參數.每旬行動點} 件事：做工、修習、歇息、走動，或去找人。做完就到下一旬。${UI.互動 ? "點台上的人或地上的東西，就走過去做那件事；右上的燈籠是這一旬還能做幾件。" : ""}</li>
       <li>換地方不花行動。${UI.互動 ? "頭上有紅色「！」的人或東西" : "有實心點的地方或人"}，是「眼下」這一章的事，先去那裡。${UI.互動 ? "小圓圈" : "空心的點"}是跟你有關、可是不急的事。</li>
       <li>沒有事的日子，可以按「照常過日子」讓它自己過，有事會停。錢多了，把「手頭」切成「捨得花」，可以換成交情、本事和精神。</li>
       <li>心境太低，做事不順手，記得歇息。右上的「你」「局勢」「帳本」隨時可以看。</li></ul>
       <div><button class="鈕 小" data-act="收教">知道了</button></div></div>`;
-    return `<article class="卡 樞${UI.互動 ? " 互動" : ""}">${UI.互動 ? 舞台HTML(L, 事, 略) : 景HTML(地.州)}
+    if (UI.互動) {
+      // 換地方、找人、做事都在台子上；台子下面只留過日子，其他收成一行。近來的事在帳本裡。
+      const 旬字 = ["上旬", "中旬", "下旬"][d.旬], 首 = 將至(S.t)[0];
+      return `<article class="卡 樞 互動">${目標條HTML(事)}${舞台HTML(L, 事, 略)}
+        ${過列}
+        ${教}
+        <details class="摺" data-摺="曆"${UI.摺.曆 ? " open" : ""}><summary>行事曆<span>${esc(月)}月${旬字}${首 ? `・接下來：${esc(首.名.replace(/^期限：/, "期限・"))}（${esc(月旬字(首.t))}）` : ""}</span></summary>
+          <div class="曆"><span>${esc(月)}月</span><span class="旬列">${["上旬", "中旬", "下旬"].map((x, i) => `<span class="${i === d.旬 ? "今" : i < d.旬 ? "過" : ""}">${x}</span>`).join("")}</span>
+          ${將 ? `<ul class="將至">${將}</ul>` : ""}</div></details>
+        ${別州HTML(true)}
+      </article>`;
+    }
+    return `<article class="卡 樞">${景HTML(地.州)}
       <div class="所在">${眉}<h2>${esc(地.名)}</h2><p>${esc(E.地說明(P, S, S.pc.地點))}</p></div>
-      <div class="標"><div class="欄題" style="margin:0">眼下</div>${標}</div>
+      <div class="標"><div class="欄題" style="margin:0">眼下</div>${眼下HTML(事)}</div>
       ${過列}
       ${教}
-      ${UI.互動 ? "" : `<div><h3 class="欄題">這一旬做什麼<span class="點">${行動點HTML()}</span><span class="鍵提示" style="font-weight:400;letter-spacing:0">按數字鍵也可以</span></h3>
-        <div class="行動格">${行動}${拜訪}</div></div>`}
+      <div><h3 class="欄題">這一旬做什麼<span class="點">${行動點HTML()}</span><span class="鍵提示" style="font-weight:400;letter-spacing:0">按數字鍵也可以</span></h3>
+        <div class="行動格">${行動}${拜訪}</div></div>
       <div><h3 class="欄題">換地方（不花行動）</h3><div class="地點列">${移動}</div>
         ${遠 ? `<details class="遠" style="margin-top:10px"><summary>遠行到別州（用掉這一旬）</summary><div class="地點列">${遠}</div></details>` : ""}</div>
       <div class="曆"><span>${esc(月)}月</span><span class="旬列">${["上旬", "中旬", "下旬"].map((x, i) => `<span class="${i === d.旬 ? "今" : i < d.旬 ? "過" : ""}">${x}</span>`).join("")}</span>
@@ -3276,23 +3441,39 @@ const 七州舞台 = (function () {
     </article>`;
   }
 
+  // 怎麼玩：前三條是第一次進來時台子下面那一框，全部放在右上的「？」裡。
+  function 教條(互動) {
+    const n = P.參數.每旬行動點;
+    return 互動 ? [
+      `點台上的人，就去找他；點地上的東西，就做那件事。一旬可以做 ${n} 件，右上的燈籠是還剩幾件。`,
+      "紅色的「！」是眼下這一章的事，底下的小字是那件事的名字；小圓圈是跟你有關、可是不急的事。台子左右的路牌通到別的地方，換地方不花行動。",
+      "沒有事的日子，按「照常過日子」讓它自己過，有事會停。心境低了，記得歇息。",
+      "台子上方那一條是現在要做的事。點一下，看這一章的全部：清單、期限、做不成會怎樣。",
+      "路牌上沒有的地方、還有別州，點左上的「地圖」。遠行到別州會用掉這一旬。",
+      "錢多了，把「手頭」切成「捨得花」：找人帶禮、修習請人指點、歇息吃好一點，把錢換成交情、本事和精神。",
+      "「你」「局勢」「帳本」隨時可以看。近來發生的事，記在帳本裡。",
+      "電腦上：數字鍵直接選台上的人和東西，M 開地圖。",
+    ] : [
+      `一旬可以做 ${n} 件事：做工、修習、歇息、走動，或去找人。做完就到下一旬。`,
+      "換地方不花行動。有實心點的地方或人，是「眼下」這一章的事，先去那裡。空心的點是跟你有關、可是不急的事。",
+      "沒有事的日子，可以按「照常過日子」讓它自己過，有事會停。錢多了，把「手頭」切成「捨得花」，可以換成交情、本事和精神。",
+      "心境太低，做事不順手，記得歇息。右上的「你」「局勢」「帳本」隨時可以看。",
+      "按數字鍵可以直接選這一旬做什麼，M 開地圖。",
+    ];
+  }
+
   // ================= 敘事 =================
   function 主角卡HTML() {
     const pc = S.pc;
     const 會 = Object.entries(pc.技能).filter(([, v]) => v.級 > 0).map(([k, v]) => `${k} ${E.等級名[v.級]}`).join("、");
     const 物 = [錢字(pc.錢), ...Object.entries(pc.物).map(([k, n]) => (n > 1 ? `${k} × ${n}` : k))].join("、");
     const 志 = pc.志業 ? (P.志業[pc.志業] || {}).名 : "";
-    const 期 = S.章.期限 != null ? `（${E.短時(S.章.期限).replace(/^\d+年/, "")}）` : "";
     const 綽 = pc.叫法 && pc.叫法 !== pc.全名 && !pc.全名.includes(pc.叫法) ? `，大家叫你「${esc(pc.叫法)}」` : "";
-    const 果 = { 達成: "做成了", 失敗: "沒做成", 放棄: "放下了" }[S.章.結果] || S.章.結果;
     return `<div class="主角卡">
       <div><b>你是</b>${esc(pc.全名)}${綽}，${esc(pc.身分)}，${pc.年齡} 歲</div>
       <div><b>你會</b>${esc(會 || "沒什麼特別的本事")}</div>
       <div><b>手上有</b>${esc(物)}；牽掛：${esc(pc.牽掛)}</div>
       ${志 ? `<div><b>志業</b>${esc(志)}${pc.旗標.includes("接了志業") && (S.歷任 || []).length ? `<span class="淡">（${esc(S.歷任[S.歷任.length - 1].叫法)}交給你的）</span>` : ""}</div>` : ""}
-      ${S.章.結果 ? `<div><b>眼下</b>${esc(S.章.名 || "這一章的事")}：${esc(果)}。${S.章.期限 != null && S.t >= S.章.期限 ? "這一章結束了。" : `到${esc(期.replace(/[（）]/g, "") || "章末")}這一章才結束。`}</div>`
-        : S.章.眼下 ? `<div><b>眼下</b>${esc(S.章.眼下)}${esc(期)}</div>` : ""}
-      ${S.章.做不成 && !S.章.結果 ? `<div><b>做不成</b>${esc(S.章.做不成)}</div>` : ""}
     </div>`;
   }
   function 畫敘事() {
@@ -3541,7 +3722,7 @@ const 七州舞台 = (function () {
         ${志業字() ? `<p>${esc(志業字())}</p>` : ""}
         ${S.章.做不成 && !S.章.結果 ? `<p class="淡">做不成：${esc(S.章.做不成)}</p>` : ""}</div>
       ${S.章.正在解 && !S.章.結果 ? `<div><h3>正在解</h3><p>${esc(S.章.正在解)}</p></div>` : ""}
-      <div><h3>所在・身邊</h3><p>${esc(州名(地.州))}・${esc(地.名)}</p>${身邊 ? `<ul>${身邊}</ul>` : ""}</div>
+      <div><h3>所在・身邊</h3><p>${esc(州名(地.州))}・${esc(地.名)}</p><p class="淡">${esc(E.地說明(P, S, S.pc.地點))}</p>${身邊 ? `<ul>${身邊}</ul>` : ""}</div>
       ${對名 ? `<div><h3>對頭</h3><p>${esc(對名)}${對說 ? `<span class="淡">：${esc(對說)}</span>` : ""}</p></div>` : ""}
       <div><h3>主線線索</h3>${線索列(主)}</div>
       ${懸.length ? `<div><h3>懸念</h3>${線索列(懸)}</div>` : ""}
@@ -3556,7 +3737,11 @@ const 七州舞台 = (function () {
       const 久 = Math.max(0, S.t - st.初見);
       return `<li class="行"><span>${esc(n)}<span class="淡">，${esc(P.人物[n].身分)}</span></span><span class="淡">${esc(E.好感段(P, st.好感))}・認識 ${久} 旬</span></li>`;
     }).join("");
+    const 近 = S.動態.slice(-15).reverse().map((x) => `
+      <li class="${esc(x.類)}"><span class="時 數">${esc(E.短時(x.t).replace(/^\d+年/, ""))}</span>
+      <span class="內">${esc(x.文)}</span>${變化HTML(x.變化)}</li>`).join("");
     return `
+      <div><h3>近來</h3>${近 ? `<ul class="動態 全">${近}</ul>` : `<p class="空">還沒有。</p>`}</div>
       <div><h3>時間</h3><p>${esc(E.時間字(S.t))}</p>${S.章.期限 != null ? `<p class="淡">期限：${esc(E.短時(S.章.期限))}，還剩 ${Math.max(0, S.章.期限 - S.t)} 旬</p>` : ""}</div>
       <div><h3>錢與東西</h3><ul><li class="行"><span>錢</span><span class="數">${esc(錢字(pc.錢))}</span></li>${物}</ul></div>
       <div><h3>查明了的事</h3>${定 ? `<ul class="已確定">${定}</ul>` : `<p class="空">還沒有。線索湊夠了、答案定下來，才記在這裡。</p>`}</div>
@@ -3816,6 +4001,9 @@ const 七州舞台 = (function () {
         ${澤圖(L, 事)}
         <p class="圖例">點州名就遠行，路上的旬數寫在底下；遠行會用掉這一旬。</p>
         <div class="鈕組"><button class="鈕 主" data-act="關疊">回到這裡</button></div></div>`;
+    } else if (UI.疊 === "說明") {
+      內 = `<div class="疊內"><h2>怎麼玩</h2><div class="框 說明"><ul>${教條(UI.互動).map((x) => `<li>${esc(x)}</li>`).join("")}</ul></div>
+        <div class="鈕組"><button class="鈕 主" data-act="關疊">知道了</button></div></div>`;
     } else if (UI.疊 === "選單") {
       內 = `<div class="疊內"><h2>選單</h2>
         <div class="框"><p data-存檔狀態>${esc(存.狀態)}</p>
@@ -3971,6 +4159,7 @@ const 七州舞台 = (function () {
         break;
       }
       case "收教": UI.教過 = true; LS.set(教鍵, "1"); 畫敘事(); break;
+      case "目標": UI.目標開 = !UI.目標開; 畫敘事(); break;
       case "版型": UI.互動 = !UI.互動; LS.set("七州養成版-版型", UI.互動 ? "互動" : "文字"); UI.畫面鍵 = ""; 畫(); break;
       case "全動態": UI.全動態 = !UI.全動態; 畫敘事(); break;
       case "疊": UI.疊 = v; UI.訊 = ""; UI.訊錯 = false; 畫疊(); $("疊").scrollTop = 0; break;
@@ -4082,7 +4271,7 @@ const 七州舞台 = (function () {
     if (!el && ev.target.closest && ev.target.closest("#敘事 .對話卡") && !ev.target.closest("a, input, label, summary, textarea") && 對話還沒完()) { 下一段(); return; }
     if (!el || el.disabled) return;
     if (el.tagName === "INPUT" && el.type === "checkbox") return;
-    if (el.classList.contains("位") && el.closest(".舞台")) { 走去(el); return; }
+    if ((el.classList.contains("位") || el.classList.contains("路牌")) && el.closest(".舞台")) { 走去(el); return; }
     動作(el.getAttribute("data-act"), el);
   });
   function 走去(el) {
@@ -4093,7 +4282,8 @@ const 七州舞台 = (function () {
     const r = 台.getBoundingClientRect(), t = el.getBoundingClientRect();
     let x = r.width ? ((t.left + t.width / 2 - r.left) / r.width) * 100 : UI.我x;
     const 現 = UI.我x;
-    if (el.classList.contains("人")) x += x > 現 ? -9 : 9;   // 找人：站在他旁邊
+    if (el.classList.contains("路牌")) x = x < 50 ? 4 : 96;   // 路牌：走到台子邊上
+    else if (el.classList.contains("人")) x += x > 現 ? -9 : 9;   // 找人：站在他旁邊
     else if (r.width) {   // 找東西：那個位置站著人，就往旁邊讓一步
       const 佔 = [...台.querySelectorAll(".位.人")].map((p) => { const q = p.getBoundingClientRect(); return ((q.left + q.width / 2 - r.left) / r.width) * 100; });
       for (const 步 of [0, -11, 11, -20, 20]) if (!佔.some((c) => Math.abs(c - (x + 步)) < 9)) { x += 步; break; }
@@ -4110,6 +4300,10 @@ const 七州舞台 = (function () {
     我.style.left = x + "%";
     setTimeout(() => { UI.走中 = false; 動作(act, el); }, 久 + 40);
   }
+  document.addEventListener("toggle", (ev) => {
+    const d = ev.target;
+    if (d && d.matches && d.matches("details[data-摺]")) UI.摺[d.getAttribute("data-摺")] = d.open;
+  }, true);
   document.addEventListener("change", (ev) => {
     const el = ev.target;
     if (el && el.matches && el.matches('input[type="checkbox"][data-act]')) 動作(el.getAttribute("data-act"), el);
